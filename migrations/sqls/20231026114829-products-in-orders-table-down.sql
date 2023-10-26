@@ -1,0 +1,1 @@
+DROP TABLE products_in_orders_table;

@@ -1,0 +1,16 @@
+{
+    "dev":{
+        "driver":"pg",
+        "host":"127.0.0.1",
+        "user":"milesoda_user",
+        "database":"storefront_dev",
+        "password":"shaban333"
+    },
+    "test":{
+        "driver":"pg",
+        "host":"127.0.0.1",
+        "user":"milesoda_user",
+        "database":"storefront_test",
+        "password":"shaban333"
+    }
+}
