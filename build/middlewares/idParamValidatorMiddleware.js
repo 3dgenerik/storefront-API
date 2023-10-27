@@ -7,7 +7,7 @@ const idParamValidatorMiddleware = () => {
         try {
             const id = req.params.id;
             if (Number.isNaN(Number(id)) || Number(id) < 0) {
-                throw new customError_1.CustomError('Id param must be positive integre number.', 401);
+                throw new customError_1.CustomError('Id param must be positive integer number.', 401);
             }
             next();
         }

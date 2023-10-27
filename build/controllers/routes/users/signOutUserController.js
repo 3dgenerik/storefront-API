@@ -10,7 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
-let SignOutUser = class SignOutUser {
+let SignOutUser = 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class SignOutUser {
     signOutUser(req, res) {
         var _a;
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.token) {
@@ -27,4 +29,5 @@ __decorate([
 ], SignOutUser.prototype, "signOutUser", null);
 SignOutUser = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ], SignOutUser);

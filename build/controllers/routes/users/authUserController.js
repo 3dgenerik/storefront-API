@@ -23,29 +23,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
-const usersStore_1 = require("../../../models/usersStore");
 const bodyValidatorMiddleware_1 = require("../../../middlewares/bodyValidatorMiddleware");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const usersStore_1 = require("../../../models/usersStore");
 const config_1 = require("../../../config");
-let CreateUser = 
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+let AuthUserController = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class CreateUser {
-    createUser(req, res, next) {
+class AuthUserController {
+    authUserController(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = req.body;
             try {
+                const user = req.body;
                 const store = new usersStore_1.UsersStore();
-                const addedUser = yield store.createUser(user);
-                if (!addedUser)
-                    throw new customError_1.CustomError(`User ${user.first_name} ${user.last_name} already exist.`, 401);
-                const token = jsonwebtoken_1.default.sign({ user: addedUser }, config_1.SECRET_TOKEN);
+                const authUser = yield store.authUser(user);
+                if (!authUser)
+                    throw new customError_1.CustomError(`User doesn't exist. Please provide correct first name, last name and password`, 401);
+                const token = jsonwebtoken_1.default.sign({ user: authUser }, config_1.SECRET_TOKEN);
                 const outputMessage = {
                     output: {
-                        user: addedUser,
+                        user: authUser,
                         token,
                     },
                 };
-                res.status(200).send(outputMessage);
+                res.send(outputMessage);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -56,13 +56,13 @@ class CreateUser {
     }
 };
 __decorate([
-    (0, decorators_1.post)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/create`),
+    (0, decorators_1.post)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/signin`),
     (0, decorators_1.middleware)((0, bodyValidatorMiddleware_1.bodyValidatorMiddleware)('first_name', 'last_name', 'password')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], CreateUser.prototype, "createUser", null);
-CreateUser = __decorate([
+], AuthUserController.prototype, "authUserController", null);
+AuthUserController = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], CreateUser);
+], AuthUserController);

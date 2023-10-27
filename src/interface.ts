@@ -54,3 +54,10 @@ export interface IToken {
     user: IUser;
     iat?: number;
 }
+
+export interface ICreatedUserOutput {
+    output: {
+        user: IUser | null;
+        token: string;
+    };
+}

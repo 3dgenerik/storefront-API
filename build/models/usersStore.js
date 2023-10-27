@@ -23,6 +23,12 @@ class UsersStore {
             return hash;
         });
     }
+    passwordHashCompare(password, hash) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const isMatch = yield bcrypt_1.default.compare(password, hash);
+            return isMatch;
+        });
+    }
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             const conn = yield database_1.default.connect();
@@ -44,6 +50,27 @@ class UsersStore {
             return false;
         });
     }
+    userExistById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const allUsers = yield this.getAllUsers();
+            for (const user of allUsers) {
+                if (user.id === id)
+                    return true;
+            }
+            return false;
+        });
+    }
+    showUserById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!(yield this.userExistById(id)))
+                return null;
+            const conn = yield database_1.default.connect();
+            const sql = 'SELECT * FROM users_table WHERE id = ($1)';
+            const result = yield conn.query(sql, [id]);
+            conn.release();
+            return result.rows[0];
+        });
+    }
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
             if (yield this.userExist(user)) {
@@ -59,6 +86,20 @@ class UsersStore {
             ]);
             conn.release();
             return result.rows[0];
+        });
+    }
+    authUser(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!(yield this.userExist(user)))
+                return null;
+            const conn = yield database_1.default.connect();
+            const sql = 'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
+            const result = yield conn.query(sql, [user.first_name, user.last_name]);
+            conn.release();
+            const dbUser = result.rows[0];
+            if (!(yield this.passwordHashCompare(user.password, dbUser.password)))
+                return null;
+            return dbUser;
         });
     }
 }

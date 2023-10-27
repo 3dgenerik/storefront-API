@@ -19,7 +19,7 @@ export const tokenVerifyMiddleware = () => {
             }
 
             if (req.session) {
-                req.session.token = decoded.user;
+                req.session.userFromToken = decoded.user;
             }
 
             next();

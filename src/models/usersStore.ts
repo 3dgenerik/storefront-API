@@ -9,6 +9,14 @@ export class UsersStore {
         return hash;
     }
 
+    private async passwordHashCompare(
+        password: string,
+        hash: string,
+    ): Promise<boolean> {
+        const isMatch = await bcrypt.compare(password, hash);
+        return isMatch;
+    }
+
     async getAllUsers(): Promise<IUser[]> {
         const conn = await client.connect();
         const sql = 'SELECT * FROM users_table';
@@ -30,6 +38,24 @@ export class UsersStore {
         return false;
     }
 
+    private async userExistById(id: number): Promise<boolean> {
+        const allUsers = await this.getAllUsers();
+        for (const user of allUsers) {
+            if (user.id === id) return true;
+        }
+        return false;
+    }
+
+    async showUserById(id: number): Promise<IUser | null> {
+        if (!(await this.userExistById(id))) return null;
+
+        const conn = await client.connect();
+        const sql = 'SELECT * FROM users_table WHERE id = ($1)';
+        const result = await conn.query(sql, [id]);
+        conn.release();
+        return result.rows[0];
+    }
+
     async createUser(user: IUser): Promise<IUser | null> {
         if (await this.userExist(user)) {
             return null;
@@ -45,5 +71,22 @@ export class UsersStore {
         ]);
         conn.release();
         return result.rows[0];
+    }
+
+    async authUser(user: IUser): Promise<IUser | null> {
+        if (!(await this.userExist(user))) return null;
+
+        const conn = await client.connect();
+        const sql =
+            'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
+        const result = await conn.query(sql, [user.first_name, user.last_name]);
+        conn.release();
+
+        const dbUser = result.rows[0] as IUser;
+
+        if (!(await this.passwordHashCompare(user.password, dbUser.password)))
+            return null;
+
+        return dbUser;
     }
 }

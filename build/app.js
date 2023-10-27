@@ -11,7 +11,8 @@ const errorHandlerMiddleware_1 = require("./middlewares/errorHandlerMiddleware")
 const cookie_session_1 = __importDefault(require("cookie-session"));
 require("./controllers/routes/users/getAllUsersController");
 require("./controllers/routes/users/createUserController");
-require("./controllers/routes/users/signOutUserController");
+require("./controllers/routes/users/findUserByIdController");
+require("./controllers/routes/users/authUserController");
 // declare module 'express-serve-static-core' {
 //     interface Request {
 //         token?: IUser | null;

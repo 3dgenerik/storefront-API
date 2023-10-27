@@ -17,7 +17,7 @@ const tokenVerifyMiddleware = () => {
                 throw new customError_1.CustomError(`Invalid token. Please sign in, or sign up again.`, 401);
             }
             if (req.session) {
-                req.session.token = decoded.user;
+                req.session.userFromToken = decoded.user;
             }
             next();
         }

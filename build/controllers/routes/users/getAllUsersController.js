@@ -22,10 +22,14 @@ const customError_1 = require("../../../errors/customError");
 const usersStore_1 = require("../../../models/usersStore");
 const decorators_1 = require("../../decorators");
 const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
-let GetAllUsers = class GetAllUsers {
+let GetAllUsers = 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+class GetAllUsers {
     getAllUsers(req, res, next) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log((_a = req.session) === null || _a === void 0 ? void 0 : _a.userFromToken);
                 const store = new usersStore_1.UsersStore();
                 const users = yield store.getAllUsers();
                 res.send(users);
@@ -47,4 +51,5 @@ __decorate([
 ], GetAllUsers.prototype, "getAllUsers", null);
 GetAllUsers = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
 ], GetAllUsers);

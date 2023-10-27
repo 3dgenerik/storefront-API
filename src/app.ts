@@ -7,7 +7,8 @@ import cookieSession from 'cookie-session';
 
 import './controllers/routes/users/getAllUsersController';
 import './controllers/routes/users/createUserController';
-import './controllers/routes/users/signOutUserController';
+import './controllers/routes/users/findUserByIdController';
+import './controllers/routes/users/authUserController';
 
 // declare module 'express-serve-static-core' {
 //     interface Request {
