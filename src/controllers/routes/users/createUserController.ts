@@ -7,7 +7,6 @@ import { IUser } from '../../../interface';
 import { bodyValidatorMiddleware } from '../../../middlewares/bodyValidatorMiddleware';
 import jwt from 'jsonwebtoken';
 import { SECRET_TOKEN } from '../../../config';
-import { tokenVerifyMiddleware } from '../../../middlewares/tokenVerifyMiddleware';
 
 @controller(AppRoutePath.PREFIX_ROUTE)
 class CreateUser {

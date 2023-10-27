@@ -4,8 +4,6 @@ import { AppRoute } from './AppRoute';
 import { COOKIE_SESSION_SECRET_KEY, PORT } from './config';
 import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware';
 import cookieSession from 'cookie-session';
-import { IUser } from './interface';
-import CookieSessionObject from 'cookie-session';
 
 import './controllers/routes/users/getAllUsersController';
 import './controllers/routes/users/createUserController';

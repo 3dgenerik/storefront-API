@@ -4,7 +4,6 @@ import { CustomError } from '../../../errors/customError';
 import { UsersStore } from '../../../models/usersStore';
 import { get, controller, middleware } from '../../decorators';
 import { tokenVerifyMiddleware } from '../../../middlewares/tokenVerifyMiddleware';
-import { IToken } from '../../../interface';
 
 @controller(AppRoutePath.PREFIX_ROUTE)
 class GetAllUsers {
