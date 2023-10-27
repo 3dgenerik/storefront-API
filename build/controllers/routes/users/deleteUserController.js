@@ -22,6 +22,7 @@ const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
 const usersStore_1 = require("../../../models/usersStore");
 const idParamValidatorMiddleware_1 = require("../../../middlewares/idParamValidatorMiddleware");
+const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
 let DeleteUserById = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class DeleteUserById {
@@ -33,6 +34,7 @@ class DeleteUserById {
                 const deletedUser = yield store.deleteUserById(Number(id));
                 if (!deletedUser)
                     throw new customError_1.CustomError(`User not found. Nothing to delete`, 404);
+                console.log(deletedUser);
                 res.status(204).send(deletedUser);
             }
             catch (err) {
@@ -46,6 +48,7 @@ class DeleteUserById {
 __decorate([
     (0, decorators_1.del)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/remove/:id`),
     (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
+    (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)

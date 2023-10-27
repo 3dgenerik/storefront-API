@@ -37,7 +37,7 @@ class CreateUser {
                 const store = new usersStore_1.UsersStore();
                 const addedUser = yield store.createUser(user);
                 if (!addedUser)
-                    throw new customError_1.CustomError(`User ${user.first_name} ${user.last_name} already exist.`, 401);
+                    throw new customError_1.CustomError(`User ${user.first_name} ${user.last_name} already exist.`, 409);
                 const token = jsonwebtoken_1.default.sign({ user: addedUser }, config_1.SECRET_TOKEN);
                 const outputMessage = {
                     output: {
@@ -45,12 +45,12 @@ class CreateUser {
                         token,
                     },
                 };
-                res.status(200).send(outputMessage);
+                res.status(201).send(outputMessage);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
                     next(err);
-                next(new customError_1.CustomError(`${err}`, 422));
+                next(new customError_1.CustomError(`${err}`, 500));
             }
         });
     }

@@ -26,18 +26,17 @@ let GetAllUsers =
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class GetAllUsers {
     getAllUsers(req, res, next) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log((_a = req.session) === null || _a === void 0 ? void 0 : _a.userFromToken);
+                // console.log(req.session?.userFromToken);
                 const store = new usersStore_1.UsersStore();
                 const users = yield store.getAllUsers();
-                res.send(users);
+                res.status(200).send(users);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
                     next(err);
-                next(new customError_1.CustomError(`${err}`, 422));
+                next(new customError_1.CustomError(`${err}`, 500));
             }
         });
     }

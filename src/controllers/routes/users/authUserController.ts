@@ -21,8 +21,8 @@ class AuthUserController {
 
             if (!authUser)
                 throw new CustomError(
-                    `User doesn't exist. Please provide correct first name, last name and password`,
-                    401,
+                    `User not found. Please provide correct first name, last name and password`,
+                    404,
                 );
 
             const token = jwt.sign({ user: authUser }, SECRET_TOKEN);
@@ -34,11 +34,10 @@ class AuthUserController {
                 },
             };
 
-
-            res.send(outputMessage);
+            res.status(200).send(outputMessage);
         } catch (err) {
             if (err instanceof CustomError) next(err);
-            next(new CustomError(`${err}`, 422));
+            next(new CustomError(`${err}`, 500));
         }
     }
 }

@@ -13,7 +13,7 @@ export const tokenVerifyMiddleware = () => {
 
             if (!decoded) {
                 throw new CustomError(
-                    `Invalid token. Please sign in, or sign up again.`,
+                    `Unauthorized: Empty or Invalid JWT token. Please sign in, or sign up again.`,
                     401,
                 );
             }
@@ -25,7 +25,12 @@ export const tokenVerifyMiddleware = () => {
             next();
         } catch (err) {
             if (err instanceof CustomError) next(err);
-            next(new CustomError(`Invalid token. ${err}`, 500));
+            next(
+                new CustomError(
+                    `Unauthorized: Empty or Invalid JWT token. ${err}`,
+                    401,
+                ),
+            );
         }
     };
 };

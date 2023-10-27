@@ -12,13 +12,13 @@ class GetAllUsers {
     @middleware(tokenVerifyMiddleware())
     async getAllUsers(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log(req.session?.userFromToken);
+            // console.log(req.session?.userFromToken);
             const store = new UsersStore();
             const users = await store.getAllUsers();
-            res.send(users);
+            res.status(200).send(users);
         } catch (err) {
             if (err instanceof CustomError) next(err);
-            next(new CustomError(`${err}`, 422));
+            next(new CustomError(`${err}`, 500));
         }
     }
 }

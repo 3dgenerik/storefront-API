@@ -24,7 +24,7 @@ class FindUserById {
             res.status(200).send(user);
         } catch (err) {
             if (err instanceof CustomError) next(err);
-            next(new CustomError(`${err}`, 422));
+            next(new CustomError(`${err}`, 500));
         }
     }
 }

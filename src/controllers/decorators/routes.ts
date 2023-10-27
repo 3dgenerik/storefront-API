@@ -3,6 +3,7 @@ import 'reflect-metadata';
 
 export const routerWrapper = (method: AppMethods) => {
     return (path: string) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return (target: any, key: string) => {
             Reflect.defineMetadata(AppFeatures.PATH, path, target, key);
             Reflect.defineMetadata(AppFeatures.METHOD, method, target, key);

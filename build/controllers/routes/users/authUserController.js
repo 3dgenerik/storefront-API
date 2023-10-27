@@ -37,7 +37,7 @@ class AuthUserController {
                 const store = new usersStore_1.UsersStore();
                 const authUser = yield store.authUser(user);
                 if (!authUser)
-                    throw new customError_1.CustomError(`User doesn't exist. Please provide correct first name, last name and password`, 401);
+                    throw new customError_1.CustomError(`User not found. Please provide correct first name, last name and password`, 404);
                 const token = jsonwebtoken_1.default.sign({ user: authUser }, config_1.SECRET_TOKEN);
                 const outputMessage = {
                     output: {
@@ -45,12 +45,12 @@ class AuthUserController {
                         token,
                     },
                 };
-                res.send(outputMessage);
+                res.status(200).send(outputMessage);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
                     next(err);
-                next(new customError_1.CustomError(`${err}`, 422));
+                next(new customError_1.CustomError(`${err}`, 500));
             }
         });
     }

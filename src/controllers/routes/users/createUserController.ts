@@ -21,7 +21,7 @@ class CreateUser {
             if (!addedUser)
                 throw new CustomError(
                     `User ${user.first_name} ${user.last_name} already exist.`,
-                    401,
+                    409,
                 );
 
             const token = jwt.sign({ user: addedUser }, SECRET_TOKEN);
@@ -33,10 +33,10 @@ class CreateUser {
                 },
             };
 
-            res.status(200).send(outputMessage);
+            res.status(201).send(outputMessage);
         } catch (err) {
             if (err instanceof CustomError) next(err);
-            next(new CustomError(`${err}`, 422));
+            next(new CustomError(`${err}`, 500));
         }
     }
 }

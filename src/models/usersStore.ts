@@ -5,11 +5,14 @@ import { SALT_ROUND } from '../config';
 
 export class UsersStore {
     private readonly SQL_GET_ALL_USERS = 'SELECT * FROM users_table';
-    private readonly SQL_SHOW_USER_BY_ID = 'SELECT * FROM users_table WHERE id = ($1)';
-    private readonly SQL_CREATE_USER = 'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
-    private readonly SQL_AUTH_USER = 'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
-    private readonly SQL_DELETE_USER= 'DELETE FROM users_table WHERE id = ($1) RETURNING *';
-
+    private readonly SQL_SHOW_USER_BY_ID =
+        'SELECT * FROM users_table WHERE id = ($1)';
+    private readonly SQL_CREATE_USER =
+        'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+    private readonly SQL_AUTH_USER =
+        'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
+    private readonly SQL_DELETE_USER =
+        'DELETE FROM users_table WHERE id = ($1) RETURNING *';
 
     private async passwordHash(password: string): Promise<string> {
         const hash = await bcrypt.hash(password, Number(SALT_ROUND));
@@ -95,14 +98,13 @@ export class UsersStore {
         return dbUser;
     }
 
-    async deleteUserById(id:number):Promise<IUser | null>{
-        if(!await this.userExistById(id))
-            return null
+    async deleteUserById(id: number): Promise<IUser | null> {
+        if (!(await this.userExistById(id))) return null;
 
-        const conn = await client.connect()
+        const conn = await client.connect();
         const sql = this.SQL_DELETE_USER;
-        const result = await conn.query(sql, [id])
-        conn.release()
-        return result.rows[0]
+        const result = await conn.query(sql, [id]);
+        conn.release();
+        return result.rows[0];
     }
 }
