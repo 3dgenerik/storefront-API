@@ -11,7 +11,7 @@ import { SECRET_TOKEN } from '../../../config';
 @controller(AppRoutePath.PREFIX_ROUTE)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class CreateUser {
-    @post(`${AppRoutePath.ENDPOINT_USERS}/create`)
+    @post(`${AppRoutePath.ENDPOINT_USERS}/signup`)
     @middleware(bodyValidatorMiddleware('first_name', 'last_name', 'password'))
     async createUser(req: Request, res: Response, next: NextFunction) {
         const user = req.body as IUser;

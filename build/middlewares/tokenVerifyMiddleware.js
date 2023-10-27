@@ -24,7 +24,7 @@ const tokenVerifyMiddleware = () => {
         catch (err) {
             if (err instanceof customError_1.CustomError)
                 next(err);
-            next(new customError_1.CustomError(`Invalid token. ${err}`, 422));
+            next(new customError_1.CustomError(`Invalid token. ${err}`, 500));
         }
     };
 };

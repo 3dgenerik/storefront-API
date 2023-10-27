@@ -34,6 +34,7 @@ class AuthUserController {
                 },
             };
 
+
             res.send(outputMessage);
         } catch (err) {
             if (err instanceof CustomError) next(err);

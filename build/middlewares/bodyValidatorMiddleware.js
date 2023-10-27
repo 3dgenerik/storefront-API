@@ -11,21 +11,21 @@ const stringOrNumberThrowError = (key, body, isString) => {
         if (bodyValue !== undefined &&
             bodyValue !== 'active' &&
             bodyValue !== 'complete') {
-            throw new customError_1.CustomError(`Status must be 'active' or 'complete'.`, 401);
+            throw new customError_1.CustomError(`Bad request. Status must be 'active' or 'complete'.`, 400);
         }
     }
     if (bodyValue) {
         if (!(0, isValueString_1.isValueString)(bodyValue) && isString) {
-            throw new customError_1.CustomError(`${keyValue} must be string. Please provide correct ${keyValue}`, 401);
+            throw new customError_1.CustomError(`Bad request. ${keyValue} must be string. Please provide correct ${keyValue}`, 400);
         }
         else if ((0, isValueString_1.isValueString)(bodyValue) && !isString)
-            throw new customError_1.CustomError(`${keyValue} must be number. Please provide correct ${keyValue}`, 401);
+            throw new customError_1.CustomError(`Bad request. ${keyValue} must be number. Please provide correct ${keyValue}`, 400);
     }
     if (key === 'password') {
         const passwordLengthLimit = 4;
         const passwordLength = (bodyValue === null || bodyValue === void 0 ? void 0 : bodyValue.toString().length) || 0;
         if (passwordLength < passwordLengthLimit) {
-            throw new customError_1.CustomError(`Password must contain minimum ${passwordLengthLimit} characters.`, 401);
+            throw new customError_1.CustomError(`Bad request. Password must contain minimum ${passwordLengthLimit} characters.`, 400);
         }
     }
 };
@@ -41,7 +41,7 @@ const bodyValidatorMiddleware = (...keys) => {
                 }
             }
             if (invalidKeys.length > 0)
-                throw new customError_1.CustomError(`Invalid values: ${[...invalidKeys].join(', ')}. Please provide correct values.`, 401);
+                throw new customError_1.CustomError(`Bad request. Invalid values: ${[...invalidKeys].join(', ')}. Please provide correct values.`, 400);
             for (const key of keys) {
                 switch (key) {
                     case 'first_name':
@@ -82,7 +82,7 @@ const bodyValidatorMiddleware = (...keys) => {
         catch (err) {
             if (err instanceof customError_1.CustomError)
                 next(err);
-            next(new customError_1.CustomError(`${err}`, 422));
+            next(new customError_1.CustomError(`${err}`, 500));
         }
     };
 };

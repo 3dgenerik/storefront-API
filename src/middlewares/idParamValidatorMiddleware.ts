@@ -8,15 +8,15 @@ export const idParamValidatorMiddleware = (): RequestHandler => {
 
             if (Number.isNaN(Number(id)) || Number(id) < 0) {
                 throw new CustomError(
-                    'Id param must be positive integer number.',
-                    401,
+                    'Bad request. Invalid id. Id param must be positive integer number.',
+                    400,
                 );
             }
 
             next();
         } catch (err) {
             if (err instanceof CustomError) next(err);
-            next(new CustomError(`${err}`, 401));
+            next(new CustomError(`${err}`, 500));
         }
     };
 };

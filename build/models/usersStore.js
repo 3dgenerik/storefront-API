@@ -17,6 +17,13 @@ const database_1 = __importDefault(require("../database"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = require("../config");
 class UsersStore {
+    constructor() {
+        this.SQL_GET_ALL_USERS = 'SELECT * FROM users_table';
+        this.SQL_SHOW_USER_BY_ID = 'SELECT * FROM users_table WHERE id = ($1)';
+        this.SQL_CREATE_USER = 'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+        this.SQL_AUTH_USER = 'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
+        this.SQL_DELETE_USER = 'DELETE FROM users_table WHERE id = ($1) RETURNING *';
+    }
     passwordHash(password) {
         return __awaiter(this, void 0, void 0, function* () {
             const hash = yield bcrypt_1.default.hash(password, Number(config_1.SALT_ROUND));
@@ -32,7 +39,7 @@ class UsersStore {
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             const conn = yield database_1.default.connect();
-            const sql = 'SELECT * FROM users_table';
+            const sql = this.SQL_GET_ALL_USERS;
             const result = yield conn.query(sql);
             conn.release();
             return result.rows;
@@ -65,7 +72,7 @@ class UsersStore {
             if (!(yield this.userExistById(id)))
                 return null;
             const conn = yield database_1.default.connect();
-            const sql = 'SELECT * FROM users_table WHERE id = ($1)';
+            const sql = this.SQL_SHOW_USER_BY_ID;
             const result = yield conn.query(sql, [id]);
             conn.release();
             return result.rows[0];
@@ -78,7 +85,7 @@ class UsersStore {
             }
             const conn = yield database_1.default.connect();
             const hash = yield this.passwordHash(user.password);
-            const sql = 'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+            const sql = this.SQL_CREATE_USER;
             const result = yield conn.query(sql, [
                 user.first_name,
                 user.last_name,
@@ -93,13 +100,24 @@ class UsersStore {
             if (!(yield this.userExist(user)))
                 return null;
             const conn = yield database_1.default.connect();
-            const sql = 'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
+            const sql = this.SQL_AUTH_USER;
             const result = yield conn.query(sql, [user.first_name, user.last_name]);
             conn.release();
             const dbUser = result.rows[0];
             if (!(yield this.passwordHashCompare(user.password, dbUser.password)))
                 return null;
             return dbUser;
+        });
+    }
+    deleteUserById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!(yield this.userExistById(id)))
+                return null;
+            const conn = yield database_1.default.connect();
+            const sql = this.SQL_DELETE_USER;
+            const result = yield conn.query(sql, [id]);
+            conn.release();
+            return result.rows[0];
         });
     }
 }

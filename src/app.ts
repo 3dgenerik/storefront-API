@@ -9,6 +9,7 @@ import './controllers/routes/users/getAllUsersController';
 import './controllers/routes/users/createUserController';
 import './controllers/routes/users/findUserByIdController';
 import './controllers/routes/users/authUserController';
+import './controllers/routes/users/deleteUserController';
 
 // declare module 'express-serve-static-core' {
 //     interface Request {

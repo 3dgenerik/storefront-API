@@ -17,52 +17,40 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
 const usersStore_1 = require("../../../models/usersStore");
-const bodyValidatorMiddleware_1 = require("../../../middlewares/bodyValidatorMiddleware");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = require("../../../config");
-let CreateUser = 
+const idParamValidatorMiddleware_1 = require("../../../middlewares/idParamValidatorMiddleware");
+let DeleteUserById = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class CreateUser {
-    createUser(req, res, next) {
+class DeleteUserById {
+    DeleteUserById(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = req.body;
             try {
+                const id = req.params.id;
                 const store = new usersStore_1.UsersStore();
-                const addedUser = yield store.createUser(user);
-                if (!addedUser)
-                    throw new customError_1.CustomError(`User ${user.first_name} ${user.last_name} already exist.`, 401);
-                const token = jsonwebtoken_1.default.sign({ user: addedUser }, config_1.SECRET_TOKEN);
-                const outputMessage = {
-                    output: {
-                        user: addedUser,
-                        token,
-                    },
-                };
-                res.status(200).send(outputMessage);
+                const deletedUser = yield store.deleteUserById(Number(id));
+                if (!deletedUser)
+                    throw new customError_1.CustomError(`User not found. Nothing to delete`, 404);
+                res.status(204).send(deletedUser);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
                     next(err);
-                next(new customError_1.CustomError(`${err}`, 422));
+                next(new customError_1.CustomError(`${err}`, 500));
             }
         });
     }
 };
 __decorate([
-    (0, decorators_1.post)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/signup`),
-    (0, decorators_1.middleware)((0, bodyValidatorMiddleware_1.bodyValidatorMiddleware)('first_name', 'last_name', 'password')),
+    (0, decorators_1.del)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/remove/:id`),
+    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], CreateUser.prototype, "createUser", null);
-CreateUser = __decorate([
+], DeleteUserById.prototype, "DeleteUserById", null);
+DeleteUserById = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], CreateUser);
+], DeleteUserById);

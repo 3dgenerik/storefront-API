@@ -20,8 +20,8 @@ const stringOrNumberThrowError = (
             bodyValue !== 'complete'
         ) {
             throw new CustomError(
-                `Status must be 'active' or 'complete'.`,
-                401,
+                `Bad request. Status must be 'active' or 'complete'.`,
+                400,
             );
         }
     }
@@ -29,13 +29,13 @@ const stringOrNumberThrowError = (
     if (bodyValue) {
         if (!isValueString(bodyValue) && isString) {
             throw new CustomError(
-                `${keyValue} must be string. Please provide correct ${keyValue}`,
-                401,
+                `Bad request. ${keyValue} must be string. Please provide correct ${keyValue}`,
+                400,
             );
         } else if (isValueString(bodyValue) && !isString)
             throw new CustomError(
-                `${keyValue} must be number. Please provide correct ${keyValue}`,
-                401,
+                `Bad request. ${keyValue} must be number. Please provide correct ${keyValue}`,
+                400,
             );
     }
 
@@ -44,8 +44,8 @@ const stringOrNumberThrowError = (
         const passwordLength = bodyValue?.toString().length || 0;
         if (passwordLength < passwordLengthLimit) {
             throw new CustomError(
-                `Password must contain minimum ${passwordLengthLimit} characters.`,
-                401,
+                `Bad request. Password must contain minimum ${passwordLengthLimit} characters.`,
+                400,
             );
         }
     }
@@ -66,10 +66,10 @@ export const bodyValidatorMiddleware = (...keys: string[]): RequestHandler => {
 
             if (invalidKeys.length > 0)
                 throw new CustomError(
-                    `Invalid values: ${[...invalidKeys].join(
+                    `Bad request. Invalid values: ${[...invalidKeys].join(
                         ', ',
                     )}. Please provide correct values.`,
-                    401,
+                    400,
                 );
 
             for (const key of keys) {
@@ -111,7 +111,7 @@ export const bodyValidatorMiddleware = (...keys: string[]): RequestHandler => {
             next();
         } catch (err) {
             if (err instanceof CustomError) next(err);
-            next(new CustomError(`${err}`, 422));
+            next(new CustomError(`${err}`, 500));
         }
     };
 };

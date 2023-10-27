@@ -25,7 +25,7 @@ export const tokenVerifyMiddleware = () => {
             next();
         } catch (err) {
             if (err instanceof CustomError) next(err);
-            next(new CustomError(`Invalid token. ${err}`, 422));
+            next(new CustomError(`Invalid token. ${err}`, 500));
         }
     };
 };

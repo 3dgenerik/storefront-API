@@ -5,6 +5,7 @@ export const errorHandlerMiddleware = (
     err: CustomError,
     req: Request,
     res: Response,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     next: NextFunction,
 ) => {
     const error = err.formatMessage();
