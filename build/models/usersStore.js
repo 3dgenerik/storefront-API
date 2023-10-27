@@ -32,11 +32,33 @@ class UsersStore {
             return result.rows;
         });
     }
+    userExist(newUser) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const allUsers = yield this.getAllUsers();
+            for (const user of allUsers) {
+                if (user.first_name === newUser.first_name &&
+                    user.last_name === newUser.last_name) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (yield this.userExist(user)) {
+                return null;
+            }
             const conn = yield database_1.default.connect();
-            const sql = 'INSERT INTO users_table (firstName, lastName, password) VALUES($1, $2, $3)';
-            const result = yield conn.query(sql, [user.firstName, user.lastName,]);
+            const hash = yield this.passwordHash(user.password);
+            const sql = 'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+            const result = yield conn.query(sql, [
+                user.first_name,
+                user.last_name,
+                hash,
+            ]);
+            conn.release();
+            return result.rows[0];
         });
     }
 }

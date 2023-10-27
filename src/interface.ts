@@ -12,8 +12,8 @@ export interface ICustomError extends IStatusCode {
 
 export interface IUser {
     id?: number;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     password: string;
 }
 
@@ -35,4 +35,22 @@ export interface IProductsInOrders {
     quantity: number;
     product_id: number;
     order_id: number;
+}
+
+export interface IBodyValidator {
+    first_name?: string;
+    last_name?: string;
+    password?: string;
+    name?: string;
+    price?: number;
+    category?: string;
+    status?: 'active' | 'complete';
+    quantity?: number;
+    product_id?: number;
+    order_id?: number;
+}
+
+export interface IToken {
+    user: IUser;
+    iat?: number;
 }

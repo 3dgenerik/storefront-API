@@ -25,8 +25,6 @@ const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddlew
 let GetAllUsers = class GetAllUsers {
     getAllUsers(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
-            const token = req.token;
-            console.log('TOKEN: ', token);
             try {
                 const store = new usersStore_1.UsersStore();
                 const users = yield store.getAllUsers();

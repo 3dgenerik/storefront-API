@@ -17,13 +17,18 @@ export const controller = (prefixRoute: AppRoutePath) => {
                 target.prototype,
                 key,
             ) as AppMethods;
-            const middleware = Reflect.getMetadata(
-                AppFeatures.MIDDLEWARE,
-                target.prototype,
-                key
-            ) || [];
+            const middleware =
+                Reflect.getMetadata(
+                    AppFeatures.MIDDLEWARE,
+                    target.prototype,
+                    key,
+                ) || [];
             if (path && method) {
-                router[method](`${prefixRoute}${path}`, ...middleware, target.prototype[key]);
+                router[method](
+                    `${prefixRoute}${path}`,
+                    ...middleware,
+                    target.prototype[key],
+                );
             }
         }
     };

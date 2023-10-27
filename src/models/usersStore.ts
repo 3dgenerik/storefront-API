@@ -4,9 +4,9 @@ import bcrypt from 'bcrypt';
 import { SALT_ROUND } from '../config';
 
 export class UsersStore {
-    async passwordHash(password: string):Promise<string> {
-        const hash = await bcrypt.hash(password, Number(SALT_ROUND))
-        return hash
+    private async passwordHash(password: string): Promise<string> {
+        const hash = await bcrypt.hash(password, Number(SALT_ROUND));
+        return hash;
     }
 
     async getAllUsers(): Promise<IUser[]> {
@@ -17,9 +17,33 @@ export class UsersStore {
         return result.rows;
     }
 
-    async createUser(user: IUser):Promise<IUser>{
+    private async userExist(newUser: IUser): Promise<boolean> {
+        const allUsers = await this.getAllUsers();
+        for (const user of allUsers) {
+            if (
+                user.first_name === newUser.first_name &&
+                user.last_name === newUser.last_name
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    async createUser(user: IUser): Promise<IUser | null> {
+        if (await this.userExist(user)) {
+            return null;
+        }
         const conn = await client.connect();
-        const sql = 'INSERT INTO users_table (firstName, lastName, password) VALUES($1, $2, $3)';
-        const result = await conn.query(sql, [user.firstName, user.lastName, ])
+        const hash = await this.passwordHash(user.password);
+        const sql =
+            'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+        const result = await conn.query(sql, [
+            user.first_name,
+            user.last_name,
+            hash,
+        ]);
+        conn.release();
+        return result.rows[0];
     }
 }

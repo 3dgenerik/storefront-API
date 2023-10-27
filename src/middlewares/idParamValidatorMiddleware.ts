@@ -13,7 +13,7 @@ export const idParamValidatorMiddleware = (): RequestHandler => {
                 );
             }
 
-            next()
+            next();
         } catch (err) {
             if (err instanceof CustomError) next(err);
             next(new CustomError(`${err}`, 401));

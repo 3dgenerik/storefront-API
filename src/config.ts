@@ -11,3 +11,4 @@ export const POSTGRES_DB_TEST = process.env.POSTGRES_DB_TEST!;
 export const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD!;
 export const SALT_ROUND = process.env.SALT_ROUND!;
 export const SECRET_TOKEN = process.env.SECRET_TOKEN!;
+export const COOKIE_SESSION_SECRET_KEY = process.env.COOKIE_SESSION_SECRET_KEY;
