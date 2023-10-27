@@ -11,6 +11,7 @@ import { tokenVerifyMiddleware } from '../../../middlewares/tokenVerifyMiddlewar
 class FindUserById {
     @get(`${AppRoutePath.ENDPOINT_USERS}/:id`)
     @middleware(idParamValidatorMiddleware())
+    //TOKEN REQUIRED
     @middleware(tokenVerifyMiddleware())
     async findUserById(req: Request, res: Response, next: NextFunction) {
         try {
@@ -19,7 +20,7 @@ class FindUserById {
             const user = await store.showUserById(Number(id));
 
             if (!user)
-                throw new CustomError(`User with id ${id} doesn't exist.`, 401);
+                throw new CustomError(`User with id ${id} not found.`, 404);
 
             res.status(200).send(user);
         } catch (err) {

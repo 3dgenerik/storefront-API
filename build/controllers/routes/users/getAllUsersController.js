@@ -42,7 +42,9 @@ class GetAllUsers {
     }
 };
 __decorate([
-    (0, decorators_1.get)("/users" /* AppRoutePath.ENDPOINT_USERS */),
+    (0, decorators_1.get)("/users" /* AppRoutePath.ENDPOINT_USERS */)
+    //TOKEN REQUIRED
+    ,
     (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),

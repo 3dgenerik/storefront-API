@@ -11,6 +11,7 @@ import { tokenVerifyMiddleware } from '../../../middlewares/tokenVerifyMiddlewar
 class DeleteUserById {
     @del(`${AppRoutePath.ENDPOINT_USERS}/remove/:id`)
     @middleware(idParamValidatorMiddleware())
+    //TOKEN REQUIRED
     @middleware(tokenVerifyMiddleware())
     async DeleteUserById(req: Request, res: Response, next: NextFunction) {
         try {
@@ -20,7 +21,6 @@ class DeleteUserById {
 
             if (!deletedUser)
                 throw new CustomError(`User not found. Nothing to delete`, 404);
-            console.log(deletedUser);
             res.status(204).send(deletedUser);
         } catch (err) {
             if (err instanceof CustomError) next(err);

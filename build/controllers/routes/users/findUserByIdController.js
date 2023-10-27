@@ -33,7 +33,7 @@ class FindUserById {
                 const store = new usersStore_1.UsersStore();
                 const user = yield store.showUserById(Number(id));
                 if (!user)
-                    throw new customError_1.CustomError(`User with id ${id} doesn't exist.`, 401);
+                    throw new customError_1.CustomError(`User with id ${id} not found.`, 404);
                 res.status(200).send(user);
             }
             catch (err) {
@@ -46,7 +46,9 @@ class FindUserById {
 };
 __decorate([
     (0, decorators_1.get)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/:id`),
-    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
+    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)())
+    //TOKEN REQUIRED
+    ,
     (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),

@@ -9,6 +9,7 @@ import { tokenVerifyMiddleware } from '../../../middlewares/tokenVerifyMiddlewar
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class GetAllUsers {
     @get(AppRoutePath.ENDPOINT_USERS)
+    //TOKEN REQUIRED
     @middleware(tokenVerifyMiddleware())
     async getAllUsers(req: Request, res: Response, next: NextFunction) {
         try {

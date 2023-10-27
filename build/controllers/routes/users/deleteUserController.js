@@ -34,7 +34,6 @@ class DeleteUserById {
                 const deletedUser = yield store.deleteUserById(Number(id));
                 if (!deletedUser)
                     throw new customError_1.CustomError(`User not found. Nothing to delete`, 404);
-                console.log(deletedUser);
                 res.status(204).send(deletedUser);
             }
             catch (err) {
@@ -47,7 +46,9 @@ class DeleteUserById {
 };
 __decorate([
     (0, decorators_1.del)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/remove/:id`),
-    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
+    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)())
+    //TOKEN REQUIRED
+    ,
     (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
