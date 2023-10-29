@@ -4,26 +4,20 @@ exports.bodyValidatorMiddleware = void 0;
 const customError_1 = require("../errors/customError");
 const interface_1 = require("../interface");
 const isValueString_1 = require("../utils/isValueString");
-const checkTypeLiteral = (typeLiteral, maybeItemName) => {
-    const items = typeLiteral.find((item) => {
-        return item === maybeItemName;
-    });
-    if (items) {
-        return items;
-    }
-    throw new customError_1.CustomError(`Bad request. Status must be ${[...typeLiteral].join(' | ')}.`, 400);
-};
+const typeStringLiteral_1 = require("./utils/typeStringLiteral");
 const stringOrNumberThrowError = (key, body, isString) => {
     const keySplit = key.split('_');
     const keyValue = keySplit.length >= 2 ? keySplit.join(' ') : keySplit;
     const bodyValue = body[key];
-    if (key === 'status') {
+    const status = 'status';
+    const category = 'category';
+    if (key === status) {
         if (bodyValue)
-            checkTypeLiteral(interface_1.statuses, bodyValue);
+            (0, typeStringLiteral_1.checkTypeLiteral)(interface_1.statuses, bodyValue, `${status[0].toUpperCase()}${status.slice(1)}`);
     }
-    if (key === 'category') {
+    if (key === category) {
         if (bodyValue)
-            checkTypeLiteral(interface_1.categories, bodyValue);
+            (0, typeStringLiteral_1.checkTypeLiteral)(interface_1.categories, bodyValue, `${category[0].toUpperCase()}${category.slice(1)}`);
     }
     // if (key === 'status') {
     // if (

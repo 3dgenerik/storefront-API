@@ -31,7 +31,7 @@ class FindUserById {
             try {
                 const id = req.params.id;
                 const store = new usersStore_1.UsersStore();
-                const user = yield store.showUserById(Number(id));
+                const user = yield store.getUserById(Number(id));
                 if (!user)
                     throw new customError_1.CustomError(`User with id ${id} not found.`, 404);
                 res.status(200).send(user);

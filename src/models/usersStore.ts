@@ -4,10 +4,11 @@ import bcrypt from 'bcrypt';
 import { SALT_ROUND } from '../config';
 import { Store } from './utils/store';
 
-export class UsersStore extends Store{
+export class UsersStore extends Store {
     private readonly SQL_GET_ALL_USERS = 'SELECT * FROM users_table';
-    private readonly SQL_IF_USER_EXIST= 'SELECT * FROM users_table WHERE first_name = ($1) AND last_name = ($2)'
-    private readonly SQL_SHOW_USER_BY_ID =
+    private readonly SQL_IF_USER_EXIST =
+        'SELECT * FROM users_table WHERE first_name = ($1) AND last_name = ($2)';
+    private readonly SQL_GET_USER_BY_ID =
         'SELECT * FROM users_table WHERE id = ($1)';
     private readonly SQL_CREATE_USER =
         'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
@@ -16,10 +17,14 @@ export class UsersStore extends Store{
     private readonly SQL_DELETE_USER =
         'DELETE FROM users_table WHERE id = ($1) RETURNING *';
 
-    constructor(){
-        super()
+    protected getAllItemsSqlQuery: string;
+    protected getItemByIdSqlQuery: string;
+
+    constructor() {
+        super();
         //set sql query in parent class
-        this.getAllItemsSqlQuery = this.SQL_GET_ALL_USERS
+        this.getAllItemsSqlQuery = this.SQL_GET_ALL_USERS;
+        this.getItemByIdSqlQuery = this.SQL_GET_USER_BY_ID;
     }
 
     //create hash
@@ -39,25 +44,24 @@ export class UsersStore extends Store{
 
     //get all users - from parent class
     async getAllUsers(): Promise<IUser[]> {
-        return await this.getAllItems<IUser>()
+        return await this.getAllItems<IUser>();
     }
 
     //if user exist
     private async userExist(user: IUser): Promise<boolean> {
-        const conn = await client.connect()
+        const conn = await client.connect();
         const sql = this.SQL_IF_USER_EXIST;
-        const result = await conn.query(sql, [user.first_name, user.last_name])
-        conn.release()
-        const existingUser = result.rows[0]
+        const result = await conn.query(sql, [user.first_name, user.last_name]);
+        conn.release();
+        const existingUser = result.rows[0];
 
-        if(existingUser)
-            return true;
+        if (existingUser) return true;
         return false;
     }
 
     //show user by id - from parent class
-    async showUserById(id: number): Promise<IUser | null> {
-        return await this.showItemById(id, this.SQL_SHOW_USER_BY_ID)
+    async getUserById(id: number): Promise<IUser | null> {
+        return await this.getItemById(id, this.SQL_GET_USER_BY_ID);
     }
 
     //create user

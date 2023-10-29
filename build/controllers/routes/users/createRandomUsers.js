@@ -20,16 +20,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
-const productsStore_1 = require("../../../models/productsStore");
-let GetAllProductsController = 
+const usersStore_1 = require("../../../models/usersStore");
+const randomItems_1 = require("../../../randomItems");
+let CreateRandomUsers = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class GetAllProductsController {
-    getAllProducts(req, res, next) {
+class CreateRandomUsers {
+    createUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const store = new productsStore_1.ProductsStore();
-                const allProducts = yield store.getAllProducts();
-                res.status(200).send(allProducts);
+                const store = new usersStore_1.UsersStore();
+                const allUsers = yield store.getAllUsers();
+                if (allUsers.length !== 0) {
+                    throw new customError_1.CustomError(`${allUsers.length} users already exist in database.`, 409);
+                }
+                for (const user of randomItems_1.randomUsers) {
+                    yield store.createUser(user);
+                }
+                res.status(201).send(`${randomItems_1.randomUsers.length} random users created.`);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -40,12 +47,12 @@ class GetAllProductsController {
     }
 };
 __decorate([
-    (0, decorators_1.get)("/products" /* AppRoutePath.ENDPOINT_PRODUCTS */),
+    (0, decorators_1.post)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/create-random-users`),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], GetAllProductsController.prototype, "getAllProducts", null);
-GetAllProductsController = __decorate([
+], CreateRandomUsers.prototype, "createUser", null);
+CreateRandomUsers = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], GetAllProductsController);
+], CreateRandomUsers);

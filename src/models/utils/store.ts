@@ -1,10 +1,8 @@
-import client from "../../database";
-import { IItemId } from "../../interface";
+import client from '../../database';
 
-
-export class Store {
-
-    protected getAllItemsSqlQuery: string = '';
+export abstract class Store {
+    protected abstract getAllItemsSqlQuery: string;
+    protected abstract getItemByIdSqlQuery: string;
 
     protected async getAllItems<T>(): Promise<T[]> {
         const conn = await client.connect();
@@ -14,16 +12,18 @@ export class Store {
         return result.rows;
     }
 
-
     protected async itemExistById(id: number): Promise<boolean> {
-        const allItems = await this.getAllItems<IItemId>();
-        for (const item of allItems) {
-            if (item.id === id) return true;
-        }
+        const conn = await client.connect();
+        const sql = this.getItemByIdSqlQuery;
+        const result = await conn.query(sql, [id]);
+        conn.release();
+        const existingItem = result.rows[0];
+
+        if (existingItem) return true;
         return false;
     }
 
-    private async itemById(id: number, sqlQuery: string){
+    protected async itemById(id: number, sqlQuery: string) {
         if (!(await this.itemExistById(id))) return null;
 
         const conn = await client.connect();
@@ -33,11 +33,17 @@ export class Store {
         return result.rows[0];
     }
 
-    protected async showItemById<T>(id: number, sqlQuery: string): Promise<T | null> {
-        return this.itemById(id, sqlQuery)
+    protected async getItemById<T>(
+        id: number,
+        sqlQuery: string,
+    ): Promise<T | null> {
+        return this.itemById(id, sqlQuery);
     }
 
-    protected async deleteItemById<T>(id: number, sqlQuery: string): Promise<T | null> {
-        return this.itemById(id, sqlQuery)
+    protected async deleteItemById<T>(
+        id: number,
+        sqlQuery: string,
+    ): Promise<T | null> {
+        return this.itemById(id, sqlQuery);
     }
 }

@@ -19,8 +19,12 @@ class ProductsStore extends store_1.Store {
     constructor() {
         super();
         this.SQL_GET_ALL_PRODUCTS = 'SELECT * FROM products_table';
+        this.SQL_IF_PRODUCT_EXIST = 'SELECT * FROM products_table WHERE name = ($1) AND category = ($2)';
         this.SQL_GET_PRODUCT_BY_ID = 'SELECT * FROM products_table WHERE id = ($1)';
+        this.SQL_CREATE_PRODUCT = 'INSERT INTO products_table (name, price, category) VALUES($1, $2, $3) RETURNING *';
+        this.SQL_DELETE_PRODUCT = 'DELETE FROM products_table WHERE id = ($1) RETURNING *';
         this.getAllItemsSqlQuery = this.SQL_GET_ALL_PRODUCTS;
+        this.getItemByIdSqlQuery = this.SQL_GET_PRODUCT_BY_ID;
     }
     getAllProducts() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -30,13 +34,48 @@ class ProductsStore extends store_1.Store {
     productExist(product) {
         return __awaiter(this, void 0, void 0, function* () {
             const conn = yield database_1.default.connect();
-            const sql = 'SELECT * FROM products_table WHERE name = ($1) AND category = ($2)';
+            const sql = this.SQL_IF_PRODUCT_EXIST;
             const result = yield conn.query(sql, [product.name, product.category]);
             conn.release();
             const existingProduct = result.rows[0];
             if (existingProduct)
                 return true;
             return false;
+        });
+    }
+    getProductById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.getItemById(id, this.SQL_GET_PRODUCT_BY_ID);
+        });
+    }
+    createProduct(product) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (yield this.productExist(product)) {
+                return null;
+            }
+            const conn = yield database_1.default.connect();
+            const sql = this.SQL_CREATE_PRODUCT;
+            const result = yield conn.query(sql, [
+                product.name,
+                product.price,
+                product.category,
+            ]);
+            conn.release();
+            return result.rows[0];
+        });
+    }
+    deleteProductById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.deleteItemById(id, this.SQL_DELETE_PRODUCT);
+        });
+    }
+    getProductsByCategory(category) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const conn = yield database_1.default.connect();
+            const sql = 'SELECT * FROM products_table WHERE category = ($1)';
+            const result = yield conn.query(sql, [category]);
+            conn.release();
+            return result.rows;
         });
     }
 }

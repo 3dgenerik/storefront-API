@@ -20,16 +20,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
+const bodyValidatorMiddleware_1 = require("../../../middlewares/bodyValidatorMiddleware");
 const productsStore_1 = require("../../../models/productsStore");
-let GetAllProductsController = 
+const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
+let CreateProductController = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class GetAllProductsController {
-    getAllProducts(req, res, next) {
+class CreateProductController {
+    createProduct(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const product = req.body;
                 const store = new productsStore_1.ProductsStore();
-                const allProducts = yield store.getAllProducts();
-                res.status(200).send(allProducts);
+                const addedProduct = yield store.createProduct(product);
+                if (!addedProduct)
+                    throw new customError_1.CustomError(`Product ${product.name} in category: ${product.category} already exist.`, 409);
+                // res.status(201).send(addedProduct);
+                res.status(201).send('OK');
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -40,12 +46,14 @@ class GetAllProductsController {
     }
 };
 __decorate([
-    (0, decorators_1.get)("/products" /* AppRoutePath.ENDPOINT_PRODUCTS */),
+    (0, decorators_1.post)("/products" /* AppRoutePath.ENDPOINT_PRODUCTS */),
+    (0, decorators_1.middleware)((0, bodyValidatorMiddleware_1.bodyValidatorMiddleware)('name', 'price', 'category')),
+    (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], GetAllProductsController.prototype, "getAllProducts", null);
-GetAllProductsController = __decorate([
+], CreateProductController.prototype, "createProduct", null);
+CreateProductController = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], GetAllProductsController);
+], CreateProductController);

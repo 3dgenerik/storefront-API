@@ -14,7 +14,12 @@ require("./controllers/routes/users/createUserController");
 require("./controllers/routes/users/findUserByIdController");
 require("./controllers/routes/users/authUserController");
 require("./controllers/routes/users/deleteUserController");
-require("./controllers/routes/prdoducts/getAllProductsController");
+require("./controllers/routes/users/createRandomUsers");
+require("./controllers/routes/products/getAllProductsController");
+require("./controllers/routes/products/createProductController");
+require("./controllers/routes/products/createRandomProducts");
+require("./controllers/routes/products/deleteProductController");
+require("./controllers/routes/products/getProductsByCategories");
 // declare module 'express-serve-static-core' {
 //     interface Request {
 //         token?: IUser | null;

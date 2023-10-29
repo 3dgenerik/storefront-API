@@ -10,8 +10,13 @@ import './controllers/routes/users/createUserController';
 import './controllers/routes/users/findUserByIdController';
 import './controllers/routes/users/authUserController';
 import './controllers/routes/users/deleteUserController';
+import './controllers/routes/users/createRandomUsers';
 
-import './controllers/routes/prdoducts/getAllProductsController';
+import './controllers/routes/products/getAllProductsController';
+import './controllers/routes/products/createProductController';
+import './controllers/routes/products/createRandomProducts';
+import './controllers/routes/products/deleteProductController';
+import './controllers/routes/products/getProductsByCategories';
 
 // declare module 'express-serve-static-core' {
 //     interface Request {

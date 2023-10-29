@@ -17,7 +17,7 @@ class FindUserById {
         try {
             const id = req.params.id;
             const store = new UsersStore();
-            const user = await store.showUserById(Number(id));
+            const user = await store.getUserById(Number(id));
 
             if (!user)
                 throw new CustomError(`User with id ${id} not found.`, 404);

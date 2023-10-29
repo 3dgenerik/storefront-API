@@ -1,58 +1,56 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { CustomError } from '../errors/customError';
-import { IBodyValidator, TCategory, TStatus, categories, statuses} from '../interface';
+import {
+    IBodyValidator,
+    categories,
+    statuses,
+} from '../interface';
 import { isValueString } from '../utils/isValueString';
-
-
-
-const checkTypeLiteral = (typeLiteral: typeof categories | typeof statuses, maybeItemName: string):TCategory | TStatus=>{
-
-    const items = typeLiteral.find((item: string)=>{
-        return item === maybeItemName
-    })
-
-    if(items){
-        return items
-    }
-        throw new CustomError(`Bad request. Status must be ${[...typeLiteral].join(' | ')}.`, 400)
-}
-
+import { checkTypeLiteral } from './utils/typeStringLiteral';
 
 const stringOrNumberThrowError = (
     key: keyof IBodyValidator,
     body: IBodyValidator,
     isString: boolean,
 ) => {
-
-    
     const keySplit = key.split('_');
     const keyValue = keySplit.length >= 2 ? keySplit.join(' ') : keySplit;
-    
+
     const bodyValue = body[key];
-    
-    if (key === 'status') {
-        if(bodyValue)
-            checkTypeLiteral(statuses, bodyValue as string)
+
+    const status = 'status';
+    const category = 'category';
+
+    if (key === status) {
+        if (bodyValue)
+            checkTypeLiteral(
+                statuses,
+                bodyValue as string,
+                `${status[0].toUpperCase()}${status.slice(1)}`,
+            );
     }
 
-    if (key === 'category') {
-        if(bodyValue)
-            checkTypeLiteral(categories, bodyValue as string)
+    if (key === category) {
+        if (bodyValue)
+            checkTypeLiteral(
+                categories,
+                bodyValue as string,
+                `${category[0].toUpperCase()}${category.slice(1)}`,
+            );
     }
 
     // if (key === 'status') {
-        // if (
-        //     bodyValue !== undefined &&
-        //     bodyValue !== 'active' &&
-        //     bodyValue !== 'complete'
-        // ) {
-        //     throw new CustomError(
-        //         `Bad request. Status must be 'active' or 'complete'.`,
-        //         400,
-        //     );
-        // }
+    // if (
+    //     bodyValue !== undefined &&
+    //     bodyValue !== 'active' &&
+    //     bodyValue !== 'complete'
+    // ) {
+    //     throw new CustomError(
+    //         `Bad request. Status must be 'active' or 'complete'.`,
+    //         400,
+    //     );
     // }
-
+    // }
 
     if (bodyValue) {
         if (!isValueString(bodyValue) && isString) {

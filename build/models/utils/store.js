@@ -15,9 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Store = void 0;
 const database_1 = __importDefault(require("../../database"));
 class Store {
-    constructor() {
-        this.getAllItemsSqlQuery = '';
-    }
     getAllItems() {
         return __awaiter(this, void 0, void 0, function* () {
             const conn = yield database_1.default.connect();
@@ -29,11 +26,13 @@ class Store {
     }
     itemExistById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const allItems = yield this.getAllItems();
-            for (const item of allItems) {
-                if (item.id === id)
-                    return true;
-            }
+            const conn = yield database_1.default.connect();
+            const sql = this.getItemByIdSqlQuery;
+            const result = yield conn.query(sql, [id]);
+            conn.release();
+            const existingItem = result.rows[0];
+            if (existingItem)
+                return true;
             return false;
         });
     }
@@ -48,7 +47,7 @@ class Store {
             return result.rows[0];
         });
     }
-    showItemById(id, sqlQuery) {
+    getItemById(id, sqlQuery) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.itemById(id, sqlQuery);
         });

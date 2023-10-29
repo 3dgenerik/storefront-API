@@ -10,8 +10,8 @@ export interface ICustomError extends IStatusCode {
     formatMessage: () => ICustomErrorMessage;
 }
 
-export interface IItemId{
-    id?: number
+export interface IItemId {
+    id?: number;
 }
 
 export interface IUser extends IItemId {
@@ -20,27 +20,32 @@ export interface IUser extends IItemId {
     password: string;
 }
 
-export const categories = ['electronics', 'clothing', 'applicances', 'furniture', 'rest'] as const;
-export type TCategory = typeof categories[number];
+export const categories = [
+    'electronics',
+    'clothing',
+    'appliances',
+    'furniture',
+    'rest',
+] as const;
+export type TCategory = (typeof categories)[number];
 
-interface ICategory{
+interface ICategory {
     category: TCategory;
 }
-export interface IProduct extends IItemId, ICategory{
+export interface IProduct extends IItemId, ICategory {
     name: string;
     price: number;
 }
 
-
 export const statuses = ['active', 'complete'] as const;
-export type TStatus = typeof statuses[number];
+export type TStatus = (typeof statuses)[number];
 
-export interface IOrders extends IItemId  {
+export interface IOrders extends IItemId {
     user_id?: number;
     status: TStatus;
 }
 
-export interface IProductsInOrders extends IItemId  {
+export interface IProductsInOrders extends IItemId {
     quantity: number;
     product_id: number;
     order_id: number;
