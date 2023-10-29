@@ -1,26 +1,25 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { CustomError } from '../errors/customError';
 import { checkTypeLiteral } from './utils/typeStringLiteral';
-import { categories } from '../interface';
+import { statuses } from '../interface';
 
-export const typeParamValidatorMiddleware = (): RequestHandler => {
+export const queryValidatorMiddleware = (): RequestHandler => {
     return (req: Request, res: Response, next: NextFunction) => {
         try {
-            // const status = 'status';
-            const category = 'category';
-            const type = req.params.category;
+            const status = 'status';
+            const type = req.query.status as string;
 
             if (!Number.isNaN(Number(type))) {
                 throw new CustomError(
-                    'Bad request. Invalid param type. Type param must be string.',
+                    'Bad request. Invalid query. Query param must be string.',
                     400,
                 );
             }
 
             checkTypeLiteral(
-                categories,
+                statuses,
                 type,
-                `${category[0].toUpperCase()}${category.slice(1)}`,
+                `${status[0].toUpperCase()}${status.slice(1)}`,
             );
 
             next();

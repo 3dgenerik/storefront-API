@@ -43,6 +43,7 @@ export type TStatus = (typeof statuses)[number];
 export interface IOrders extends IItemId {
     user_id?: number;
     status: TStatus;
+    timestamp: string;
 }
 
 export interface IProductsInOrders extends IItemId {

@@ -19,18 +19,6 @@ const stringOrNumberThrowError = (key, body, isString) => {
         if (bodyValue)
             (0, typeStringLiteral_1.checkTypeLiteral)(interface_1.categories, bodyValue, `${category[0].toUpperCase()}${category.slice(1)}`);
     }
-    // if (key === 'status') {
-    // if (
-    //     bodyValue !== undefined &&
-    //     bodyValue !== 'active' &&
-    //     bodyValue !== 'complete'
-    // ) {
-    //     throw new CustomError(
-    //         `Bad request. Status must be 'active' or 'complete'.`,
-    //         400,
-    //     );
-    // }
-    // }
     if (bodyValue) {
         if (!(0, isValueString_1.isValueString)(bodyValue) && isString) {
             throw new customError_1.CustomError(`Bad request. ${keyValue} must be string. Please provide correct ${keyValue}`, 400);

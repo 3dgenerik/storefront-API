@@ -20,6 +20,9 @@ require("./controllers/routes/products/createProductController");
 require("./controllers/routes/products/createRandomProducts");
 require("./controllers/routes/products/deleteProductController");
 require("./controllers/routes/products/getProductsByCategories");
+require("./controllers/routes/orders/getAllOrdersByUserIdController");
+require("./controllers/routes/orders/getAllSpecificOrdersByUserIdController");
+require("./controllers/routes/orders/getCurrentOrderController");
 // declare module 'express-serve-static-core' {
 //     interface Request {
 //         token?: IUser | null;

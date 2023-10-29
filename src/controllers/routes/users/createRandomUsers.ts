@@ -13,21 +13,19 @@ class CreateRandomUsers {
         try {
             const store = new UsersStore();
 
-            const allUsers = await store.getAllUsers()
+            const allUsers = await store.getAllUsers();
 
-            if(allUsers.length !== 0){
+            if (allUsers.length !== 0) {
                 throw new CustomError(
                     `${allUsers.length} users already exist in database.`,
                     409,
                 );
             }
-            
-            
+
             for (const user of randomUsers) {
                 await store.createUser(user);
             }
             res.status(201).send(`${randomUsers.length} random users created.`);
-
         } catch (err) {
             if (err instanceof CustomError) next(err);
             next(new CustomError(`${err}`, 500));

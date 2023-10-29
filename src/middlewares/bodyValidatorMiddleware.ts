@@ -1,10 +1,6 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { CustomError } from '../errors/customError';
-import {
-    IBodyValidator,
-    categories,
-    statuses,
-} from '../interface';
+import { IBodyValidator, categories, statuses } from '../interface';
 import { isValueString } from '../utils/isValueString';
 import { checkTypeLiteral } from './utils/typeStringLiteral';
 
@@ -39,18 +35,6 @@ const stringOrNumberThrowError = (
             );
     }
 
-    // if (key === 'status') {
-    // if (
-    //     bodyValue !== undefined &&
-    //     bodyValue !== 'active' &&
-    //     bodyValue !== 'complete'
-    // ) {
-    //     throw new CustomError(
-    //         `Bad request. Status must be 'active' or 'complete'.`,
-    //         400,
-    //     );
-    // }
-    // }
 
     if (bodyValue) {
         if (!isValueString(bodyValue) && isString) {

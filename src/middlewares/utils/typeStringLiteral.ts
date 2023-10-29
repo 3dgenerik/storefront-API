@@ -1,5 +1,5 @@
-import { CustomError } from "../../errors/customError";
-import { TCategory, TStatus, categories, statuses } from "../../interface";
+import { CustomError } from '../../errors/customError';
+import { TCategory, TStatus, categories, statuses } from '../../interface';
 
 export const checkTypeLiteral = (
     typeLiteral: typeof categories | typeof statuses,

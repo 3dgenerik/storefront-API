@@ -2,7 +2,7 @@ export const enum AppRoutePath {
     PREFIX_ROUTE = '/api',
     ENDPOINT_USERS = '/users',
     ENDPOINT_PRODUCTS = '/products',
-    ENDPOINT_ORDERS = './orders',
+    ENDPOINT_ORDERS = '/orders',
 }
 
 export const enum AppMethods {

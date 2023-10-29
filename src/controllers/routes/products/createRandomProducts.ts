@@ -13,9 +13,9 @@ class CreateRandomProducts {
         try {
             const store = new ProductsStore();
 
-            const allProducts = await store.getAllProducts()
+            const allProducts = await store.getAllProducts();
 
-            if(allProducts.length !== 0){
+            if (allProducts.length !== 0) {
                 throw new CustomError(
                     `${allProducts.length} products already exist in database.`,
                     409,
@@ -26,7 +26,9 @@ class CreateRandomProducts {
                 await store.createProduct(product);
             }
 
-            res.status(201).send(`${radnomProducts.length} radnom products created.`);
+            res.status(201).send(
+                `${radnomProducts.length} radnom products created.`,
+            );
         } catch (err) {
             if (err instanceof CustomError) next(err);
             next(new CustomError(`${err}`, 500));

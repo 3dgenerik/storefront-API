@@ -18,6 +18,10 @@ import './controllers/routes/products/createRandomProducts';
 import './controllers/routes/products/deleteProductController';
 import './controllers/routes/products/getProductsByCategories';
 
+import './controllers/routes/orders/getAllOrdersByUserIdController';
+import './controllers/routes/orders/getAllSpecificOrdersByUserIdController';
+import './controllers/routes/orders/getCurrentOrderController';
+
 // declare module 'express-serve-static-core' {
 //     interface Request {
 //         token?: IUser | null;

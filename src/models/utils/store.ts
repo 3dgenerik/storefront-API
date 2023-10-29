@@ -1,8 +1,8 @@
 import client from '../../database';
 
-export abstract class Store {
-    protected abstract getAllItemsSqlQuery: string;
-    protected abstract getItemByIdSqlQuery: string;
+export class Store {
+    protected getAllItemsSqlQuery: string = '';
+    protected getItemByIdSqlQuery: string = '';
 
     protected async getAllItems<T>(): Promise<T[]> {
         const conn = await client.connect();

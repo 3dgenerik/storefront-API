@@ -17,9 +17,6 @@ export class UsersStore extends Store {
     private readonly SQL_DELETE_USER =
         'DELETE FROM users_table WHERE id = ($1) RETURNING *';
 
-    protected getAllItemsSqlQuery: string;
-    protected getItemByIdSqlQuery: string;
-
     constructor() {
         super();
         //set sql query in parent class

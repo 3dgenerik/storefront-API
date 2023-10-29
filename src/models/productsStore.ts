@@ -1,5 +1,5 @@
 import client from '../database';
-import { IProduct} from '../interface';
+import { IProduct } from '../interface';
 import { Store } from './utils/store';
 
 export class ProductsStore extends Store {
@@ -12,9 +12,6 @@ export class ProductsStore extends Store {
         'INSERT INTO products_table (name, price, category) VALUES($1, $2, $3) RETURNING *';
     private readonly SQL_DELETE_PRODUCT =
         'DELETE FROM products_table WHERE id = ($1) RETURNING *';
-
-    protected getAllItemsSqlQuery: string;
-    protected getItemByIdSqlQuery: string;
 
     constructor() {
         super();
@@ -56,15 +53,15 @@ export class ProductsStore extends Store {
         return result.rows[0];
     }
 
-    async deleteProductById(id: number):Promise<IProduct | null>{
-        return await this.deleteItemById(id, this.SQL_DELETE_PRODUCT)
+    async deleteProductById(id: number): Promise<IProduct | null> {
+        return await this.deleteItemById(id, this.SQL_DELETE_PRODUCT);
     }
 
-    async getProductsByCategory(category: string):Promise<IProduct[]>{
-        const conn = await client.connect()
-        const sql = 'SELECT * FROM products_table WHERE category = ($1)'
-        const result = await conn.query(sql, [category])
-        conn.release()
-        return result.rows
+    async getProductsByCategory(category: string): Promise<IProduct[]> {
+        const conn = await client.connect();
+        const sql = 'SELECT * FROM products_table WHERE category = ($1)';
+        const result = await conn.query(sql, [category]);
+        conn.release();
+        return result.rows;
     }
 }
