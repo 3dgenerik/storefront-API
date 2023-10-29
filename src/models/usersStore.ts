@@ -2,9 +2,11 @@ import { IUser } from '../interface';
 import client from '../database';
 import bcrypt from 'bcrypt';
 import { SALT_ROUND } from '../config';
+import { Store } from './utils/store';
 
-export class UsersStore {
+export class UsersStore extends Store{
     private readonly SQL_GET_ALL_USERS = 'SELECT * FROM users_table';
+    private readonly SQL_IF_USER_EXIST= 'SELECT * FROM users_table WHERE first_name = ($1) AND last_name = ($2)'
     private readonly SQL_SHOW_USER_BY_ID =
         'SELECT * FROM users_table WHERE id = ($1)';
     private readonly SQL_CREATE_USER =
@@ -14,11 +16,19 @@ export class UsersStore {
     private readonly SQL_DELETE_USER =
         'DELETE FROM users_table WHERE id = ($1) RETURNING *';
 
+    constructor(){
+        super()
+        //set sql query in parent class
+        this.getAllItemsSqlQuery = this.SQL_GET_ALL_USERS
+    }
+
+    //create hash
     private async passwordHash(password: string): Promise<string> {
         const hash = await bcrypt.hash(password, Number(SALT_ROUND));
         return hash;
     }
 
+    //compare password and hash
     private async passwordHashCompare(
         password: string,
         hash: string,
@@ -27,45 +37,30 @@ export class UsersStore {
         return isMatch;
     }
 
+    //get all users - from parent class
     async getAllUsers(): Promise<IUser[]> {
-        const conn = await client.connect();
-        const sql = this.SQL_GET_ALL_USERS;
-        const result = await conn.query(sql);
-        conn.release();
-        return result.rows;
+        return await this.getAllItems<IUser>()
     }
 
-    private async userExist(newUser: IUser): Promise<boolean> {
-        const allUsers = await this.getAllUsers();
-        for (const user of allUsers) {
-            if (
-                user.first_name === newUser.first_name &&
-                user.last_name === newUser.last_name
-            ) {
-                return true;
-            }
-        }
+    //if user exist
+    private async userExist(user: IUser): Promise<boolean> {
+        const conn = await client.connect()
+        const sql = this.SQL_IF_USER_EXIST;
+        const result = await conn.query(sql, [user.first_name, user.last_name])
+        conn.release()
+        const existingUser = result.rows[0]
+
+        if(existingUser)
+            return true;
         return false;
     }
 
-    private async userExistById(id: number): Promise<boolean> {
-        const allUsers = await this.getAllUsers();
-        for (const user of allUsers) {
-            if (user.id === id) return true;
-        }
-        return false;
-    }
-
+    //show user by id - from parent class
     async showUserById(id: number): Promise<IUser | null> {
-        if (!(await this.userExistById(id))) return null;
-
-        const conn = await client.connect();
-        const sql = this.SQL_SHOW_USER_BY_ID;
-        const result = await conn.query(sql, [id]);
-        conn.release();
-        return result.rows[0];
+        return await this.showItemById(id, this.SQL_SHOW_USER_BY_ID)
     }
 
+    //create user
     async createUser(user: IUser): Promise<IUser | null> {
         if (await this.userExist(user)) {
             return null;
@@ -82,6 +77,7 @@ export class UsersStore {
         return result.rows[0];
     }
 
+    //user authorization
     async authUser(user: IUser): Promise<IUser | null> {
         if (!(await this.userExist(user))) return null;
 
@@ -98,13 +94,8 @@ export class UsersStore {
         return dbUser;
     }
 
+    //delete user - from parent class
     async deleteUserById(id: number): Promise<IUser | null> {
-        if (!(await this.userExistById(id))) return null;
-
-        const conn = await client.connect();
-        const sql = this.SQL_DELETE_USER;
-        const result = await conn.query(sql, [id]);
-        conn.release();
-        return result.rows[0];
+        return await this.deleteItemById(id, this.SQL_DELETE_USER);
     }
 }

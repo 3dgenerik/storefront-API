@@ -14,6 +14,7 @@ require("./controllers/routes/users/createUserController");
 require("./controllers/routes/users/findUserByIdController");
 require("./controllers/routes/users/authUserController");
 require("./controllers/routes/users/deleteUserController");
+require("./controllers/routes/prdoducts/getAllProductsController");
 // declare module 'express-serve-static-core' {
 //     interface Request {
 //         token?: IUser | null;

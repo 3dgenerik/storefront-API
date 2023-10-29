@@ -10,28 +10,37 @@ export interface ICustomError extends IStatusCode {
     formatMessage: () => ICustomErrorMessage;
 }
 
-export interface IUser {
-    id?: number;
+export interface IItemId{
+    id?: number
+}
+
+export interface IUser extends IItemId {
     first_name: string;
     last_name: string;
     password: string;
 }
 
-export interface IProduct {
-    id?: number;
+export const categories = ['electronics', 'clothing', 'applicances', 'furniture', 'rest'] as const;
+export type TCategory = typeof categories[number];
+
+interface ICategory{
+    category: TCategory;
+}
+export interface IProduct extends IItemId, ICategory{
     name: string;
     price: number;
-    category: string;
 }
 
-export interface IOrders {
-    id?: number;
+
+export const statuses = ['active', 'complete'] as const;
+export type TStatus = typeof statuses[number];
+
+export interface IOrders extends IItemId  {
     user_id?: number;
-    status: 'active' | 'complete';
+    status: TStatus;
 }
 
-export interface IProductsInOrders {
-    id?: number;
+export interface IProductsInOrders extends IItemId  {
     quantity: number;
     product_id: number;
     order_id: number;
@@ -43,8 +52,8 @@ export interface IBodyValidator {
     password?: string;
     name?: string;
     price?: number;
-    category?: string;
-    status?: 'active' | 'complete';
+    category?: TCategory;
+    status?: TStatus;
     quantity?: number;
     product_id?: number;
     order_id?: number;

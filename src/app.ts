@@ -11,6 +11,8 @@ import './controllers/routes/users/findUserByIdController';
 import './controllers/routes/users/authUserController';
 import './controllers/routes/users/deleteUserController';
 
+import './controllers/routes/prdoducts/getAllProductsController';
+
 // declare module 'express-serve-static-core' {
 //     interface Request {
 //         token?: IUser | null;

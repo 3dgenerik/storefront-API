@@ -2,18 +2,41 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bodyValidatorMiddleware = void 0;
 const customError_1 = require("../errors/customError");
+const interface_1 = require("../interface");
 const isValueString_1 = require("../utils/isValueString");
+const checkTypeLiteral = (typeLiteral, maybeItemName) => {
+    const items = typeLiteral.find((item) => {
+        return item === maybeItemName;
+    });
+    if (items) {
+        return items;
+    }
+    throw new customError_1.CustomError(`Bad request. Status must be ${[...typeLiteral].join(' | ')}.`, 400);
+};
 const stringOrNumberThrowError = (key, body, isString) => {
     const keySplit = key.split('_');
     const keyValue = keySplit.length >= 2 ? keySplit.join(' ') : keySplit;
     const bodyValue = body[key];
     if (key === 'status') {
-        if (bodyValue !== undefined &&
-            bodyValue !== 'active' &&
-            bodyValue !== 'complete') {
-            throw new customError_1.CustomError(`Bad request. Status must be 'active' or 'complete'.`, 400);
-        }
+        if (bodyValue)
+            checkTypeLiteral(interface_1.statuses, bodyValue);
     }
+    if (key === 'category') {
+        if (bodyValue)
+            checkTypeLiteral(interface_1.categories, bodyValue);
+    }
+    // if (key === 'status') {
+    // if (
+    //     bodyValue !== undefined &&
+    //     bodyValue !== 'active' &&
+    //     bodyValue !== 'complete'
+    // ) {
+    //     throw new CustomError(
+    //         `Bad request. Status must be 'active' or 'complete'.`,
+    //         400,
+    //     );
+    // }
+    // }
     if (bodyValue) {
         if (!(0, isValueString_1.isValueString)(bodyValue) && isString) {
             throw new customError_1.CustomError(`Bad request. ${keyValue} must be string. Please provide correct ${keyValue}`, 400);
