@@ -1,4 +1,5 @@
 export const enum AppRoutePath {
+    ROOT = '/',
     PREFIX_ROUTE = '/api',
     ENDPOINT_USERS = '/users',
     ENDPOINT_PRODUCTS = '/products',

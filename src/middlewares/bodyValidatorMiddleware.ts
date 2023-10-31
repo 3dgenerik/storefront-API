@@ -114,6 +114,9 @@ export const bodyValidatorMiddleware = (...keys: string[]): RequestHandler => {
                     case 'order_id':
                         stringOrNumberThrowError(key, body, false);
                         break;
+                    case 'user_id':
+                        stringOrNumberThrowError(key, body, false);
+                        break;
                     default:
                 }
             }

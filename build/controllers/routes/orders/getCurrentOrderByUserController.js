@@ -18,20 +18,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const customError_1 = require("../../../errors/customError");
-const usersStore_1 = require("../../../models/usersStore");
 const decorators_1 = require("../../decorators");
-const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
-let GetAllUsers = 
+const customError_1 = require("../../../errors/customError");
+const ordersStore_1 = require("../../../models/ordersStore");
+const idParamValidatorMiddleware_1 = require("../../../middlewares/idParamValidatorMiddleware");
+let GetCurrentOrderController = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class GetAllUsers {
-    getAllUsers(req, res, next) {
+class GetCurrentOrderController {
+    getCurrentOrderController(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // console.log('SESSION TOKEN: ', req.session?.userFromToken);
-                const store = new usersStore_1.UsersStore();
-                const users = yield store.getAllUsers();
-                res.status(200).send(users);
+                const userId = req.params.id;
+                const store = new ordersStore_1.OrdersStore();
+                const order = yield store.getCurrentOrder(Number(userId));
+                if (!order)
+                    throw new customError_1.CustomError(`Current order not found.`, 404);
+                res.status(200).send(order);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -42,15 +44,13 @@ class GetAllUsers {
     }
 };
 __decorate([
-    (0, decorators_1.get)("/users" /* AppRoutePath.ENDPOINT_USERS */)
-    //TOKEN REQUIRED
-    ,
-    (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
+    (0, decorators_1.get)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/:id${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/current`),
+    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], GetAllUsers.prototype, "getAllUsers", null);
-GetAllUsers = __decorate([
+], GetCurrentOrderController.prototype, "getCurrentOrderController", null);
+GetCurrentOrderController = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], GetAllUsers);
+], GetCurrentOrderController);

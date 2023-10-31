@@ -26,12 +26,12 @@ const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddlew
 let DeleteUserById = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class DeleteUserById {
-    DeleteUserById(req, res, next) {
+    deleteUserById(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const id = req.params.id;
-                const store = new usersStore_1.UsersStore();
-                const deletedUser = yield store.deleteUserById(Number(id));
+                const usersStore = new usersStore_1.UsersStore();
+                const deletedUser = yield usersStore.deleteUserById(Number(id));
                 if (!deletedUser)
                     throw new customError_1.CustomError(`User not found. Nothing to delete`, 404);
                 res.status(204).send(deletedUser);
@@ -53,7 +53,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], DeleteUserById.prototype, "DeleteUserById", null);
+], DeleteUserById.prototype, "deleteUserById", null);
 DeleteUserById = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

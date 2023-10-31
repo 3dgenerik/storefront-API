@@ -14,13 +14,11 @@ export class UsersStore extends Store {
         'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
     private readonly SQL_AUTH_USER =
         'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
-    private readonly SQL_DELETE_USER =
-        'DELETE FROM users_table WHERE id = ($1) RETURNING *';
+
 
     constructor() {
         super();
         //set sql query in parent class
-        this.getAllItemsSqlQuery = this.SQL_GET_ALL_USERS;
         this.getItemByIdSqlQuery = this.SQL_GET_USER_BY_ID;
     }
 
@@ -41,7 +39,7 @@ export class UsersStore extends Store {
 
     //get all users - from parent class
     async getAllUsers(): Promise<IUser[]> {
-        return await this.getAllItems<IUser>();
+        return await this.getAllItems<IUser>(this.SQL_GET_ALL_USERS);
     }
 
     //if user exist
@@ -96,7 +94,8 @@ export class UsersStore extends Store {
     }
 
     //delete user - from parent class
-    async deleteUserById(id: number): Promise<IUser | null> {
-        return await this.deleteItemById(id, this.SQL_DELETE_USER);
-    }
+    // async deleteUserById(id: number): Promise<IUser | null> {
+        
+    //     return await this.deleteItemById(id, this.SQL_DELETE_USER);
+    // }
 }

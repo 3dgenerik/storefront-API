@@ -25,9 +25,7 @@ class UsersStore extends store_1.Store {
         this.SQL_GET_USER_BY_ID = 'SELECT * FROM users_table WHERE id = ($1)';
         this.SQL_CREATE_USER = 'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
         this.SQL_AUTH_USER = 'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
-        this.SQL_DELETE_USER = 'DELETE FROM users_table WHERE id = ($1) RETURNING *';
         //set sql query in parent class
-        this.getAllItemsSqlQuery = this.SQL_GET_ALL_USERS;
         this.getItemByIdSqlQuery = this.SQL_GET_USER_BY_ID;
     }
     //create hash
@@ -47,7 +45,7 @@ class UsersStore extends store_1.Store {
     //get all users - from parent class
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.getAllItems();
+            return yield this.getAllItems(this.SQL_GET_ALL_USERS);
         });
     }
     //if user exist
@@ -100,12 +98,6 @@ class UsersStore extends store_1.Store {
             if (!(yield this.passwordHashCompare(user.password, dbUser.password)))
                 return null;
             return dbUser;
-        });
-    }
-    //delete user - from parent class
-    deleteUserById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield this.deleteItemById(id, this.SQL_DELETE_USER);
         });
     }
 }

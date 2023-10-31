@@ -13,7 +13,7 @@ class GetAllUsers {
     @middleware(tokenVerifyMiddleware())
     async getAllUsers(req: Request, res: Response, next: NextFunction) {
         try {
-            // console.log(req.session?.userFromToken);
+            // console.log('SESSION TOKEN: ', req.session?.userFromToken);
             const store = new UsersStore();
             const users = await store.getAllUsers();
             res.status(200).send(users);

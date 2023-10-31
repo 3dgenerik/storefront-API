@@ -1,12 +1,10 @@
 import client from '../../database';
 
 export class Store {
-    protected getAllItemsSqlQuery: string = '';
     protected getItemByIdSqlQuery: string = '';
 
-    protected async getAllItems<T>(): Promise<T[]> {
+    protected async getAllItems<T>(sql: string): Promise<T[]> {
         const conn = await client.connect();
-        const sql = this.getAllItemsSqlQuery;
         const result = await conn.query(sql);
         conn.release();
         return result.rows;

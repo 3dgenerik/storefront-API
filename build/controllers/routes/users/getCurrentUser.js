@@ -18,20 +18,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const customError_1 = require("../../../errors/customError");
-const usersStore_1 = require("../../../models/usersStore");
 const decorators_1 = require("../../decorators");
+const customError_1 = require("../../../errors/customError");
 const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
-let GetAllUsers = 
+let GetCurrentUser = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class GetAllUsers {
-    getAllUsers(req, res, next) {
+class GetCurrentUser {
+    getCurrentUser(req, res, next) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // console.log('SESSION TOKEN: ', req.session?.userFromToken);
-                const store = new usersStore_1.UsersStore();
-                const users = yield store.getAllUsers();
-                res.status(200).send(users);
+                const currentUser = (_a = req.session) === null || _a === void 0 ? void 0 : _a.userFromToken;
+                res.status(200).send(currentUser);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -42,15 +40,13 @@ class GetAllUsers {
     }
 };
 __decorate([
-    (0, decorators_1.get)("/users" /* AppRoutePath.ENDPOINT_USERS */)
-    //TOKEN REQUIRED
-    ,
+    (0, decorators_1.get)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/current`),
     (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], GetAllUsers.prototype, "getAllUsers", null);
-GetAllUsers = __decorate([
+], GetCurrentUser.prototype, "getCurrentUser", null);
+GetCurrentUser = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], GetAllUsers);
+], GetCurrentUser);

@@ -18,20 +18,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const customError_1 = require("../../../errors/customError");
-const usersStore_1 = require("../../../models/usersStore");
 const decorators_1 = require("../../decorators");
+const customError_1 = require("../../../errors/customError");
+const idParamValidatorMiddleware_1 = require("../../../middlewares/idParamValidatorMiddleware");
 const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
-let GetAllUsers = 
+const dashboard_1 = require("../../../services/dashboard");
+let DeleteUserById = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class GetAllUsers {
-    getAllUsers(req, res, next) {
+class DeleteUserById {
+    deleteUserById(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // console.log('SESSION TOKEN: ', req.session?.userFromToken);
-                const store = new usersStore_1.UsersStore();
-                const users = yield store.getAllUsers();
-                res.status(200).send(users);
+                const id = req.params.id;
+                const dashboard = new dashboard_1.Dashboard();
+                const deletedUser = yield dashboard.deleteUserWithAllDependencies(Number(id));
+                if (!deletedUser)
+                    throw new customError_1.CustomError(`User not found. Nothing to delete`, 404);
+                res.status(204).send(deletedUser);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -42,15 +45,16 @@ class GetAllUsers {
     }
 };
 __decorate([
-    (0, decorators_1.get)("/users" /* AppRoutePath.ENDPOINT_USERS */)
+    (0, decorators_1.del)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/remove/:id`),
+    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)())
     //TOKEN REQUIRED
     ,
     (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], GetAllUsers.prototype, "getAllUsers", null);
-GetAllUsers = __decorate([
+], DeleteUserById.prototype, "deleteUserById", null);
+DeleteUserById = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], GetAllUsers);
+], DeleteUserById);

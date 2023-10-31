@@ -9,7 +9,7 @@ import { idParamValidatorMiddleware } from '../../../middlewares/idParamValidato
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class GetCurrentOrderController {
     @get(
-        `${AppRoutePath.ENDPOINT_USERS}/:id${AppRoutePath.ENDPOINT_ORDERS}/current`,
+        `${AppRoutePath.ENDPOINT_USERS}/:id${AppRoutePath.ENDPOINT_ORDERS}/current`
     )
     @middleware(idParamValidatorMiddleware())
     async getCurrentOrderController(

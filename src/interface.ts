@@ -41,7 +41,7 @@ export const statuses = ['active', 'complete'] as const;
 export type TStatus = (typeof statuses)[number];
 
 export interface IOrders extends IItemId {
-    user_id?: number;
+    user_id: number;
     status: TStatus;
     timestamp: string;
 }
@@ -63,6 +63,7 @@ export interface IBodyValidator {
     quantity?: number;
     product_id?: number;
     order_id?: number;
+    user_id?:number;
 }
 
 export interface IToken {

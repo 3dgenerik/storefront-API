@@ -79,6 +79,9 @@ const bodyValidatorMiddleware = (...keys) => {
                     case 'order_id':
                         stringOrNumberThrowError(key, body, false);
                         break;
+                    case 'user_id':
+                        stringOrNumberThrowError(key, body, false);
+                        break;
                     default:
                 }
             }

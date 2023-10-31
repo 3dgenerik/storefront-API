@@ -18,20 +18,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const customError_1 = require("../../../errors/customError");
-const usersStore_1 = require("../../../models/usersStore");
 const decorators_1 = require("../../decorators");
-const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
-let GetAllUsers = 
+const customError_1 = require("../../../errors/customError");
+const bodyValidatorMiddleware_1 = require("../../../middlewares/bodyValidatorMiddleware");
+const ordersStore_1 = require("../../../models/ordersStore");
+let CreateOrder = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class GetAllUsers {
-    getAllUsers(req, res, next) {
+class CreateOrder {
+    createUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
+            const order = req.body;
             try {
-                // console.log('SESSION TOKEN: ', req.session?.userFromToken);
-                const store = new usersStore_1.UsersStore();
-                const users = yield store.getAllUsers();
-                res.status(200).send(users);
+                const store = new ordersStore_1.OrdersStore();
+                const addedOrder = yield store.createOrder(order);
+                res.status(200).send(addedOrder);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -42,15 +42,13 @@ class GetAllUsers {
     }
 };
 __decorate([
-    (0, decorators_1.get)("/users" /* AppRoutePath.ENDPOINT_USERS */)
-    //TOKEN REQUIRED
-    ,
-    (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
+    (0, decorators_1.post)(`${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/create`),
+    (0, decorators_1.middleware)((0, bodyValidatorMiddleware_1.bodyValidatorMiddleware)('user_id', 'status')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], GetAllUsers.prototype, "getAllUsers", null);
-GetAllUsers = __decorate([
+], CreateOrder.prototype, "createUser", null);
+CreateOrder = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], GetAllUsers);
+], CreateOrder);

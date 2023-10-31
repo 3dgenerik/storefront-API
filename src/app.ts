@@ -5,22 +5,28 @@ import { COOKIE_SESSION_SECRET_KEY, PORT } from './config';
 import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware';
 import cookieSession from 'cookie-session';
 
+import './controllers/routes/dashboard/startController'
+
+import './controllers/routes/users/getCurrentUser';
 import './controllers/routes/users/getAllUsersController';
 import './controllers/routes/users/createUserController';
 import './controllers/routes/users/findUserByIdController';
 import './controllers/routes/users/authUserController';
-import './controllers/routes/users/deleteUserController';
 import './controllers/routes/users/createRandomUsers';
 
 import './controllers/routes/products/getAllProductsController';
 import './controllers/routes/products/createProductController';
 import './controllers/routes/products/createRandomProducts';
-import './controllers/routes/products/deleteProductController';
 import './controllers/routes/products/getProductsByCategories';
 
+import './controllers/routes/orders/createOrderController'
 import './controllers/routes/orders/getAllOrdersByUserIdController';
 import './controllers/routes/orders/getAllSpecificOrdersByUserIdController';
-import './controllers/routes/orders/getCurrentOrderController';
+import './controllers/routes/orders/getCurrentOrderByUserController';
+import './controllers/routes/orders/completeOrdersController';
+
+
+import './controllers/routes/dashboard/deleteUserController'
 
 // declare module 'express-serve-static-core' {
 //     interface Request {

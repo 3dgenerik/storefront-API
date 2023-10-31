@@ -16,13 +16,11 @@ exports.Store = void 0;
 const database_1 = __importDefault(require("../../database"));
 class Store {
     constructor() {
-        this.getAllItemsSqlQuery = '';
         this.getItemByIdSqlQuery = '';
     }
-    getAllItems() {
+    getAllItems(sql) {
         return __awaiter(this, void 0, void 0, function* () {
             const conn = yield database_1.default.connect();
-            const sql = this.getAllItemsSqlQuery;
             const result = yield conn.query(sql);
             conn.release();
             return result.rows;
