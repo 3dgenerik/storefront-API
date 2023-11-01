@@ -20,22 +20,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
-const idParamValidatorMiddleware_1 = require("../../../middlewares/idParamValidatorMiddleware");
-const ordersStore_1 = require("../../../models/ordersStore");
-const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
-let CompleteOrderController = 
+const dashboard_1 = require("../../../services/dashboard");
+let GetMostPopularProducts = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class CompleteOrderController {
-    completeOrder(req, res, next) {
+class GetMostPopularProducts {
+    getMostPopularProducts(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const userId = req.params.userId;
-                const orderId = req.params.orderId;
-                const store = new ordersStore_1.OrdersStore();
-                const order = yield store.completeOrder(Number(userId), Number(orderId));
-                if (!order)
-                    throw new customError_1.CustomError(`Bad request. User or order doesn't exist. Can't complete order.`, 404);
-                res.status(200).send(order);
+                const store = new dashboard_1.DashboardQueries();
+                const popularProducts = yield store.mostPopularProducts();
+                if (popularProducts.length === 0)
+                    throw new customError_1.CustomError(`Popular list is empty`, 204);
+                res.status(200).send(popularProducts);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -46,14 +42,12 @@ class CompleteOrderController {
     }
 };
 __decorate([
-    (0, decorators_1.put)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/:userId${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/:orderId`),
-    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
-    (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
+    (0, decorators_1.get)(`${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/popular`),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], CompleteOrderController.prototype, "completeOrder", null);
-CompleteOrderController = __decorate([
+], GetMostPopularProducts.prototype, "getMostPopularProducts", null);
+GetMostPopularProducts = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], CompleteOrderController);
+], GetMostPopularProducts);

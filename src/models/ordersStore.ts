@@ -9,12 +9,19 @@ export class OrdersStore extends Store {
     private readonly SQL_GET_ALL_SPECIFIC_ORDERS_BY_USER_ID =
         'SELECT * FROM orders_table WHERE user_id = ($1) AND status = ($2)';
     private readonly SQL_GET_ALL_ORDERS_WITH_ACTIVE_STATUS = `SELECT * FROM orders_table WHERE user_id = ($1) AND status = 'active'`;
-    private readonly SQL_DELETE_ORDER_BY_USER_ID ='DELETE FROM orders_table WHERE user_id = ($1) RETURNING *';
-    private readonly SQL_UPDATE_ORDER_STATUS = 'UPDATE orders_table SET status = ($1) WHERE user_id = ($2) AND id = ($3) RETURNING *';
-    private readonly SQL_CREATE_ORDER = 'INSERT INTO orders_table (user_id, status) VALUES($1, $2) RETURNING *';
+    private readonly SQL_DELETE_ORDER_BY_USER_ID =
+        'DELETE FROM orders_table WHERE user_id = ($1) RETURNING *';
+    private readonly SQL_UPDATE_ORDER_STATUS =
+        'UPDATE orders_table SET status = ($1) WHERE user_id = ($2) AND id = ($3) RETURNING *';
+    private readonly SQL_CREATE_ORDER =
+        'INSERT INTO orders_table (user_id, status) VALUES($1, $2) RETURNING *';
 
     constructor() {
         super();
+    }
+
+    async getAllOrders(): Promise<IOrders[]> {
+        return await this.getAllItems<IOrders>(this.SQL_GET_ALL_ORDERS);
     }
 
     async getAllOrdersByUserId(userId: number): Promise<IOrders[]> {
@@ -48,39 +55,43 @@ export class OrdersStore extends Store {
 
         const currentOrder = orders.reduce(
             (latest: IOrders, current: IOrders) =>
-                current.timestamp > latest.timestamp ? current : latest,
+                (current.timestamp !== undefined && current.timestamp) >
+                (latest.timestamp !== undefined && latest.timestamp)
+                    ? current
+                    : latest,
             orders[0],
         );
 
         return currentOrder;
     }
 
-
     async createOrder(order: IOrders): Promise<IOrders> {
         const conn = await client.connect();
         const sql = this.SQL_CREATE_ORDER;
-        const result = await conn.query(sql, [order.user_id, order.status as TStatus]);
+        const result = await conn.query(sql, [
+            order.user_id,
+            order.status as TStatus,
+        ]);
         conn.release();
         return result.rows[0];
     }
 
-
-    async completeOrder(userId: number, orderId: number):Promise<IOrders | null>{
-        const conn = await client.connect()
+    async completeOrder(
+        userId: number,
+        orderId: number,
+    ): Promise<IOrders | null> {
+        const conn = await client.connect();
         const sql = this.SQL_UPDATE_ORDER_STATUS;
-        const result = await conn.query(sql, ['complete', userId, orderId])
+        const result = await conn.query(sql, ['complete', userId, orderId]);
 
-        conn.release()
+        conn.release();
 
-        const completedOrder = result.rows[0]
-        if(!completedOrder)
-            return null
-        return result.rows[0]
+        const completedOrder = result.rows[0];
+        if (!completedOrder) return null;
+        return result.rows[0];
     }
 
     // async deleteOrderById(id: number): Promise<IOrders | null> {
     //     return await this.deleteItemById(id, this.SQL_DELETE_ORDER_BY_USER_ID);
     // }
-
-
 }

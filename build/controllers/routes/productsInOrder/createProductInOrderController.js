@@ -20,40 +20,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
-const idParamValidatorMiddleware_1 = require("../../../middlewares/idParamValidatorMiddleware");
-const ordersStore_1 = require("../../../models/ordersStore");
+const bodyValidatorMiddleware_1 = require("../../../middlewares/bodyValidatorMiddleware");
+const productsInOrder_1 = require("../../../models/productsInOrder");
 const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
-let CompleteOrderController = 
+let CreateProductInOrder = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class CompleteOrderController {
-    completeOrder(req, res, next) {
+class CreateProductInOrder {
+    createProductInOrder(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const userId = req.params.userId;
-                const orderId = req.params.orderId;
-                const store = new ordersStore_1.OrdersStore();
-                const order = yield store.completeOrder(Number(userId), Number(orderId));
-                if (!order)
-                    throw new customError_1.CustomError(`Bad request. User or order doesn't exist. Can't complete order.`, 404);
-                res.status(200).send(order);
+                const productInOrder = req.body;
+                const store = new productsInOrder_1.ProductsInOrder();
+                const createdProductInOrder = yield store.createProductsInOrders(productInOrder);
+                res.status(200).send(createdProductInOrder);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
                     next(err);
-                next(new customError_1.CustomError(`${err}`, 500));
+                next(new customError_1.CustomError(`Enable to create product in orders. Please use unique product ids for orders.`, 422));
             }
         });
     }
 };
 __decorate([
-    (0, decorators_1.put)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/:userId${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/:orderId`),
-    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
+    (0, decorators_1.post)(`${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create`),
+    (0, decorators_1.middleware)((0, bodyValidatorMiddleware_1.bodyValidatorMiddleware)('quantity', 'product_id', 'order_id')),
     (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], CompleteOrderController.prototype, "completeOrder", null);
-CompleteOrderController = __decorate([
+], CreateProductInOrder.prototype, "createProductInOrder", null);
+CreateProductInOrder = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], CompleteOrderController);
+], CreateProductInOrder);

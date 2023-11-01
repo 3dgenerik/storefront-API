@@ -15,12 +15,11 @@ export class ProductsStore extends Store {
 
     constructor() {
         super();
-        this.getAllItemsSqlQuery = this.SQL_GET_ALL_PRODUCTS;
         this.getItemByIdSqlQuery = this.SQL_GET_PRODUCT_BY_ID;
     }
 
     async getAllProducts(): Promise<IProduct[]> {
-        return await this.getAllItems<IProduct>();
+        return await this.getAllItems<IProduct>(this.SQL_GET_ALL_PRODUCTS);
     }
 
     private async productExist(product: IProduct): Promise<boolean> {

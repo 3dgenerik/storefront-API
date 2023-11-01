@@ -9,7 +9,7 @@ import { randomUsers } from '../../../randomItems';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class CreateRandomUsers {
     @post(`${AppRoutePath.ENDPOINT_USERS}/create-random-users`)
-    async createUser(req: Request, res: Response, next: NextFunction) {
+    async createRandomUsers(req: Request, res: Response, next: NextFunction) {
         try {
             const store = new UsersStore();
 

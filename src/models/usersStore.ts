@@ -15,7 +15,6 @@ export class UsersStore extends Store {
     private readonly SQL_AUTH_USER =
         'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
 
-
     constructor() {
         super();
         //set sql query in parent class
@@ -95,7 +94,7 @@ export class UsersStore extends Store {
 
     //delete user - from parent class
     // async deleteUserById(id: number): Promise<IUser | null> {
-        
+
     //     return await this.deleteItemById(id, this.SQL_DELETE_USER);
     // }
 }

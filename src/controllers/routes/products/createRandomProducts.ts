@@ -9,7 +9,11 @@ import { ProductsStore } from '../../../models/productsStore';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class CreateRandomProducts {
     @post(`${AppRoutePath.ENDPOINT_PRODUCTS}/create-random-products`)
-    async createUser(req: Request, res: Response, next: NextFunction) {
+    async createRandomProducts(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) {
         try {
             const store = new ProductsStore();
 

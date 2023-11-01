@@ -35,7 +35,6 @@ const stringOrNumberThrowError = (
             );
     }
 
-
     if (bodyValue) {
         if (!isValueString(bodyValue) && isString) {
             throw new CustomError(

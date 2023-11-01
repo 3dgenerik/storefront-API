@@ -25,7 +25,7 @@ const productsStore_1 = require("../../../models/productsStore");
 let CreateRandomProducts = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class CreateRandomProducts {
-    createUser(req, res, next) {
+    createRandomProducts(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const store = new productsStore_1.ProductsStore();
@@ -51,7 +51,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], CreateRandomProducts.prototype, "createUser", null);
+], CreateRandomProducts.prototype, "createRandomProducts", null);
 CreateRandomProducts = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -23,12 +23,11 @@ class ProductsStore extends store_1.Store {
         this.SQL_GET_PRODUCT_BY_ID = 'SELECT * FROM products_table WHERE id = ($1)';
         this.SQL_CREATE_PRODUCT = 'INSERT INTO products_table (name, price, category) VALUES($1, $2, $3) RETURNING *';
         this.SQL_DELETE_PRODUCT = 'DELETE FROM products_table WHERE id = ($1) RETURNING *';
-        this.getAllItemsSqlQuery = this.SQL_GET_ALL_PRODUCTS;
         this.getItemByIdSqlQuery = this.SQL_GET_PRODUCT_BY_ID;
     }
     getAllProducts() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.getAllItems();
+            return yield this.getAllItems(this.SQL_GET_ALL_PRODUCTS);
         });
     }
     productExist(product) {

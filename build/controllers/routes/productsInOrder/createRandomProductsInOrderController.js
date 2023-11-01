@@ -20,22 +20,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
-const idParamValidatorMiddleware_1 = require("../../../middlewares/idParamValidatorMiddleware");
-const ordersStore_1 = require("../../../models/ordersStore");
-const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
-let CompleteOrderController = 
+const randomItems_1 = require("../../../randomItems");
+const productsInOrder_1 = require("../../../models/productsInOrder");
+let CreateRandomProductInOrders = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class CompleteOrderController {
-    completeOrder(req, res, next) {
+class CreateRandomProductInOrders {
+    createRandomProductInOrders(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const userId = req.params.userId;
-                const orderId = req.params.orderId;
-                const store = new ordersStore_1.OrdersStore();
-                const order = yield store.completeOrder(Number(userId), Number(orderId));
-                if (!order)
-                    throw new customError_1.CustomError(`Bad request. User or order doesn't exist. Can't complete order.`, 404);
-                res.status(200).send(order);
+                const store = new productsInOrder_1.ProductsInOrder();
+                const allProductInOrders = yield store.getAllProductInOrders();
+                if (allProductInOrders.length !== 0) {
+                    throw new customError_1.CustomError(`${allProductInOrders.length} product-in-orders already exist in database.`, 409);
+                }
+                for (const productInOrder of randomItems_1.randomProductInOrder) {
+                    yield store.createProductsInOrders(productInOrder);
+                }
+                console.log(allProductInOrders);
+                res.status(201).send(`${randomItems_1.randomProductInOrder.length} random product-in-orders created.`);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -46,14 +48,12 @@ class CompleteOrderController {
     }
 };
 __decorate([
-    (0, decorators_1.put)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/:userId${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/:orderId`),
-    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
-    (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
+    (0, decorators_1.post)(`/product-in-orders/create-random-product-in-orders`),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], CompleteOrderController.prototype, "completeOrder", null);
-CompleteOrderController = __decorate([
+], CreateRandomProductInOrders.prototype, "createRandomProductInOrders", null);
+CreateRandomProductInOrders = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], CompleteOrderController);
+], CreateRandomProductInOrders);

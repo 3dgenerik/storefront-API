@@ -20,22 +20,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
-const idParamValidatorMiddleware_1 = require("../../../middlewares/idParamValidatorMiddleware");
+const randomItems_1 = require("../../../randomItems");
 const ordersStore_1 = require("../../../models/ordersStore");
-const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
-let CompleteOrderController = 
+let CreateRandomOrders = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class CompleteOrderController {
-    completeOrder(req, res, next) {
+class CreateRandomOrders {
+    createRandomOrders(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const userId = req.params.userId;
-                const orderId = req.params.orderId;
                 const store = new ordersStore_1.OrdersStore();
-                const order = yield store.completeOrder(Number(userId), Number(orderId));
-                if (!order)
-                    throw new customError_1.CustomError(`Bad request. User or order doesn't exist. Can't complete order.`, 404);
-                res.status(200).send(order);
+                const allOrders = yield store.getAllOrders();
+                if (allOrders.length !== 0) {
+                    throw new customError_1.CustomError(`${allOrders.length} orders already exist in database.`, 409);
+                }
+                for (const order of randomItems_1.randomOrders) {
+                    yield store.createOrder(order);
+                }
+                res.status(201).send(`${randomItems_1.randomOrders.length} radnom orders created.`);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
@@ -46,14 +47,12 @@ class CompleteOrderController {
     }
 };
 __decorate([
-    (0, decorators_1.put)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/:userId${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/:orderId`),
-    (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
-    (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
+    (0, decorators_1.post)(`${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/create-random-orders`),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
-], CompleteOrderController.prototype, "completeOrder", null);
-CompleteOrderController = __decorate([
+], CreateRandomOrders.prototype, "createRandomOrders", null);
+CreateRandomOrders = __decorate([
     (0, decorators_1.controller)("/api" /* AppRoutePath.PREFIX_ROUTE */)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-], CompleteOrderController);
+], CreateRandomOrders);

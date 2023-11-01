@@ -26,6 +26,11 @@ class OrdersStore extends store_1.Store {
         this.SQL_UPDATE_ORDER_STATUS = 'UPDATE orders_table SET status = ($1) WHERE user_id = ($2) AND id = ($3) RETURNING *';
         this.SQL_CREATE_ORDER = 'INSERT INTO orders_table (user_id, status) VALUES($1, $2) RETURNING *';
     }
+    getAllOrders() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.getAllItems(this.SQL_GET_ALL_ORDERS);
+        });
+    }
     getAllOrdersByUserId(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             const conn = yield database_1.default.connect();
@@ -53,7 +58,10 @@ class OrdersStore extends store_1.Store {
             const orders = result.rows;
             if (orders.length === 0)
                 return null;
-            const currentOrder = orders.reduce((latest, current) => current.timestamp > latest.timestamp ? current : latest, orders[0]);
+            const currentOrder = orders.reduce((latest, current) => (current.timestamp !== undefined && current.timestamp) >
+                (latest.timestamp !== undefined && latest.timestamp)
+                ? current
+                : latest, orders[0]);
             return currentOrder;
         });
     }
@@ -61,7 +69,10 @@ class OrdersStore extends store_1.Store {
         return __awaiter(this, void 0, void 0, function* () {
             const conn = yield database_1.default.connect();
             const sql = this.SQL_CREATE_ORDER;
-            const result = yield conn.query(sql, [order.user_id, order.status]);
+            const result = yield conn.query(sql, [
+                order.user_id,
+                order.status,
+            ]);
             conn.release();
             return result.rows[0];
         });

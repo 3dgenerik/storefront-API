@@ -22,6 +22,7 @@ const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
 const bodyValidatorMiddleware_1 = require("../../../middlewares/bodyValidatorMiddleware");
 const ordersStore_1 = require("../../../models/ordersStore");
+const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
 let CreateOrder = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class CreateOrder {
@@ -44,6 +45,7 @@ class CreateOrder {
 __decorate([
     (0, decorators_1.post)(`${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/create`),
     (0, decorators_1.middleware)((0, bodyValidatorMiddleware_1.bodyValidatorMiddleware)('user_id', 'status')),
+    (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)

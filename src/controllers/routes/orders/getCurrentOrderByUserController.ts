@@ -4,14 +4,16 @@ import { controller, get, middleware } from '../../decorators';
 import { CustomError } from '../../../errors/customError';
 import { OrdersStore } from '../../../models/ordersStore';
 import { idParamValidatorMiddleware } from '../../../middlewares/idParamValidatorMiddleware';
+import { tokenVerifyMiddleware } from '../../../middlewares/tokenVerifyMiddleware';
 
 @controller(AppRoutePath.PREFIX_ROUTE)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class GetCurrentOrderController {
     @get(
-        `${AppRoutePath.ENDPOINT_USERS}/:id${AppRoutePath.ENDPOINT_ORDERS}/current`
+        `${AppRoutePath.ENDPOINT_USERS}/:id${AppRoutePath.ENDPOINT_ORDERS}/current`,
     )
     @middleware(idParamValidatorMiddleware())
+    @middleware(tokenVerifyMiddleware())
     async getCurrentOrderController(
         req: Request,
         res: Response,

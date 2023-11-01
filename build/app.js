@@ -9,6 +9,7 @@ const AppRoute_1 = require("./AppRoute");
 const config_1 = require("./config");
 const errorHandlerMiddleware_1 = require("./middlewares/errorHandlerMiddleware");
 const cookie_session_1 = __importDefault(require("cookie-session"));
+require("./controllers/routes/dashboard/mostPopularProductsController");
 require("./controllers/routes/dashboard/startController");
 require("./controllers/routes/users/getCurrentUser");
 require("./controllers/routes/users/getAllUsersController");
@@ -25,6 +26,9 @@ require("./controllers/routes/orders/getAllOrdersByUserIdController");
 require("./controllers/routes/orders/getAllSpecificOrdersByUserIdController");
 require("./controllers/routes/orders/getCurrentOrderByUserController");
 require("./controllers/routes/orders/completeOrdersController");
+require("./controllers/routes/orders/createRandomOrders");
+require("./controllers/routes/productsInOrder/createProductInOrderController");
+require("./controllers/routes/productsInOrder/createRandomProductsInOrderController");
 require("./controllers/routes/dashboard/deleteUserController");
 // declare module 'express-serve-static-core' {
 //     interface Request {

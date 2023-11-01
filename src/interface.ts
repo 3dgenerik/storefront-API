@@ -43,13 +43,18 @@ export type TStatus = (typeof statuses)[number];
 export interface IOrders extends IItemId {
     user_id: number;
     status: TStatus;
-    timestamp: string;
+    timestamp?: string;
 }
 
 export interface IProductsInOrders extends IItemId {
     quantity: number;
     product_id: number;
     order_id: number;
+}
+
+export interface IProductPopular {
+    name: string;
+    total_quantity: number;
 }
 
 export interface IBodyValidator {
@@ -63,7 +68,7 @@ export interface IBodyValidator {
     quantity?: number;
     product_id?: number;
     order_id?: number;
-    user_id?:number;
+    user_id?: number;
 }
 
 export interface IToken {

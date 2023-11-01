@@ -22,6 +22,7 @@ const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
 const ordersStore_1 = require("../../../models/ordersStore");
 const idParamValidatorMiddleware_1 = require("../../../middlewares/idParamValidatorMiddleware");
+const tokenVerifyMiddleware_1 = require("../../../middlewares/tokenVerifyMiddleware");
 let GetCurrentOrderController = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class GetCurrentOrderController {
@@ -46,6 +47,7 @@ class GetCurrentOrderController {
 __decorate([
     (0, decorators_1.get)(`${"/users" /* AppRoutePath.ENDPOINT_USERS */}/:id${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/current`),
     (0, decorators_1.middleware)((0, idParamValidatorMiddleware_1.idParamValidatorMiddleware)()),
+    (0, decorators_1.middleware)((0, tokenVerifyMiddleware_1.tokenVerifyMiddleware)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Function]),
     __metadata("design:returntype", Promise)
