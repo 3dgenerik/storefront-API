@@ -10,12 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let StartController = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class StartController {
     start(req, res) {
-        res.send('Please use README file for instructions.');
+        res.send(`
+            <div>
+                <h3>Please use README file for instructions.</h3>
+            </div>
+        `);
     }
 };
 __decorate([

@@ -94,7 +94,6 @@ export class UsersStore extends Store {
 
     //delete user - from parent class
     // async deleteUserById(id: number): Promise<IUser | null> {
-
     //     return await this.deleteItemById(id, this.SQL_DELETE_USER);
     // }
 }
