@@ -20,7 +20,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
-const randomItems_1 = require("../../../randomItems");
 const productsStore_1 = require("../../../models/productsStore");
 let CreateRandomProducts = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,14 +28,11 @@ class CreateRandomProducts {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const store = new productsStore_1.ProductsStore();
-                const allProducts = yield store.getAllProducts();
-                if (allProducts.length !== 0) {
-                    throw new customError_1.CustomError(`${allProducts.length} products already exist in database.`, 409);
+                const allProducts = yield store.createRandomProducts();
+                if (!allProducts) {
+                    throw new customError_1.CustomError(`Products already exist in database.`, 409);
                 }
-                for (const product of randomItems_1.radnomProducts) {
-                    yield store.createProduct(product);
-                }
-                res.status(201).send(`${randomItems_1.radnomProducts.length} radnom products created.`);
+                res.status(201).send(`Radnom products created.`);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)

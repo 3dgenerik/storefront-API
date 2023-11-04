@@ -7,5 +7,6 @@ exports.categories = [
     'appliances',
     'furniture',
     'rest',
+    'vehicles',
 ];
 exports.statuses = ['active', 'complete'];

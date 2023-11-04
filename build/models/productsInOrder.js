@@ -14,12 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsInOrder = void 0;
 const database_1 = __importDefault(require("../database"));
+const randomItems_1 = require("../randomItems");
 const store_1 = require("./utils/store");
 class ProductsInOrder extends store_1.Store {
     constructor() {
         super();
         this.SQL_GET_ALL_PRODUCT_IN_ORDER = 'SELECT * FROM products_in_orders_table';
-        this.SQL_INSERT_PRODUCT_IN_ORDERS = 'INSERT INTO products_in_orders_table (quantity, product_id, order_id) VALUES($1, $2, $3) RETURNING *';
+        this.SQL_INSERT_PRODUCT_IN_ORDERS = 'INSERT INTO products_in_orders_table (id, quantity, product_id, order_id) VALUES(COALESCE((SELECT MAX(id) FROM products_in_orders_table), 0) + 1, $1, $2, $3) RETURNING *';
+        this.SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST = 'INSERT INTO products_in_orders_table (id, quantity, product_id, order_id) VALUES($1, $2, $3, $4)';
+        this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS = 'DELETE FROM products_in_orders_table';
     }
     getAllProductInOrders() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -37,6 +40,30 @@ class ProductsInOrder extends store_1.Store {
             ]);
             conn.release();
             return result.rows[0];
+        });
+    }
+    createRandomProductInOrders() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const existingProductInOrders = yield this.getAllProductInOrders();
+            if (existingProductInOrders.length !== 0)
+                return false;
+            const conn = yield database_1.default.connect();
+            for (const productInOrder of randomItems_1.randomProductInOrder) {
+                const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST;
+                yield conn.query(sql, [
+                    productInOrder.id,
+                    productInOrder.quantity,
+                    productInOrder.product_id,
+                    productInOrder.order_id,
+                ]);
+            }
+            conn.release();
+            return true;
+        });
+    }
+    deleteAllProductInOrders() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS);
         });
     }
 }

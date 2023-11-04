@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersStore = void 0;
 const database_1 = __importDefault(require("../database"));
+const randomItems_1 = require("../randomItems");
 const store_1 = require("./utils/store");
 class OrdersStore extends store_1.Store {
     constructor() {
@@ -24,7 +25,9 @@ class OrdersStore extends store_1.Store {
         this.SQL_GET_ALL_ORDERS_WITH_ACTIVE_STATUS = `SELECT * FROM orders_table WHERE user_id = ($1) AND status = 'active'`;
         this.SQL_DELETE_ORDER_BY_USER_ID = 'DELETE FROM orders_table WHERE user_id = ($1) RETURNING *';
         this.SQL_UPDATE_ORDER_STATUS = 'UPDATE orders_table SET status = ($1) WHERE user_id = ($2) AND id = ($3) RETURNING *';
-        this.SQL_CREATE_ORDER = 'INSERT INTO orders_table (user_id, status) VALUES($1, $2) RETURNING *';
+        this.SQL_CREATE_ORDER = 'INSERT INTO orders_table (id, user_id, status) VALUES(COALESCE((SELECT MAX(id) FROM orders_table), 0) + 1, $1, $2) RETURNING *';
+        this.SQL_CREATE_ORDER_FOR_TEST = 'INSERT INTO orders_table (id, user_id, status) VALUES($1, $2, $3)';
+        this.SQL_DELETE_ALL_ORDERS = 'DELETE FROM orders_table';
     }
     getAllOrders() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -75,6 +78,29 @@ class OrdersStore extends store_1.Store {
             ]);
             conn.release();
             return result.rows[0];
+        });
+    }
+    createRandomOrders() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const existingOrders = yield this.getAllOrders();
+            if (existingOrders.length !== 0)
+                return false;
+            const conn = yield database_1.default.connect();
+            for (const order of randomItems_1.randomOrders) {
+                const sql = this.SQL_CREATE_ORDER_FOR_TEST;
+                yield conn.query(sql, [
+                    order.id,
+                    order.user_id,
+                    order.status,
+                ]);
+            }
+            conn.release();
+            return true;
+        });
+    }
+    deleteAllOrders() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.deleteAllItems(this.SQL_DELETE_ALL_ORDERS);
         });
     }
     completeOrder(userId, orderId) {

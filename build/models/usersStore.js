@@ -17,14 +17,17 @@ const database_1 = __importDefault(require("../database"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const config_1 = require("../config");
 const store_1 = require("./utils/store");
+const randomItems_1 = require("../randomItems");
 class UsersStore extends store_1.Store {
     constructor() {
         super();
         this.SQL_GET_ALL_USERS = 'SELECT * FROM users_table';
         this.SQL_IF_USER_EXIST = 'SELECT * FROM users_table WHERE first_name = ($1) AND last_name = ($2)';
         this.SQL_GET_USER_BY_ID = 'SELECT * FROM users_table WHERE id = ($1)';
-        this.SQL_CREATE_USER = 'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+        this.SQL_CREATE_USER = 'INSERT INTO users_table (id, first_name, last_name, password) VALUES(COALESCE((SELECT MAX(id) FROM users_table), 0) + 1, $1, $2, $3) RETURNING *';
+        this.SQL_CREATE_USER_FOR_TEST = 'INSERT INTO users_table (id, first_name, last_name, password) VALUES($1, $2, $3, $4)';
         this.SQL_AUTH_USER = 'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
+        this.SQL_DELETE_ALL_USERS = 'DELETE FROM users_table';
         //set sql query in parent class
         this.getItemByIdSqlQuery = this.SQL_GET_USER_BY_ID;
     }
@@ -83,6 +86,32 @@ class UsersStore extends store_1.Store {
             ]);
             conn.release();
             return result.rows[0];
+        });
+    }
+    //create users list
+    createRandomUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const existingUsers = yield this.getAllUsers();
+            if (existingUsers.length !== 0)
+                return false;
+            const conn = yield database_1.default.connect();
+            for (const user of randomItems_1.randomUsers) {
+                const hash = yield this.passwordHash(user.password);
+                const sql = this.SQL_CREATE_USER_FOR_TEST;
+                yield conn.query(sql, [
+                    user.id,
+                    user.first_name,
+                    user.last_name,
+                    hash,
+                ]);
+            }
+            conn.release();
+            return true;
+        });
+    }
+    deleteAllUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.deleteAllItems(this.SQL_DELETE_ALL_USERS);
         });
     }
     //user authorization

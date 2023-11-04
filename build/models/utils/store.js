@@ -59,5 +59,12 @@ class Store {
             return this.itemById(id, sqlQuery);
         });
     }
+    deleteAllItems(sql) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const conn = yield database_1.default.connect();
+            yield conn.query(sql);
+            conn.release();
+        });
+    }
 }
 exports.Store = Store;

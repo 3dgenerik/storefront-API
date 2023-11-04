@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsStore = void 0;
 const database_1 = __importDefault(require("../database"));
+const randomItems_1 = require("../randomItems");
 const store_1 = require("./utils/store");
 class ProductsStore extends store_1.Store {
     constructor() {
@@ -21,8 +22,10 @@ class ProductsStore extends store_1.Store {
         this.SQL_GET_ALL_PRODUCTS = 'SELECT * FROM products_table';
         this.SQL_IF_PRODUCT_EXIST = 'SELECT * FROM products_table WHERE name = ($1) AND category = ($2)';
         this.SQL_GET_PRODUCT_BY_ID = 'SELECT * FROM products_table WHERE id = ($1)';
-        this.SQL_CREATE_PRODUCT = 'INSERT INTO products_table (name, price, category) VALUES($1, $2, $3) RETURNING *';
+        this.SQL_CREATE_PRODUCT = 'INSERT INTO products_table (id, name, price, category) VALUES(COALESCE((SELECT MAX(id) FROM products_table), 0) + 1, $1, $2, $3) RETURNING *';
+        this.SQL_CREATE_PRODUCT_FOR_TEST = 'INSERT INTO products_table (id, name, price, category) VALUES($1, $2, $3, $4)';
         this.SQL_DELETE_PRODUCT = 'DELETE FROM products_table WHERE id = ($1) RETURNING *';
+        this.SQL_DELETE_ALL_PRODUCTS = 'DELETE FROM products_table';
         this.getItemByIdSqlQuery = this.SQL_GET_PRODUCT_BY_ID;
     }
     getAllProducts() {
@@ -61,6 +64,30 @@ class ProductsStore extends store_1.Store {
             ]);
             conn.release();
             return result.rows[0];
+        });
+    }
+    createRandomProducts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const existingProducts = yield this.getAllProducts();
+            if (existingProducts.length !== 0)
+                return false;
+            const conn = yield database_1.default.connect();
+            for (const product of randomItems_1.radnomProducts) {
+                const sql = this.SQL_CREATE_PRODUCT_FOR_TEST;
+                yield conn.query(sql, [
+                    product.id,
+                    product.name,
+                    product.price,
+                    product.category,
+                ]);
+            }
+            conn.release();
+            return true;
+        });
+    }
+    deleteAllProducts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCTS);
         });
     }
     deleteProductById(id) {

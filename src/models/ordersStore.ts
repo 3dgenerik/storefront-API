@@ -1,5 +1,6 @@
 import client from '../database';
 import { IOrders, TStatus } from '../interface';
+import { randomOrders } from '../randomItems';
 import { Store } from './utils/store';
 
 export class OrdersStore extends Store {
@@ -14,7 +15,10 @@ export class OrdersStore extends Store {
     private readonly SQL_UPDATE_ORDER_STATUS =
         'UPDATE orders_table SET status = ($1) WHERE user_id = ($2) AND id = ($3) RETURNING *';
     private readonly SQL_CREATE_ORDER =
-        'INSERT INTO orders_table (user_id, status) VALUES($1, $2) RETURNING *';
+        'INSERT INTO orders_table (id, user_id, status) VALUES(COALESCE((SELECT MAX(id) FROM orders_table), 0) + 1, $1, $2) RETURNING *';
+    private readonly SQL_CREATE_ORDER_FOR_TEST =
+        'INSERT INTO orders_table (id, user_id, status) VALUES($1, $2, $3)';
+    private readonly SQL_DELETE_ALL_ORDERS = 'DELETE FROM orders_table';
 
     constructor() {
         super();
@@ -74,6 +78,29 @@ export class OrdersStore extends Store {
         ]);
         conn.release();
         return result.rows[0];
+    }
+
+    async createRandomOrders(): Promise<boolean> {
+        const existingOrders = await this.getAllOrders();
+
+        if (existingOrders.length !== 0) return false;
+
+        const conn = await client.connect();
+        for (const order of randomOrders) {
+            const sql = this.SQL_CREATE_ORDER_FOR_TEST;
+            await conn.query(sql, [
+                order.id,
+                order.user_id,
+                order.status as TStatus,
+            ]);
+        }
+        conn.release();
+
+        return true;
+    }
+
+    async deleteAllOrders(): Promise<void> {
+        await this.deleteAllItems(this.SQL_DELETE_ALL_ORDERS);
     }
 
     async completeOrder(

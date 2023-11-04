@@ -26,6 +26,7 @@ export const categories = [
     'appliances',
     'furniture',
     'rest',
+    'vehicles',
 ] as const;
 export type TCategory = (typeof categories)[number];
 

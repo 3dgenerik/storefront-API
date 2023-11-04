@@ -1,5 +1,6 @@
 import client from '../database';
 import { IProduct } from '../interface';
+import { radnomProducts } from '../randomItems';
 import { Store } from './utils/store';
 
 export class ProductsStore extends Store {
@@ -9,9 +10,12 @@ export class ProductsStore extends Store {
     private readonly SQL_GET_PRODUCT_BY_ID =
         'SELECT * FROM products_table WHERE id = ($1)';
     private readonly SQL_CREATE_PRODUCT =
-        'INSERT INTO products_table (name, price, category) VALUES($1, $2, $3) RETURNING *';
+        'INSERT INTO products_table (id, name, price, category) VALUES(COALESCE((SELECT MAX(id) FROM products_table), 0) + 1, $1, $2, $3) RETURNING *';
+    private readonly SQL_CREATE_PRODUCT_FOR_TEST =
+        'INSERT INTO products_table (id, name, price, category) VALUES($1, $2, $3, $4)';
     private readonly SQL_DELETE_PRODUCT =
         'DELETE FROM products_table WHERE id = ($1) RETURNING *';
+    private readonly SQL_DELETE_ALL_PRODUCTS = 'DELETE FROM products_table';
 
     constructor() {
         super();
@@ -22,7 +26,7 @@ export class ProductsStore extends Store {
         return await this.getAllItems<IProduct>(this.SQL_GET_ALL_PRODUCTS);
     }
 
-    private async productExist(product: IProduct): Promise<boolean> {
+    async productExist(product: IProduct): Promise<boolean> {
         const conn = await client.connect();
         const sql = this.SQL_IF_PRODUCT_EXIST;
         const result = await conn.query(sql, [product.name, product.category]);
@@ -50,6 +54,30 @@ export class ProductsStore extends Store {
         ]);
         conn.release();
         return result.rows[0];
+    }
+
+    async createRandomProducts(): Promise<boolean> {
+        const existingProducts = await this.getAllProducts();
+
+        if (existingProducts.length !== 0) return false;
+
+        const conn = await client.connect();
+        for (const product of radnomProducts) {
+            const sql = this.SQL_CREATE_PRODUCT_FOR_TEST;
+            await conn.query(sql, [
+                product.id,
+                product.name,
+                product.price,
+                product.category,
+            ]);
+        }
+        conn.release();
+
+        return true;
+    }
+
+    async deleteAllProducts(): Promise<void> {
+        await this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCTS);
     }
 
     async deleteProductById(id: number): Promise<IProduct | null> {

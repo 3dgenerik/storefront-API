@@ -3,6 +3,7 @@ import client from '../database';
 import bcrypt from 'bcrypt';
 import { SALT_ROUND } from '../config';
 import { Store } from './utils/store';
+import { randomUsers } from '../randomItems';
 
 export class UsersStore extends Store {
     private readonly SQL_GET_ALL_USERS = 'SELECT * FROM users_table';
@@ -11,9 +12,12 @@ export class UsersStore extends Store {
     private readonly SQL_GET_USER_BY_ID =
         'SELECT * FROM users_table WHERE id = ($1)';
     private readonly SQL_CREATE_USER =
-        'INSERT INTO users_table (first_name, last_name, password) VALUES($1, $2, $3) RETURNING *';
+        'INSERT INTO users_table (id, first_name, last_name, password) VALUES(COALESCE((SELECT MAX(id) FROM users_table), 0) + 1, $1, $2, $3) RETURNING *';
+    private readonly SQL_CREATE_USER_FOR_TEST =
+        'INSERT INTO users_table (id, first_name, last_name, password) VALUES($1, $2, $3, $4)';
     private readonly SQL_AUTH_USER =
         'SELECT * FROM users_table WHERE first_name = $1 AND last_name = $2';
+    private readonly SQL_DELETE_ALL_USERS = 'DELETE FROM users_table';
 
     constructor() {
         super();
@@ -22,13 +26,13 @@ export class UsersStore extends Store {
     }
 
     //create hash
-    private async passwordHash(password: string): Promise<string> {
+    async passwordHash(password: string): Promise<string> {
         const hash = await bcrypt.hash(password, Number(SALT_ROUND));
         return hash;
     }
 
     //compare password and hash
-    private async passwordHashCompare(
+    async passwordHashCompare(
         password: string,
         hash: string,
     ): Promise<boolean> {
@@ -42,13 +46,12 @@ export class UsersStore extends Store {
     }
 
     //if user exist
-    private async userExist(user: IUser): Promise<boolean> {
+    async userExist(user: IUser): Promise<boolean> {
         const conn = await client.connect();
         const sql = this.SQL_IF_USER_EXIST;
         const result = await conn.query(sql, [user.first_name, user.last_name]);
         conn.release();
         const existingUser = result.rows[0];
-
         if (existingUser) return true;
         return false;
     }
@@ -73,6 +76,32 @@ export class UsersStore extends Store {
         ]);
         conn.release();
         return result.rows[0];
+    }
+
+    //create users list
+    async createRandomUsers(): Promise<boolean> {
+        const existingUsers = await this.getAllUsers();
+
+        if (existingUsers.length !== 0) return false;
+
+        const conn = await client.connect();
+        for (const user of randomUsers) {
+            const hash = await this.passwordHash(user.password);
+            const sql = this.SQL_CREATE_USER_FOR_TEST;
+            await conn.query(sql, [
+                user.id,
+                user.first_name,
+                user.last_name,
+                hash,
+            ]);
+        }
+        conn.release();
+
+        return true;
+    }
+
+    async deleteAllUsers(): Promise<void> {
+        await this.deleteAllItems(this.SQL_DELETE_ALL_USERS);
     }
 
     //user authorization

@@ -21,7 +21,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const decorators_1 = require("../../decorators");
 const customError_1 = require("../../../errors/customError");
 const usersStore_1 = require("../../../models/usersStore");
-const randomItems_1 = require("../../../randomItems");
 let CreateRandomUsers = 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class CreateRandomUsers {
@@ -29,14 +28,11 @@ class CreateRandomUsers {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const store = new usersStore_1.UsersStore();
-                const allUsers = yield store.getAllUsers();
-                if (allUsers.length !== 0) {
-                    throw new customError_1.CustomError(`${allUsers.length} users already exist in database.`, 409);
+                const existingUser = yield store.createRandomUsers();
+                if (!existingUser) {
+                    throw new customError_1.CustomError(`Users already exist in database.`, 409);
                 }
-                for (const user of randomItems_1.randomUsers) {
-                    yield store.createUser(user);
-                }
-                res.status(201).send(`${randomItems_1.randomUsers.length} random users created.`);
+                res.status(201).send(`Random users created.`);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)

@@ -44,4 +44,10 @@ export class Store {
     ): Promise<T | null> {
         return this.itemById(id, sqlQuery);
     }
+
+    protected async deleteAllItems(sql: string): Promise<void> {
+        const conn = await client.connect();
+        await conn.query(sql);
+        conn.release();
+    }
 }
