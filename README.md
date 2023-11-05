@@ -36,9 +36,8 @@
 
 #### database.json file should look like this:
 
-
-
 {
+
     "dev":{
 
         "driver":"pg",
@@ -86,14 +85,12 @@
     npm run reset - drop all tables
     npm test - run testing mode
 <br />
-<br />
-<br />
+
 
 ## Endpoints
 <br />
-<br />
 
-### Users
+### Users endpoints
 <br />
 
 
