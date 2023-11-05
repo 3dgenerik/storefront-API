@@ -217,11 +217,10 @@ describe('Testing all models:', async () => {
             it('getCurrentOrder() should return id 6 of last created active order.', async () => {
                 const lastCreatedActiveOrder =
                     await ordersStore.getCurrentOrder(1);
-                    // console.log(lastCreatedActiveOrder);
+                // console.log(lastCreatedActiveOrder);
                 expect(lastCreatedActiveOrder?.id).toEqual(6);
             });
 
-            
             it('getAllOrders() should return list of orders.', async () => {
                 const allOrders = await ordersStore.getAllOrders();
                 expect(allOrders.length).toBeGreaterThan(0);
