@@ -93,7 +93,7 @@
 ## Users endpoints
 <br />
 
-Get all users [TOKEN REQUIRED]
+#### Get all users [TOKEN REQUIRED]
 http://localhost:3001/api/users
 
 <br />
@@ -105,12 +105,11 @@ http://localhost:3001/api/users/:id
 
 #### Create users [CREATE JWT TOKEN]
 
-
-{
-    "first_name": "John",
-    "last_name": "Doe",
-    "password": "password"
-}
+    {
+        "first_name": "John",
+        "last_name": "Doe",
+        "password": "password"
+    }
 
 
 http://localhost:3001/api/users/signup
