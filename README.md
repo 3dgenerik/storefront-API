@@ -122,12 +122,12 @@ Now we want to add approximately 30 rows to each tables to have something to wor
 ## Users endpoints
 <br />
 
-#### Get all users [TOKEN REQUIRED]
+#### [GET] Get all users [TOKEN REQUIRED]
 http://localhost:3001/api/users
 
 <br />
 
-#### Get users by id [TOKEN REQUIRED]
+#### [GET] Get users by id [TOKEN REQUIRED]
 
     //example
     http://localhost:3001/api/users/1
@@ -136,7 +136,7 @@ http://localhost:3001/api/users/:id
 
 <br />
 
-#### Create users [CREATE JWT TOKEN]
+#### [POST] Create users [CREATE JWT TOKEN]
 
     // body example
     {
@@ -149,7 +149,7 @@ http://localhost:3001/api/users/signup
 
 <br />
 
-#### Auth user (sign in user) [CREATE JWT TOKEN]
+#### [POST] Auth user (sign in user) [CREATE JWT TOKEN]
 
     // body example
     {
@@ -162,7 +162,7 @@ http://localhost:3001/api/users/signin
 
 <br />
 
-#### Get current user (get last signup or signed in user). This actually use decoded JWT which are assigned to req.session (using cookie-session) in token verify middleware. [TOKEN REQUIRED]
+#### [GET] Get current user (get last signup or signed in user). This actually use decoded JWT which are assigned to req.session (using cookie-session) in token verify middleware. [TOKEN REQUIRED]
 
 http://localhost:3001/api/users/current
 
@@ -176,12 +176,12 @@ http://localhost:3001/api/users/current
 ## Products endpoints
 <br />
 
-#### Get all products
+#### [GET] Get all products
 http://localhost:3001/api/products
 
 <br />
 
-#### Get products by categories
+#### [GET] Get products by categories
 
     //you can use one of the following categories: electronics | clothing | appliances | furniture | rest | vehicles
     http://localhost:3001/api/products/category/clothing
@@ -190,7 +190,7 @@ http://localhost:3001/api/products/category/:category
 
 <br />
 
-#### Create product [TOKEN REQUIRED]
+#### [POST] Create product [TOKEN REQUIRED]
 
     // body example
     {
@@ -207,7 +207,7 @@ http://localhost:3001/api/products
 ## Orders endpoints
 <br />
 
-#### Get current order by user. This endpoint is responsible for retrieving the most recent actuall order.  [TOKEN REQUIRED]
+#### [GET] Get current order by user. This endpoint is responsible for retrieving the most recent actuall order.  [TOKEN REQUIRED]
 
     //example
     http://localhost:3001/api/users/1/orders/current
@@ -215,6 +215,80 @@ http://localhost:3001/api/products
 http://localhost:3001/api/users/:id/orders/current
 
 <br />
+
+#### [GET] Get all orders by user id depending on order status.
+
+    //example
+    //status can be active | complete
+    http://localhost:3001/api/users/1/orders/status?status=active
+
+http://localhost:3001/api/users/:id/orders/status
+
+<br />
+
+#### [GET] Get all orders by user id.
+
+    //example
+    http://localhost:3001/api/users/1/orders
+
+http://localhost:3001/api/users/:userId/orders
+
+<br />
+
+#### [POST] Create order [TOKEN REQUIRED]
+
+    //body example
+    {
+        "user_id":5,
+        "status":"active"
+    }
+
+http://localhost:3001/api/orders/create
+
+<br />
+
+#### [PUT] Complete order (change status from 'active' to 'complete')[TOKEN REQUIRED]
+
+    //example
+    http://localhost:3001/api/users/2/orders/2
+
+http://localhost:3001/api/users/:userId/orders/:orderId
+
+<br />
+<br />
+
+## Products-in-order endpoints
+<br />
+
+#### [POST] Create products-in-order.  [TOKEN REQUIRED]
+
+http://localhost:3001/api/orders/products/create
+
+<br />
+<br />
+
+## Dashboard endpoints
+<br />
+
+#### [GET] Most popular products. Get top 5 products with highest total quantity.
+
+http://localhost:3001/api/products/popular
+
+<br />
+<br />
+<br />
+
+## Testing in Jasmine
+
+#### To run the test do following
+
+    npm run test
+
+This will change the environment to TEST mode and automatically create all test tables and populate them with rows, and clear all tables when test is finished.
+
+
+
+
 
 
 
