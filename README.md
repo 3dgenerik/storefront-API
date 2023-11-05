@@ -94,12 +94,12 @@
 <br />
 
 #### Get all users [TOKEN REQUIRED]
-    http://localhost:3001/api/users
+http://localhost:3001/api/users
 
 <br />
 
 #### Get users by id [TOKEN REQUIRED]
-    http://localhost:3001/api/users/:id
+http://localhost:3001/api/users/:id
 
 <br />
 
@@ -113,7 +113,7 @@
     }
 
 
-    http://localhost:3001/api/users/signup
+http://localhost:3001/api/users/signup
 
 <br />
 
