@@ -36,10 +36,9 @@
 
 #### database.json file should look like this:
 
--
+
 
 {
-
     "dev":{
 
         "driver":"pg",
@@ -61,7 +60,6 @@
     }
 }
 
-<br />
 
 ### Scripts
 
