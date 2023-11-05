@@ -25,7 +25,6 @@ describe('Testing orders routes: ', ()=>{
     it(`GET: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS}/1${AppRoutePath.ENDPOINT_ORDERS} should return status code 200 and order list length greater than 0.`, async ()=>{
         const result = await request.get(`${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS}/1${AppRoutePath.ENDPOINT_ORDERS}`)
         const allOrdersByUser = result.body as IOrders[]
-        console.log(allOrdersByUser);
         expect(allOrdersByUser.length).toBeGreaterThan(0)
         expect(result.status).toBe(200)
     })
@@ -40,6 +39,13 @@ describe('Testing orders routes: ', ()=>{
         const result = await request.get(`${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS}/notANumber${AppRoutePath.ENDPOINT_ORDERS}`)
         expect(result.text).toEqual('Bad request. Invalid params for userId. Id param(s) must be positive integer number.')
         expect(result.status).toBe(400)
+    })
+
+    it(`GET: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS}/1${AppRoutePath.ENDPOINT_ORDERS}/status?status=active should return status code 200 and get orders length greather than 0`, async ()=>{
+        const result = await request.get(`${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS}/1${AppRoutePath.ENDPOINT_ORDERS}/status?status=active`)
+        const allOrdersByUser = result.body as IOrders[]
+        expect(allOrdersByUser.length).toBeGreaterThan(0)
+        expect(result.status).toBe(200)
     })
 
 

@@ -33,7 +33,6 @@ describe('Testing orders routes: ', () => {
     it(`GET: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/1${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */} should return status code 200 and order list length greater than 0.`, () => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield request.get(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/1${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}`);
         const allOrdersByUser = result.body;
-        console.log(allOrdersByUser);
         expect(allOrdersByUser.length).toBeGreaterThan(0);
         expect(result.status).toBe(200);
     }));
@@ -42,11 +41,16 @@ describe('Testing orders routes: ', () => {
         expect(result.text).toEqual('Orders list is empty.');
         expect(result.status).toBe(200);
     }));
-    fit(`GET: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/notANumber${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */} should return status code 400. Error message: Bad request. Invalid params for userId. Id param(s) must be positive integer number.`, () => __awaiter(void 0, void 0, void 0, function* () {
+    it(`GET: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/notANumber${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */} should return status code 400. Error message: Bad request. Invalid params for userId. Id param(s) must be positive integer number.`, () => __awaiter(void 0, void 0, void 0, function* () {
         const result = yield request.get(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/notANumber${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}`);
-        console.log(result.text);
         expect(result.text).toEqual('Bad request. Invalid params for userId. Id param(s) must be positive integer number.');
         expect(result.status).toBe(400);
+    }));
+    it(`GET: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/1${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/status?status=active should return status code 200 and get orders length greather than 0`, () => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield request.get(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/1${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/status?status=active`);
+        const allOrdersByUser = result.body;
+        expect(allOrdersByUser.length).toBeGreaterThan(0);
+        expect(result.status).toBe(200);
     }));
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield productsInOrder.deleteAllProductInOrders();
