@@ -191,6 +191,20 @@ http://localhost:3001/api/products/category/:category
 
 <br />
 
+#### Create product [TOKEN REQUIRED]
+
+    // body example
+    {
+        "name": "Desk",
+        "price": 229.99,
+        "category": "furniture"
+    }
+
+http://localhost:3001/api/products
+
+<br />
+
+
 
 
 
