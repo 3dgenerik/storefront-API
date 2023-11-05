@@ -101,9 +101,9 @@ Order is very important because orders_table has CONSTRAINT to id from users_tab
 
 Then run the app:
 
-    run start
+    npm start
 
-Now we want to add approximately 30 rows to each tables to have something to work with. Also order is very important. Just follow instructions:
+Now we want to add approximately 30 rows to each tables to have something to work with. Just follow instructions and visit these URLs to trigger the corresponding actions. Also order is very important. 
     
     http://localhost:3001/api/users/create-random-users
     http://localhost:3001/api/products/create-random-products
@@ -162,10 +162,12 @@ http://localhost:3001/api/users/signin
 
 <br />
 
-#### Get current user (get last signup or signed in user) [TOKEN REQUIRED]
+#### Get current user (get last signup or signed in user). This actually use decoded JWT which are assigned to res.session in token verify middleware. [TOKEN REQUIRED]
 http://localhost:3001/api/users/current
 
 <br />
+
+##### Note: If we are using Postman then for every token required endpoint we must manualy copy JWT to Authorization->Bearer Token->Token
 
 
 
