@@ -120,7 +120,7 @@ http://localhost:3001/api/users/signup
 
 <br />
 
-#### Auth user (sign in user) [TOKEN REQUIRED]
+#### Auth user (sign in user) [CREATE JWT TOKEN]
 
     // body example
     {
@@ -133,7 +133,7 @@ http://localhost:3001/api/users/signin
 
 <br />
 
-#### Get current user (user ) [TOKEN REQUIRED]
+#### Get current user (get last signup or signed in user) [TOKEN REQUIRED]
 http://localhost:3001/api/users/current
 
 <br />
