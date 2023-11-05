@@ -285,7 +285,7 @@ http://localhost:3001/api/products/popular
 
 This will change the environment to TEST mode and automatically create all test tables and populate them with rows, and clear all tables when test is finished.
 
-
+##### Very last note: I have created my own project from scratch. I did not clone your start project from repo.
 
 
 
