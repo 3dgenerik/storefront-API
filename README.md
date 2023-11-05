@@ -36,28 +36,27 @@
 
 #### database.json file should look like this:
 
-{
+    {
+        "dev":{
 
-    "dev":{
+            "driver":"pg",
+            "host":"127.0.0.1",
+            "user":"<new_user>",
+            "database":"storefront_dev",
+            "password":"<user_password>"
 
-        "driver":"pg",
-        "host":"127.0.0.1",
-        "user":"<new_user>",
-        "database":"storefront_dev",
-        "password":"<user_password>"
+        },
 
-    },
+        "test":{
 
-    "test":{
+            "driver":"pg",
+            "host":"127.0.0.1",
+            "user":"<new_user>",
+            "database":"storefront_test",
+            "password":"<user_password>"
 
-        "driver":"pg",
-        "host":"127.0.0.1",
-        "user":"<new_user>",
-        "database":"storefront_test",
-        "password":"<user_password>"
-
+        }
     }
-}
 
 
 ### Scripts
