@@ -85,7 +85,7 @@
     npm test - run testing mode
 <br />
 
-## IMPORTANT NOTES BEFORE WE GO TO ENPOINTS
+## Important notes before we start with endpoints
 For DEV mode first of all we need to run following command to create tables:
 
     npm run up
@@ -97,7 +97,21 @@ This will create the tables in the following order:
     orders_table
     products_in_order_table
 
-Order is very important because orders_table has CONSTRAINT to user_id from users_table, and products_in_order_table has CONSTRAINTS to products_id from products_table and to orders_id from orders_table.
+Order is very important because orders_table has CONSTRAINT to id from users_table, and products_in_order_table has CONSTRAINTS to id from products_table and to id from orders_table.
+
+Then run the app:
+
+    run start
+
+Now we want to add approximately 30 rows to each tables to have something to work with. Also order is very important. Just follow instructions:
+    
+    http://localhost:3001/api/users/create-random-users
+    http://localhost:3001/api/products/create-random-products
+    http://localhost:3001/api/orders/create-random-orders
+    http://localhost:3001/api/product-in-orders/create-random-product-in-orders
+
+
+
 
 <br />
 <br />
