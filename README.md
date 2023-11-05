@@ -97,6 +97,7 @@ This will create the tables in the following order:
     orders_table
     products_in_order_table
 
+Order is very important because orders_table has CONSTRAINT to user_id from users_table, and products_in_order_table has CONSTRAINTS to products_id from products_table and to orders_id from orders_table.
 
 <br />
 <br />
