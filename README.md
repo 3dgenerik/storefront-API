@@ -167,12 +167,30 @@ http://localhost:3001/api/users/signin
 http://localhost:3001/api/users/current
 
 <br />
+
+#### Note: If we are using Postman then for every token required endpoint we must manualy copy JWT to Authorization->Bearer Token->Token
+
+<br />
 <br />
 
-### Note: If we are using Postman then for every token required endpoint we must manualy copy JWT to Authorization->Bearer Token->Token
+## Products endpoints
+<br />
+
+#### Get all products
+http://localhost:3001/api/products
 
 <br />
+
+#### Get products by categories
+
+    //you can use one of the following categories: electronics | clothing | appliances | furniture | rest | vehicles
+
+    http://localhost:3001/api/products/category/clothing
+
+http://localhost:3001/api/products/category/:category
+
 <br />
+
 
 
 
