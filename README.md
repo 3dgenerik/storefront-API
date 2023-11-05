@@ -2,36 +2,29 @@
 
 ### Database setup
 
-Here is a way how to setup our database:
+#### Here is a way how to setup our database:
 
     1. psql -U postgres
-
     2. type postgres password
-
     3. CREATE USER <new_user> WITH PASSWORD <user_password>;
-
     4. CREATE DATABASE storefront_dev;
-
     5. CREATE DATABASE storefront_dev;
-
     6. \c storefront_dev
-
     7. GRANT ALL ON SCHEMA public TO <new_user>;
-
     8. \c storefront_test
-
     9. GRANT ALL ON SCHEMA public TO <new_user>;
-    
 
-Note: Points 7 and 9 are not necessary if we use SUPERUSER (user with all privileges)
+
+#### Note: Points 7 and 9 are not necessary if we use SUPERUSER (user with all privileges)
 <br />
 
-Let's assume that we want to use the newly created user <new_user>, we need to update folowing files:
+### Let's assume that we want to use the newly created user <new_user>, we need to update folowing files:
     - .env
     - database.json
 <br />
 
-.env file should look like this:
+#### .env file should look like this:
+
     PORT=3001
     ENV=dev
     POSTGRES_HOST=127.0.0.1
