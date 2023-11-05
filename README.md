@@ -103,6 +103,25 @@ http://localhost:3001/api/users/:id
 
 <br />
 
+#### Create users [CREATE JWT TOKEN]
+
+{
+    "first_name": "Jovica",
+    "last_name": "Cvetkovic",
+    "password": "jovica"
+}
+
+
+http://localhost:3001/api/users/signup
+
+<br />
+
+#### Get current user (user ) [TOKEN REQUIRED]
+http://localhost:3001/api/users/current
+
+<br />
+
+
 
 
 
