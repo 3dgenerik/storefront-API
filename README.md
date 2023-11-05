@@ -58,7 +58,7 @@ database.json file should look like this:
 <br />
 
 ### Scripts
-<br />
+
     "build": "npx tsc",
     "start:build": "tsc -w",
     "start:run": "nodemon build/app.js",
