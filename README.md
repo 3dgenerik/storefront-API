@@ -37,20 +37,27 @@
 #### database.json file should look like this:
 
 {
+
     "dev":{
+
         "driver":"pg",
         "host":"127.0.0.1",
         "user":"<new_user>",
         "database":"storefront_dev",
         "password":"<user_password>"
+
     },
+
     "test":{
+
         "driver":"pg",
         "host":"127.0.0.1",
         "user":"<new_user>",
         "database":"storefront_test",
         "password":"<user_password>"
+        
     }
+
 }
 <br />
 
@@ -68,8 +75,6 @@
     "reset": "db-migrate --env test reset && db-migrate reset",
     "jasmine": "jasmine",
     "test": "set ENV=test&& db-migrate --env test up && npm run build && npm run jasmine && db-migrate db:drop test"
-<br />
-<br />
 
 ### Scripts explanations
 
