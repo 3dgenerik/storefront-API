@@ -162,12 +162,17 @@ http://localhost:3001/api/users/signin
 
 <br />
 
-#### Get current user (get last signup or signed in user). This actually use decoded JWT which are assigned to res.session in token verify middleware. [TOKEN REQUIRED]
+#### Get current user (get last signup or signed in user). This actually use decoded JWT which are assigned to req.session (using cookie-session) in token verify middleware. [TOKEN REQUIRED]
+
 http://localhost:3001/api/users/current
 
 <br />
+<br />
 
-##### Note: If we are using Postman then for every token required endpoint we must manualy copy JWT to Authorization->Bearer Token->Token
+### Note: If we are using Postman then for every token required endpoint we must manualy copy JWT to Authorization->Bearer Token->Token
+
+<br />
+<br />
 
 
 
