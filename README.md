@@ -16,12 +16,10 @@
 
 
 #### Note: Points 7 and 9 are not necessary if we use SUPERUSER (user with all privileges)
-<br />
 
-### Let's assume that we want to use the newly created user <new_user>, we need to update folowing files:
+#### Let's assume that we want to use the newly created user <new_user>, we need to update folowing files:
     - .env
     - database.json
-<br />
 
 #### .env file should look like this:
 
@@ -35,9 +33,9 @@
     SALT_ROUND=10
     SECRET_TOKEN=secret
     COOKIE_SESSION_SECRET_KEY=secret
-<br />
 
-database.json file should look like this:
+#### database.json file should look like this:
+
 {
     "dev":{
         "driver":"pg",
@@ -54,7 +52,6 @@ database.json file should look like this:
         "password":"<user_password>"
     }
 }
-<br />
 <br />
 
 ### Scripts
