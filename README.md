@@ -92,12 +92,15 @@
 
 ## Users endpoints
 <br />
+
 #### Get all users [TOKEN REQUIRED]
 http://localhost:3001/api/users
+
 <br />
 
 #### Get users by id [TOKEN REQUIRED]
 http://localhost:3001/api/users/:id
+
 <br />
 
 
