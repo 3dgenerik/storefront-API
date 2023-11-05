@@ -184,7 +184,6 @@ http://localhost:3001/api/products
 #### Get products by categories
 
     //you can use one of the following categories: electronics | clothing | appliances | furniture | rest | vehicles
-
     http://localhost:3001/api/products/category/clothing
 
 http://localhost:3001/api/products/category/:category
@@ -203,6 +202,20 @@ http://localhost:3001/api/products/category/:category
 http://localhost:3001/api/products
 
 <br />
+<br />
+
+## Orders endpoints
+<br />
+
+#### Get current order by user. This endpoint is responsible for retrieving the most recent actuall order.  [TOKEN REQUIRED]
+
+    //example
+    http://localhost:3001/api/users/1/orders/current
+
+http://localhost:3001/api/users/:id/orders/current
+
+<br />
+
 
 
 
