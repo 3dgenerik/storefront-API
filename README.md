@@ -86,9 +86,14 @@
 <br />
 
 ## IMPORTANT NOTES BEFORE WE GO TO ENPOINTS
-First of all we need to run following command to create  tables:
-
+For DEV mode first of all we need to run following command to create tables:
     npm run up
+This will create the tables in the following order:
+    users_table
+    products_table
+    orders_table
+    products_in_order_table
+
 
 <br />
 <br />
