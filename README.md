@@ -1,8 +1,6 @@
 # Storefront backend project
-<br />
 
 ### Database setup
-<br />
 
 Here is a way how to setup our database:
     1. psql -U postgres
@@ -14,7 +12,6 @@ Here is a way how to setup our database:
     7. GRANT ALL ON SCHEMA public TO <new_user>;
     8. \c storefront_test
     9. GRANT ALL ON SCHEMA public TO <new_user>;
-<br />
 
 Note: Points 7 and 9 are not necessary if we use SUPERUSER (user with all privileges)
 <br />
@@ -75,7 +72,7 @@ database.json file should look like this:
 <br />
 
 ### Scripts explanations
-<br />
+
     npm run build - create build only
     npm start - run build and nodemon in live mode
     npm run prettier - run prettier
