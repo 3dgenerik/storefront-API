@@ -37,7 +37,6 @@
 #### database.json file should look like this:
 
 {
-
     "dev":{
 
         "driver":"pg",
@@ -55,10 +54,10 @@
         "user":"<new_user>",
         "database":"storefront_test",
         "password":"<user_password>"
-        
-    }
 
+    }
 }
+
 <br />
 
 ### Scripts
