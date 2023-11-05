@@ -103,11 +103,11 @@ class OrdersStore extends store_1.Store {
             yield this.deleteAllItems(this.SQL_DELETE_ALL_ORDERS);
         });
     }
-    completeOrder(userId, orderId) {
+    completeOrder(userId, orderId, status) {
         return __awaiter(this, void 0, void 0, function* () {
             const conn = yield database_1.default.connect();
             const sql = this.SQL_UPDATE_ORDER_STATUS;
-            const result = yield conn.query(sql, ['complete', userId, orderId]);
+            const result = yield conn.query(sql, [status, userId, orderId]);
             conn.release();
             const completedOrder = result.rows[0];
             if (!completedOrder)

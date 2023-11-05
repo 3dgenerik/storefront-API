@@ -49,3 +49,4 @@ app.use(errorHandlerMiddleware_1.errorHandlerMiddleware);
 app.listen(config_1.PORT, () => {
     console.log(`...listening port ${config_1.PORT}`);
 });
+exports.default = app;

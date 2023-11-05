@@ -9,15 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const usersStore_1 = require("../../models/usersStore");
-const productsStore_1 = require("../../models/productsStore");
-const ordersStore_1 = require("../../models/ordersStore");
-const productsInOrder_1 = require("../../models/productsInOrder");
+const usersStore_1 = require("../models/usersStore");
+const productsStore_1 = require("../models/productsStore");
+const ordersStore_1 = require("../models/ordersStore");
+const productsInOrder_1 = require("../models/productsInOrder");
+const dashboard_1 = require("../services/dashboard");
 describe('Testing all models:', () => __awaiter(void 0, void 0, void 0, function* () {
     const usersStore = new usersStore_1.UsersStore();
     const productsStore = new productsStore_1.ProductsStore();
     const ordersStore = new ordersStore_1.OrdersStore();
     const productsInOrder = new productsInOrder_1.ProductsInOrder();
+    const dashboardQuery = new dashboard_1.DashboardQueries();
     const password = 'password';
     let hash = '';
     const userAlreadyExist = {
@@ -39,6 +41,16 @@ describe('Testing all models:', () => __awaiter(void 0, void 0, void 0, function
         name: 'Samsung Tablet',
         price: 256.99,
         category: 'electronics',
+    };
+    const productInOrderAlreadyExist = {
+        quantity: 3,
+        product_id: 1,
+        order_id: 1,
+    };
+    const productInOrderNotExist = {
+        quantity: 5,
+        product_id: 10,
+        order_id: 10,
     };
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         //create some random test rows
@@ -164,6 +176,11 @@ describe('Testing all models:', () => __awaiter(void 0, void 0, void 0, function
             }));
         }));
         describe('Testing orders: ', () => {
+            it('getCurrentOrder() should return id 6 of last created active order.', () => __awaiter(void 0, void 0, void 0, function* () {
+                const lastCreatedActiveOrder = yield ordersStore.getCurrentOrder(1);
+                // console.log(lastCreatedActiveOrder);
+                expect(lastCreatedActiveOrder === null || lastCreatedActiveOrder === void 0 ? void 0 : lastCreatedActiveOrder.id).toEqual(6);
+            }));
             it('getAllOrders() should return list of orders.', () => __awaiter(void 0, void 0, void 0, function* () {
                 const allOrders = yield ordersStore.getAllOrders();
                 expect(allOrders.length).toBeGreaterThan(0);
@@ -184,10 +201,6 @@ describe('Testing all models:', () => __awaiter(void 0, void 0, void 0, function
                 const allProductsBySpecificStatus = yield ordersStore.getAllSpecificStatusOrdersByUserId(1, 'complete');
                 expect(allProductsBySpecificStatus.length).toEqual(1);
             }));
-            it('getCurrentOrder() should return id 6 of last created active order.', () => __awaiter(void 0, void 0, void 0, function* () {
-                const lastCreatedActiveOrder = yield ordersStore.getCurrentOrder(1);
-                expect(lastCreatedActiveOrder === null || lastCreatedActiveOrder === void 0 ? void 0 : lastCreatedActiveOrder.id).toEqual(6);
-            }));
             it('getCurrentOrder() should return null.', () => __awaiter(void 0, void 0, void 0, function* () {
                 const lastCreatedActiveOrder = yield ordersStore.getCurrentOrder(25);
                 expect(lastCreatedActiveOrder).toBe(null);
@@ -200,10 +213,51 @@ describe('Testing all models:', () => __awaiter(void 0, void 0, void 0, function
                 const createdOrder = yield ordersStore.createOrder(newOrder);
                 expect(createdOrder.id).toEqual(34);
             }));
-            fit('completeOrder() should complete order for specific user', () => __awaiter(void 0, void 0, void 0, function* () {
-                const completeOrder = yield ordersStore.completeOrder(2, 1);
-                console.log(completeOrder);
-                expect(100).toEqual(100);
+            it('completeOrder() should complete order for specific user', () => __awaiter(void 0, void 0, void 0, function* () {
+                const completeOrder = yield ordersStore.completeOrder(2, 2, 'complete');
+                expect({
+                    id: completeOrder === null || completeOrder === void 0 ? void 0 : completeOrder.id,
+                    user_id: completeOrder === null || completeOrder === void 0 ? void 0 : completeOrder.user_id,
+                    status: completeOrder === null || completeOrder === void 0 ? void 0 : completeOrder.status,
+                }).toEqual({
+                    id: 2,
+                    user_id: 2,
+                    status: 'complete',
+                });
+            }));
+            it('completeOrder() should return null if there is no order for specific user', () => __awaiter(void 0, void 0, void 0, function* () {
+                const completeOrder = yield ordersStore.completeOrder(100000, 100000, 'complete');
+                expect(completeOrder).toBe(null);
+            }));
+        });
+        describe('Testing products-in-orders', () => {
+            it('getAllProductInOrders() should return list of products-in-orders', () => __awaiter(void 0, void 0, void 0, function* () {
+                const getAllProductInOrders = yield productsInOrder.getAllProductInOrders();
+                expect(getAllProductInOrders.length).toBeGreaterThan(0);
+            }));
+            it('createProductsInOrders() should return newly created products-in-orders if success.', () => __awaiter(void 0, void 0, void 0, function* () {
+                const createdProductInOrder = yield productsInOrder.createProductsInOrders(productInOrderNotExist);
+                expect(createdProductInOrder).toEqual({
+                    id: 38,
+                    quantity: 5,
+                    product_id: 10,
+                    order_id: 10,
+                });
+            }));
+            it('createProductsInOrders() should return SQL ERROR when products-in-orders already exist.', () => __awaiter(void 0, void 0, void 0, function* () {
+                try {
+                    yield productsInOrder.createProductsInOrders(productInOrderAlreadyExist);
+                }
+                catch (err) {
+                    expect(err instanceof Error).toBe(true);
+                }
+            }));
+        });
+        describe('Testing dashboard: ', () => {
+            it('mostPopularProducts() should have length of 5 elements, and first element is: { name: "Coffee", total_quantity: 20}', () => __awaiter(void 0, void 0, void 0, function* () {
+                const popularProducts = yield dashboardQuery.mostPopularProducts();
+                expect(popularProducts.length).toEqual(5);
+                expect(Object.assign(Object.assign({}, popularProducts[0]), { total_quantity: Number(popularProducts[0].total_quantity) })).toEqual({ name: 'Coffee', total_quantity: 20 });
             }));
         });
     });

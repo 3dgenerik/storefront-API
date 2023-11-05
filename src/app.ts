@@ -57,3 +57,5 @@ app.use(errorHandlerMiddleware);
 app.listen(PORT, () => {
     console.log(`...listening port ${PORT}`);
 });
+
+export default app;

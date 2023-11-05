@@ -1,14 +1,16 @@
-import { UsersStore } from '../../models/usersStore';
-import { ProductsStore } from '../../models/productsStore';
-import { OrdersStore } from '../../models/ordersStore';
-import { ProductsInOrder } from '../../models/productsInOrder';
-import { IOrders, IProduct, IUser } from '../../interface';
+import { UsersStore } from '../models/usersStore';
+import { ProductsStore } from '../models/productsStore';
+import { OrdersStore } from '../models/ordersStore';
+import { ProductsInOrder } from '../models/productsInOrder';
+import { IOrders, IProduct, IProductsInOrders, IUser } from '../interface';
+import { DashboardQueries } from '../services/dashboard';
 
 describe('Testing all models:', async () => {
     const usersStore = new UsersStore();
     const productsStore = new ProductsStore();
     const ordersStore = new OrdersStore();
     const productsInOrder = new ProductsInOrder();
+    const dashboardQuery = new DashboardQueries();
 
     const password = 'password';
     let hash = '';
@@ -35,6 +37,18 @@ describe('Testing all models:', async () => {
         name: 'Samsung Tablet',
         price: 256.99,
         category: 'electronics',
+    };
+
+    const productInOrderAlreadyExist: IProductsInOrders = {
+        quantity: 3,
+        product_id: 1,
+        order_id: 1,
+    };
+
+    const productInOrderNotExist: IProductsInOrders = {
+        quantity: 5,
+        product_id: 10,
+        order_id: 10,
     };
 
     beforeAll(async () => {
@@ -199,60 +213,134 @@ describe('Testing all models:', async () => {
             });
         });
 
+        describe('Testing orders: ', () => {
+            it('getCurrentOrder() should return id 6 of last created active order.', async () => {
+                const lastCreatedActiveOrder =
+                    await ordersStore.getCurrentOrder(1);
+                    // console.log(lastCreatedActiveOrder);
+                expect(lastCreatedActiveOrder?.id).toEqual(6);
+            });
 
-        describe('Testing orders: ', ()=>{
+            
+            it('getAllOrders() should return list of orders.', async () => {
+                const allOrders = await ordersStore.getAllOrders();
+                expect(allOrders.length).toBeGreaterThan(0);
+            });
 
-            it('getAllOrders() should return list of orders.', async ()=>{
-                const allOrders = await ordersStore.getAllOrders()
-                expect(allOrders.length).toBeGreaterThan(0)
-            })
+            it('getAllOrdersByUserId() should return list of orders by specific user id', async () => {
+                const allOrdersByUserId =
+                    await ordersStore.getAllOrdersByUserId(1);
+                expect(allOrdersByUserId.length).toEqual(3);
+            });
 
-            it('getAllOrdersByUserId() should return list of orders by specific user id', async ()=>{
-                const allOrdersByUserId = await ordersStore.getAllOrdersByUserId(1);
-                expect(allOrdersByUserId.length).toEqual(3)
-            })
+            it('getAllOrdersByUserId() should return empty list of orders if user id does not exist.', async () => {
+                const allOrdersByUserId =
+                    await ordersStore.getAllOrdersByUserId(10000);
+                expect(allOrdersByUserId.length).toEqual(0);
+            });
 
-            it('getAllOrdersByUserId() should return empty list of orders if user id does not exist.', async ()=>{
-                const allOrdersByUserId = await ordersStore.getAllOrdersByUserId(10000);
-                expect(allOrdersByUserId.length).toEqual(0)
-            })
+            it('getAllSpecificStatusOrdersByUserId() should return list with length of 2. Status = active', async () => {
+                const allProductsBySpecificStatus =
+                    await ordersStore.getAllSpecificStatusOrdersByUserId(
+                        1,
+                        'active',
+                    );
+                expect(allProductsBySpecificStatus.length).toEqual(2);
+            });
 
-            it('getAllSpecificStatusOrdersByUserId() should return list with length of 2. Status = active', async ()=>{
-                const allProductsBySpecificStatus = await ordersStore.getAllSpecificStatusOrdersByUserId(1, 'active')
-                expect(allProductsBySpecificStatus.length).toEqual(2)
-            })
+            it('getAllSpecificStatusOrdersByUserId() should return list with length of 1. Status = complete', async () => {
+                const allProductsBySpecificStatus =
+                    await ordersStore.getAllSpecificStatusOrdersByUserId(
+                        1,
+                        'complete',
+                    );
+                expect(allProductsBySpecificStatus.length).toEqual(1);
+            });
 
-            it('getAllSpecificStatusOrdersByUserId() should return list with length of 1. Status = complete', async ()=>{
-                const allProductsBySpecificStatus = await ordersStore.getAllSpecificStatusOrdersByUserId(1, 'complete')
-                expect(allProductsBySpecificStatus.length).toEqual(1)
-            })
-
-            it('getCurrentOrder() should return id 6 of last created active order.', async ()=>{
-                const lastCreatedActiveOrder = await ordersStore.getCurrentOrder(1)
-                expect(lastCreatedActiveOrder?.id).toEqual(6)
-            })
-
-            it('getCurrentOrder() should return null.', async ()=>{
-                const lastCreatedActiveOrder = await ordersStore.getCurrentOrder(25)
-                expect(lastCreatedActiveOrder).toBe(null)
-            })
+            it('getCurrentOrder() should return null.', async () => {
+                const lastCreatedActiveOrder =
+                    await ordersStore.getCurrentOrder(25);
+                expect(lastCreatedActiveOrder).toBe(null);
+            });
 
             it('createOrder() should create order for specific user. Return order.', async () => {
                 const newOrder: IOrders = {
                     user_id: 2,
                     status: 'active',
-
                 };
                 const createdOrder = await ordersStore.createOrder(newOrder);
                 expect(createdOrder.id).toEqual(34);
             });
 
-            fit('completeOrder() should complete order for specific user', async ()=>{
-                const completeOrder = await ordersStore.completeOrder(2, 1)
-                console.log(completeOrder);
-                expect(100).toEqual(100)
-            })
-        })
+            it('completeOrder() should complete order for specific user', async () => {
+                const completeOrder = await ordersStore.completeOrder(
+                    2,
+                    2,
+                    'complete',
+                );
+                expect({
+                    id: completeOrder?.id,
+                    user_id: completeOrder?.user_id,
+                    status: completeOrder?.status,
+                }).toEqual({
+                    id: 2,
+                    user_id: 2,
+                    status: 'complete',
+                });
+            });
+
+            it('completeOrder() should return null if there is no order for specific user', async () => {
+                const completeOrder = await ordersStore.completeOrder(
+                    100000,
+                    100000,
+                    'complete',
+                );
+                expect(completeOrder).toBe(null);
+            });
+        });
+
+        describe('Testing products-in-orders', () => {
+            it('getAllProductInOrders() should return list of products-in-orders', async () => {
+                const getAllProductInOrders =
+                    await productsInOrder.getAllProductInOrders();
+                expect(getAllProductInOrders.length).toBeGreaterThan(0);
+            });
+
+            it('createProductsInOrders() should return newly created products-in-orders if success.', async () => {
+                const createdProductInOrder =
+                    await productsInOrder.createProductsInOrders(
+                        productInOrderNotExist,
+                    );
+                expect(createdProductInOrder).toEqual({
+                    id: 38,
+                    quantity: 5,
+                    product_id: 10,
+                    order_id: 10,
+                });
+            });
+
+            it('createProductsInOrders() should return SQL ERROR when products-in-orders already exist.', async () => {
+                try {
+                    await productsInOrder.createProductsInOrders(
+                        productInOrderAlreadyExist,
+                    );
+                } catch (err) {
+                    expect(err instanceof Error).toBe(true);
+                }
+            });
+        });
+
+        describe('Testing dashboard: ', () => {
+            it('mostPopularProducts() should have length of 5 elements, and first element is: { name: "Coffee", total_quantity: 20}', async () => {
+                const popularProducts =
+                    await dashboardQuery.mostPopularProducts();
+                expect(popularProducts.length).toEqual(5);
+                expect({
+                    ...popularProducts[0],
+                    total_quantity: Number(popularProducts[0].total_quantity),
+                }).toEqual({ name: 'Coffee', total_quantity: 20 });
+            });
+        });
     });
 
     afterAll(async () => {

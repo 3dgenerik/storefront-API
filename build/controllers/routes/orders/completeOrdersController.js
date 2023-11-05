@@ -32,7 +32,7 @@ class CompleteOrderController {
                 const userId = req.params.userId;
                 const orderId = req.params.orderId;
                 const store = new ordersStore_1.OrdersStore();
-                const order = yield store.completeOrder(Number(userId), Number(orderId));
+                const order = yield store.completeOrder(Number(userId), Number(orderId), 'complete');
                 if (!order)
                     throw new customError_1.CustomError(`Bad request. User or order doesn't exist. Can't complete order.`, 404);
                 res.status(200).send(order);

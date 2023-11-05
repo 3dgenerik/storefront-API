@@ -23,6 +23,7 @@ class CompleteOrderController {
             const order = await store.completeOrder(
                 Number(userId),
                 Number(orderId),
+                'complete',
             );
 
             if (!order)

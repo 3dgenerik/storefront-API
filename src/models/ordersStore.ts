@@ -106,10 +106,11 @@ export class OrdersStore extends Store {
     async completeOrder(
         userId: number,
         orderId: number,
+        status: TStatus,
     ): Promise<IOrders | null> {
         const conn = await client.connect();
         const sql = this.SQL_UPDATE_ORDER_STATUS;
-        const result = await conn.query(sql, ['complete', userId, orderId]);
+        const result = await conn.query(sql, [status, userId, orderId]);
 
         conn.release();
 
