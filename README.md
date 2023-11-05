@@ -99,6 +99,10 @@ http://localhost:3001/api/users
 <br />
 
 #### Get users by id [TOKEN REQUIRED]
+
+    //example
+    http://localhost:3001/api/users/1
+
 http://localhost:3001/api/users/:id
 
 <br />
@@ -112,8 +116,20 @@ http://localhost:3001/api/users/:id
         "password": "password"
     }
 
-
 http://localhost:3001/api/users/signup
+
+<br />
+
+#### Auth user (sign in user) [TOKEN REQUIRED]
+
+    // body example
+    {
+        "first_name": "John",
+        "last_name": "Doe",
+        "password": "password"
+    }
+
+http://localhost:3001/api/users/signin
 
 <br />
 
