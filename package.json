@@ -10,7 +10,6 @@
     "start": "concurrently npm:start:*",
     "prettier": "prettier --config .prettierrc src/**/*.ts --write",
     "lint": "eslint src/**/*.ts",
-    "create": "db-migrate create products_in_orders_table --sql-file",
     "up": "db-migrate --env test up && db-migrate up",
     "down": "db-migrate --env test down && db-migrate down",
     "reset": "db-migrate --env test reset && db-migrate reset",
