@@ -105,6 +105,7 @@
 
 #### Create users [CREATE JWT TOKEN]
 
+    // body example
     {
         "first_name": "John",
         "last_name": "Doe",
@@ -112,7 +113,7 @@
     }
 
 
-http://localhost:3001/api/users/signup
+    http://localhost:3001/api/users/signup
 
 <br />
 
