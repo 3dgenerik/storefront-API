@@ -68,7 +68,6 @@
     "start": "concurrently npm:start:*",
     "prettier": "prettier --config .prettierrc src/**/*.ts --write",
     "lint": "eslint src/**/*.ts",
-    "create": "db-migrate create users_table --sql-file",
     "up": "db-migrate --env test up && db-migrate up",
     "down": "db-migrate --env test down && db-migrate down",
     "reset": "db-migrate --env test reset && db-migrate reset",
@@ -86,6 +85,13 @@
     npm test - run testing mode
 <br />
 
+## IMPORTANT NOTES BEFORE WE GO TO ENPOINTS
+First of all we need to run following command to create  tables:
+
+    npm run up
+
+<br />
+<br />
 
 # Endpoints
 <br />
