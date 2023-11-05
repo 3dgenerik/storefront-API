@@ -31,9 +31,9 @@ class GetProductsByCategories {
                 const category = req.params.category;
                 const store = new productsStore_1.ProductsStore();
                 const products = yield store.getProductsByCategory(category);
-                if (products.length === 0)
+                if (products.length === 0 || !products)
                     throw new customError_1.CustomError('Products not found.', 404);
-                res.send(products);
+                res.status(200).send(products);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)

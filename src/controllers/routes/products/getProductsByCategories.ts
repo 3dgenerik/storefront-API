@@ -21,9 +21,9 @@ class GetProductsByCategories {
             const store = new ProductsStore();
             const products = await store.getProductsByCategory(category);
 
-            if (products.length === 0)
+            if (products.length === 0 || !products)
                 throw new CustomError('Products not found.', 404);
-            res.send(products);
+            res.status(200).send(products);
         } catch (err) {
             if (err instanceof CustomError) next(err);
             next(new CustomError(`${err}`, 500));

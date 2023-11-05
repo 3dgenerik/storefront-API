@@ -24,7 +24,7 @@ class CreateProductController {
                     409,
                 );
             // res.status(201).send(addedProduct);
-            res.status(201).send('OK');
+            res.status(200).send(addedProduct);
         } catch (err) {
             if (err instanceof CustomError) next(err);
             next(new CustomError(`${err}`, 500));

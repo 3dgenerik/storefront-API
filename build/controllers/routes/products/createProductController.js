@@ -35,7 +35,7 @@ class CreateProductController {
                 if (!addedProduct)
                     throw new customError_1.CustomError(`Product ${product.name} in category: ${product.category} already exist.`, 409);
                 // res.status(201).send(addedProduct);
-                res.status(201).send('OK');
+                res.status(200).send(addedProduct);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
