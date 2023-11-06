@@ -2,15 +2,15 @@
     "dev":{
         "driver":"pg",
         "host":"127.0.0.1",
-        "user":"postgres",
-        "database":"storefront_dev",
-        "password":"your_password"
+        "user":{"ENV":"PG_USER"},
+        "database":{"ENV":"PG_DB"},
+        "password":{"ENV":"PG_PASSWORD"}
     },
     "test":{
         "driver":"pg",
         "host":"127.0.0.1",
-        "user":"postgres",
-        "database":"storefront_test",
-        "password":"your_password"
+        "user":{"ENV":"PG_USER"},
+        "database":{"ENV":"PG_DB_TEST"},
+        "password":{"ENV":"PG_PASSWORD"}
     }
 }

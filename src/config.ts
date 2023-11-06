@@ -4,11 +4,11 @@ dotenv.config();
 
 export const PORT = process.env.PORT!;
 export const ENV = process.env.ENV!;
-export const POSTGRES_HOST = process.env.POSTGRES_HOST!;
-export const POSTGRES_USER = process.env.POSTGRES_USER!;
-export const POSTGRES_DB = process.env.POSTGRES_DB!;
-export const POSTGRES_DB_TEST = process.env.POSTGRES_DB_TEST!;
-export const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD!;
+export const POSTGRES_HOST = process.env.PG_HOST!;
+export const POSTGRES_USER = process.env.PG_USER!;
+export const POSTGRES_DB = process.env.PG_DB!;
+export const POSTGRES_DB_TEST = process.env.PG_DB_TEST!;
+export const POSTGRES_PASSWORD = process.env.PG_PASSWORD!;
 export const SALT_ROUND = process.env.SALT_ROUND!;
 export const SECRET_TOKEN = process.env.SECRET_TOKEN!;
 export const COOKIE_SESSION_SECRET_KEY = process.env.COOKIE_SESSION_SECRET_KEY;
