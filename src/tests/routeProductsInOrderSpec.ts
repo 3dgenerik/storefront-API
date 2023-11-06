@@ -1,13 +1,12 @@
-import app from '../app';
-import supertest from 'supertest';
 import { ProductsStore } from '../models/productsStore';
 import { OrdersStore } from '../models/ordersStore';
 import { ProductsInOrder } from '../models/productsInOrder';
 import { UsersStore } from '../models/usersStore';
-import { AppRoutePath, token } from '../constants';
+import { AppRoutePath } from '../constants';
 import { IProductsInOrders } from '../interface';
+import { request } from './utils/getRequest';
+import { getToken } from './utils/getToken';
 
-const request = supertest(app);
 
 describe('Testing product-in-orders routes: ', () => {
     const usersStore = new UsersStore();
@@ -26,17 +25,14 @@ describe('Testing product-in-orders routes: ', () => {
         order_id: 6,
     };
 
-    const nonUniqueProductInOrder: IProductsInOrders = {
-        quantity: 3,
-        product_id: 1,
-        order_id: 1,
-    };
+    let token = ''
 
     beforeAll(async () => {
         await usersStore.createRandomUsers();
         await productsStore.createRandomProducts();
         await ordersStore.createRandomOrders();
         await productsInOrder.createRandomProductInOrders();
+        token = await getToken()
     });
 
     describe('Testing create product-in-orders: ', () => {

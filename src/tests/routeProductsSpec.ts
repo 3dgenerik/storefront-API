@@ -3,16 +3,12 @@ import { AppRoutePath } from '../constants';
 import { IProduct } from '../interface';
 import { request } from './utils/getRequest';
 import { getToken } from './utils/getToken';
-import { OrdersStore } from '../models/ordersStore';
-import { ProductsInOrder } from '../models/productsInOrder';
 import { UsersStore } from '../models/usersStore';
 
 
 describe('Testing products routes: ', () => {
     const usersStore = new UsersStore();
     const productsStore = new ProductsStore();
-    const ordersStore = new OrdersStore();
-    const productsInOrder = new ProductsInOrder();
 
     const productAlreadyExist: IProduct = {
         name: 'Laptop',
@@ -31,8 +27,6 @@ describe('Testing products routes: ', () => {
     beforeAll(async () => {
         await usersStore.createRandomUsers();
         await productsStore.createRandomProducts();
-        await ordersStore.createRandomOrders();
-        await productsInOrder.createRandomProductInOrders();
         token = await getToken()
     });
 
@@ -109,8 +103,6 @@ describe('Testing products routes: ', () => {
     });
 
     afterAll(async () => {
-        await productsInOrder.deleteAllProductInOrders();
-        await ordersStore.deleteAllOrders();
         await productsStore.deleteAllProducts();
         await usersStore.deleteAllUsers();
     });

@@ -1,5 +1,3 @@
-import app from '../app';
-import supertest from 'supertest';
 import { AppRoutePath } from '../constants';
 import { ICreatedUserOutput, IUser } from '../interface';
 import { UsersStore } from '../models/usersStore';

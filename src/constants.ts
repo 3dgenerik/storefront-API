@@ -19,6 +19,3 @@ export const enum AppFeatures {
     VALIDATION = 'validation',
     MIDDLEWARE = 'middleware',
 }
-
-export const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJmaXJzdF9uYW1lIjoiS2F0YXJpbmEiLCJsYXN0X25hbWUiOiJQb3BvdmljIiwicGFzc3dvcmQiOiIkMmIkMTAkTDVnLkZxQTZLWnguMjJiTldvcjVrZWo3TGNJUDB4S2xzTHlWV1pRSnd4RnFpWUxIUkpRWDYifSwiaWF0IjoxNjk5MjU2Mjk4fQ.aRbRA_VoSbaaeGZtd9bMlmCwR9Auy-kffeVAzEUacMY';

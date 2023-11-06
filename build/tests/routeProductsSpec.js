@@ -12,14 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const productsStore_1 = require("../models/productsStore");
 const getRequest_1 = require("./utils/getRequest");
 const getToken_1 = require("./utils/getToken");
-const ordersStore_1 = require("../models/ordersStore");
-const productsInOrder_1 = require("../models/productsInOrder");
 const usersStore_1 = require("../models/usersStore");
-fdescribe('Testing products routes: ', () => {
+describe('Testing products routes: ', () => {
     const usersStore = new usersStore_1.UsersStore();
     const productsStore = new productsStore_1.ProductsStore();
-    const ordersStore = new ordersStore_1.OrdersStore();
-    const productsInOrder = new productsInOrder_1.ProductsInOrder();
     const productAlreadyExist = {
         name: 'Laptop',
         price: 799.99,
@@ -34,8 +30,6 @@ fdescribe('Testing products routes: ', () => {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield usersStore.createRandomUsers();
         yield productsStore.createRandomProducts();
-        yield ordersStore.createRandomOrders();
-        yield productsInOrder.createRandomProductInOrders();
         token = yield (0, getToken_1.getToken)();
     }));
     it(`GET: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */} should return status code 200 and product length must be greater than 0.`, () => __awaiter(void 0, void 0, void 0, function* () {
@@ -86,8 +80,6 @@ fdescribe('Testing products routes: ', () => {
         expect(result.status).toBe(400);
     }));
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
-        yield productsInOrder.deleteAllProductInOrders();
-        yield ordersStore.deleteAllOrders();
         yield productsStore.deleteAllProducts();
         yield usersStore.deleteAllUsers();
     }));

@@ -1,30 +1,33 @@
-import app from '../app';
-import supertest from 'supertest';
 import { ProductsStore } from '../models/productsStore';
 import { OrdersStore } from '../models/ordersStore';
 import { ProductsInOrder } from '../models/productsInOrder';
 import { UsersStore } from '../models/usersStore';
-import { AppRoutePath, token } from '../constants';
+import { AppRoutePath } from '../constants';
 import { IOrders } from '../interface';
+import { request } from './utils/getRequest';
+import { getToken } from './utils/getToken';
 
-const request = supertest(app);
 
-describe('Testing orders routes: ', () => {
+fdescribe('Testing orders routes: ', () => {
     const usersStore = new UsersStore();
     const productsStore = new ProductsStore();
     const ordersStore = new OrdersStore();
     const productsInOrder = new ProductsInOrder();
 
+    let token = ''
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const isAnOrder = (obj: any): obj is IOrders => {
         return 'user_id' in obj && 'status' in obj;
     };
+    
 
     beforeAll(async () => {
         await usersStore.createRandomUsers();
         await productsStore.createRandomProducts();
         await ordersStore.createRandomOrders();
         await productsInOrder.createRandomProductInOrders();
+        token = await getToken()
     });
 
     describe('Testing all orders by specific user id:', () => {

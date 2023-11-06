@@ -8,18 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const app_1 = __importDefault(require("../app"));
-const supertest_1 = __importDefault(require("supertest"));
 const productsStore_1 = require("../models/productsStore");
 const ordersStore_1 = require("../models/ordersStore");
 const productsInOrder_1 = require("../models/productsInOrder");
 const usersStore_1 = require("../models/usersStore");
-const constants_1 = require("../constants");
-const request = (0, supertest_1.default)(app_1.default);
+const getRequest_1 = require("./utils/getRequest");
+const getToken_1 = require("./utils/getToken");
 describe('Testing product-in-orders routes: ', () => {
     const usersStore = new usersStore_1.UsersStore();
     const productsStore = new productsStore_1.ProductsStore();
@@ -39,17 +34,19 @@ describe('Testing product-in-orders routes: ', () => {
         product_id: 1,
         order_id: 1,
     };
+    let token = '';
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield usersStore.createRandomUsers();
         yield productsStore.createRandomProducts();
         yield ordersStore.createRandomOrders();
         yield productsInOrder.createRandomProductInOrders();
+        token = yield (0, getToken_1.getToken)();
     }));
     describe('Testing create product-in-orders: ', () => {
         it(`POST: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create should return status code 200, check if created product-in-otder is IProductInOrder. Also return created user as object [TOKEN REQUIRED]`, () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield request
+            const result = yield getRequest_1.request
                 .post(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create`)
-                .set('Authorization', `Bearer ${constants_1.token}`)
+                .set('Authorization', `Bearer ${token}`)
                 .send(uniqueProductInOrder);
             const createdProductInOrder = (yield result.body);
             expect(isAnProductInOrder(createdProductInOrder)).toBe(true);
@@ -62,9 +59,9 @@ describe('Testing product-in-orders routes: ', () => {
             expect(result.status).toBe(200);
         }));
         it(`POST: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create testing body validator and should return status code 400. Error message: Bad request. Invalid values: quantity, product_id, order_id. Please provide correct values. [TOKEN REQUIRED]`, () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield request
+            const result = yield getRequest_1.request
                 .post(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create`)
-                .set('Authorization', `Bearer ${constants_1.token}`)
+                .set('Authorization', `Bearer ${token}`)
                 .send({});
             expect(result.text).toEqual('Bad request. Invalid values: quantity, product_id, order_id. Please provide correct values.');
             expect(result.status).toEqual(400);

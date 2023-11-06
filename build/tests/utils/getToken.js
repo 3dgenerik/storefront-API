@@ -21,7 +21,6 @@ const getToken = () => __awaiter(void 0, void 0, void 0, function* () {
         .post(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/signin`)
         .send(userAlreadyExist);
     const body = yield result.body;
-    console.log('oooooooooooooooooooooooooooooooooo', body);
     return body.output.token;
 });
 exports.getToken = getToken;
