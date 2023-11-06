@@ -109,6 +109,8 @@ Now we want to add approximately 30 rows to each tables to have something to wor
     http://localhost:3001/api/orders/create-random-orders
     http://localhost:3001/api/product-in-orders/create-random-product-in-orders
 
+Before we use the app FIRST WE NEED TO CREATE TOKEN by sign in or sign up.
+
 
 <br />
 <br />

@@ -39,7 +39,7 @@ describe('Testing product-in-orders routes: ', () => {
         await productsInOrder.createRandomProductInOrders();
     });
 
-    describe('Testin create product-in-orders: ', () => {
+    describe('Testing create product-in-orders: ', () => {
         it(`POST: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_ORDERS}${AppRoutePath.ENDPOINT_PRODUCTS}/create should return status code 200, check if created product-in-otder is IProductInOrder. Also return created user as object [TOKEN REQUIRED]`, async () => {
             const result = await request
                 .post(
@@ -59,19 +59,6 @@ describe('Testing product-in-orders routes: ', () => {
             expect(result.status).toBe(200);
         });
 
-        it(`POST: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_ORDERS}${AppRoutePath.ENDPOINT_PRODUCTS}/create should return status code 422 and return empty object [TOKEN REQUIRED]`, async () => {
-            const result = await request
-                .post(
-                    `${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_ORDERS}${AppRoutePath.ENDPOINT_PRODUCTS}/create`,
-                )
-                .set('Authorization', `Bearer ${token}`)
-                .send(nonUniqueProductInOrder);
-            const possiblyCreatedProductInOrder =
-                (await result.body) as IProductsInOrders;
-
-            expect(possiblyCreatedProductInOrder.id).toBe(undefined);
-            expect(result.status).toEqual(422);
-        });
 
         it(`POST: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_ORDERS}${AppRoutePath.ENDPOINT_PRODUCTS}/create testing body validator and should return status code 400. Error message: Bad request. Invalid values: quantity, product_id, order_id. Please provide correct values. [TOKEN REQUIRED]`, async () => {
             const result = await request

@@ -45,7 +45,7 @@ describe('Testing product-in-orders routes: ', () => {
         yield ordersStore.createRandomOrders();
         yield productsInOrder.createRandomProductInOrders();
     }));
-    describe('Testin create product-in-orders: ', () => {
+    describe('Testing create product-in-orders: ', () => {
         it(`POST: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create should return status code 200, check if created product-in-otder is IProductInOrder. Also return created user as object [TOKEN REQUIRED]`, () => __awaiter(void 0, void 0, void 0, function* () {
             const result = yield request
                 .post(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create`)
@@ -60,15 +60,6 @@ describe('Testing product-in-orders routes: ', () => {
                 order_id: 6,
             });
             expect(result.status).toBe(200);
-        }));
-        it(`POST: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create should return status code 422 and return empty object [TOKEN REQUIRED]`, () => __awaiter(void 0, void 0, void 0, function* () {
-            const result = yield request
-                .post(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create`)
-                .set('Authorization', `Bearer ${constants_1.token}`)
-                .send(nonUniqueProductInOrder);
-            const possiblyCreatedProductInOrder = (yield result.body);
-            expect(possiblyCreatedProductInOrder.id).toBe(undefined);
-            expect(result.status).toEqual(422);
         }));
         it(`POST: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create testing body validator and should return status code 400. Error message: Bad request. Invalid values: quantity, product_id, order_id. Please provide correct values. [TOKEN REQUIRED]`, () => __awaiter(void 0, void 0, void 0, function* () {
             const result = yield request

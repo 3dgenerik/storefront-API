@@ -1,13 +1,18 @@
-import app from '../app';
-import supertest from 'supertest';
 import { ProductsStore } from '../models/productsStore';
-import { AppRoutePath, token } from '../constants';
+import { AppRoutePath } from '../constants';
 import { IProduct } from '../interface';
+import { request } from './utils/getRequest';
+import { getToken } from './utils/getToken';
+import { OrdersStore } from '../models/ordersStore';
+import { ProductsInOrder } from '../models/productsInOrder';
+import { UsersStore } from '../models/usersStore';
 
-const request = supertest(app);
 
 describe('Testing products routes: ', () => {
+    const usersStore = new UsersStore();
     const productsStore = new ProductsStore();
+    const ordersStore = new OrdersStore();
+    const productsInOrder = new ProductsInOrder();
 
     const productAlreadyExist: IProduct = {
         name: 'Laptop',
@@ -21,8 +26,14 @@ describe('Testing products routes: ', () => {
         category: 'electronics',
     };
 
+    let token = ''
+
     beforeAll(async () => {
+        await usersStore.createRandomUsers();
         await productsStore.createRandomProducts();
+        await ordersStore.createRandomOrders();
+        await productsInOrder.createRandomProductInOrders();
+        token = await getToken()
     });
 
     it(`GET: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_PRODUCTS} should return status code 200 and product length must be greater than 0.`, async () => {
@@ -98,6 +109,9 @@ describe('Testing products routes: ', () => {
     });
 
     afterAll(async () => {
+        await productsInOrder.deleteAllProductInOrders();
+        await ordersStore.deleteAllOrders();
         await productsStore.deleteAllProducts();
+        await usersStore.deleteAllUsers();
     });
 });

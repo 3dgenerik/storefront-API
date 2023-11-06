@@ -1,10 +1,11 @@
 import app from '../app';
 import supertest from 'supertest';
-import { AppRoutePath, token } from '../constants';
+import { AppRoutePath } from '../constants';
 import { ICreatedUserOutput, IUser } from '../interface';
 import { UsersStore } from '../models/usersStore';
+import { getToken } from './utils/getToken';
+import { request } from './utils/getRequest';
 
-const request = supertest(app);
 
 describe('Testing user routes: ', () => {
     const usersStore = new UsersStore();
@@ -21,8 +22,11 @@ describe('Testing user routes: ', () => {
         password: 'petar',
     };
 
+    let token = ''
+
     beforeAll(async () => {
         await usersStore.createRandomUsers();
+        token = await getToken() 
     });
     describe('Testing all users: ', () => {
         it(`GET: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS} should return status 200, users.length > 0 [TOKEN REQUIRED]`, async () => {
@@ -47,7 +51,7 @@ describe('Testing user routes: ', () => {
     });
 
     describe('Testing current user: ', () => {
-        it(`GET: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS}/current should return User object with id = 3 [TOKEN REQUIRED]`, async () => {
+        it(`GET: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS}/current should return User object with first_name = 'Petar' and last_name = 'Stojanovic'[TOKEN REQUIRED]`, async () => {
             const result = await request
                 .get(
                     `${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS}/current`,
@@ -56,12 +60,9 @@ describe('Testing user routes: ', () => {
 
             const currentUser = (await result.body) as IUser;
 
-            expect(currentUser).toEqual({
-                id: 3,
-                first_name: 'Katarina',
-                last_name: 'Popovic',
-                password:
-                    '$2b$10$lNN4j.ktbQlECvJ99C/zFO1DpgqDkdMdRLcRDFyyIJm0fFhnrnrJe',
+            expect({first_name: currentUser.first_name, last_name: currentUser.last_name}).toEqual({
+                first_name: 'Petar',
+                last_name: 'Stojanovic'
             });
         });
 

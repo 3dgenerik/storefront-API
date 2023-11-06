@@ -2,15 +2,15 @@
     "dev":{
         "driver":"pg",
         "host":"127.0.0.1",
-        "user":"postgres",
+        "user":"milesoda_user",
         "database":"storefront_dev",
-        "password":"your_password"
+        "password":"shaban333"
     },
     "test":{
         "driver":"pg",
         "host":"127.0.0.1",
-        "user":"postgres",
+        "user":"milesoda_user",
         "database":"storefront_test",
-        "password":"your_password"
+        "password":"shaban333"
     }
 }
