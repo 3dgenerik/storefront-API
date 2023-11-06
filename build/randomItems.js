@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.randomProductInOrder = exports.randomOrders = exports.radnomProducts = exports.randomUsers = void 0;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 exports.randomUsers = [
     { id: 1, first_name: 'Milena', last_name: 'Petrovic', password: 'milena' },
     { id: 2, first_name: 'Nikola', last_name: 'Jovanovic', password: 'nikola' },

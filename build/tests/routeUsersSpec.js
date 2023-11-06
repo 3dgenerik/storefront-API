@@ -49,9 +49,12 @@ describe('Testing user routes: ', () => {
                 .get(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/current`)
                 .set('Authorization', `Bearer ${token}`);
             const currentUser = (yield result.body);
-            expect({ first_name: currentUser.first_name, last_name: currentUser.last_name }).toEqual({
+            expect({
+                first_name: currentUser.first_name,
+                last_name: currentUser.last_name,
+            }).toEqual({
                 first_name: 'Petar',
-                last_name: 'Stojanovic'
+                last_name: 'Stojanovic',
             });
         }));
         it(`GET: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/current should return 401 without or wrong token [TOKEN REQUIRED]`, () => __awaiter(void 0, void 0, void 0, function* () {
