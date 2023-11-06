@@ -29,11 +29,6 @@ describe('Testing product-in-orders routes: ', () => {
         product_id: 6,
         order_id: 6,
     };
-    const nonUniqueProductInOrder = {
-        quantity: 3,
-        product_id: 1,
-        order_id: 1,
-    };
     let token = '';
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         yield usersStore.createRandomUsers();

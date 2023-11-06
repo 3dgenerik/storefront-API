@@ -7,7 +7,6 @@ import { IProductsInOrders } from '../interface';
 import { request } from './utils/getRequest';
 import { getToken } from './utils/getToken';
 
-
 describe('Testing product-in-orders routes: ', () => {
     const usersStore = new UsersStore();
     const productsStore = new ProductsStore();
@@ -25,14 +24,14 @@ describe('Testing product-in-orders routes: ', () => {
         order_id: 6,
     };
 
-    let token = ''
+    let token = '';
 
     beforeAll(async () => {
         await usersStore.createRandomUsers();
         await productsStore.createRandomProducts();
         await ordersStore.createRandomOrders();
         await productsInOrder.createRandomProductInOrders();
-        token = await getToken()
+        token = await getToken();
     });
 
     describe('Testing create product-in-orders: ', () => {
@@ -54,7 +53,6 @@ describe('Testing product-in-orders routes: ', () => {
             });
             expect(result.status).toBe(200);
         });
-
 
         it(`POST: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_ORDERS}${AppRoutePath.ENDPOINT_PRODUCTS}/create testing body validator and should return status code 400. Error message: Bad request. Invalid values: quantity, product_id, order_id. Please provide correct values. [TOKEN REQUIRED]`, async () => {
             const result = await request

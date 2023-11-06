@@ -58,6 +58,10 @@
         }
     }
 
+### Ports
+#### Backend use port 3001
+#### Database use port 5432
+
 
 ### Scripts
 
@@ -109,7 +113,7 @@ Now we want to add approximately 30 rows to each tables to have something to wor
     http://localhost:3001/api/orders/create-random-orders
     http://localhost:3001/api/product-in-orders/create-random-product-in-orders
 
-Before we use the app FIRST WE NEED TO CREATE TOKEN by sign in or sign up.
+Before we start to use the app FIRST WE NEED TO CREATE TOKEN by signin or signup.
 
 
 <br />
@@ -124,7 +128,9 @@ Before we use the app FIRST WE NEED TO CREATE TOKEN by sign in or sign up.
 
 This will change the environment to TEST mode and automatically create all test tables and populate them with rows, and clear all tables when test is finished.
 
-##### Very last note: I have created my own project from scratch. I did not clone your start project from repo.
+### Notes
+##### I have created my own project from scratch. I did not clone your start project from repo.
+##### I have sent you the 'storefront-api.postman_collection.json' file with all the URLs for testing in Postman.
 
 
 

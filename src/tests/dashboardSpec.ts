@@ -56,7 +56,7 @@ describe('Testing dashboard routes: ', () => {
                     return acc + Number(product.total_quantity);
                 },
                 0,
-            );                
+            );
 
             expect(popularProductsList.length).toEqual(5);
             expect(totalSum).toEqual(55);

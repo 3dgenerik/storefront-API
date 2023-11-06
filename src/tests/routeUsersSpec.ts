@@ -4,7 +4,6 @@ import { UsersStore } from '../models/usersStore';
 import { getToken } from './utils/getToken';
 import { request } from './utils/getRequest';
 
-
 describe('Testing user routes: ', () => {
     const usersStore = new UsersStore();
 
@@ -20,11 +19,11 @@ describe('Testing user routes: ', () => {
         password: 'petar',
     };
 
-    let token = ''
+    let token = '';
 
     beforeAll(async () => {
         await usersStore.createRandomUsers();
-        token = await getToken() 
+        token = await getToken();
     });
     describe('Testing all users: ', () => {
         it(`GET: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS} should return status 200, users.length > 0 [TOKEN REQUIRED]`, async () => {
@@ -58,9 +57,12 @@ describe('Testing user routes: ', () => {
 
             const currentUser = (await result.body) as IUser;
 
-            expect({first_name: currentUser.first_name, last_name: currentUser.last_name}).toEqual({
+            expect({
+                first_name: currentUser.first_name,
+                last_name: currentUser.last_name,
+            }).toEqual({
                 first_name: 'Petar',
-                last_name: 'Stojanovic'
+                last_name: 'Stojanovic',
             });
         });
 

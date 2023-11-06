@@ -310,7 +310,11 @@ describe('Testing all models:', async () => {
                     await productsInOrder.createProductsInOrders(
                         productInOrderNotExist,
                     );
-                expect({quantity: createdProductInOrder.quantity, product_id: createdProductInOrder.product_id, order_id: createdProductInOrder.order_id}).toEqual({
+                expect({
+                    quantity: createdProductInOrder.quantity,
+                    product_id: createdProductInOrder.product_id,
+                    order_id: createdProductInOrder.order_id,
+                }).toEqual({
                     quantity: 5,
                     product_id: 10,
                     order_id: 10,

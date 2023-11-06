@@ -5,7 +5,6 @@ import { request } from './utils/getRequest';
 import { getToken } from './utils/getToken';
 import { UsersStore } from '../models/usersStore';
 
-
 describe('Testing products routes: ', () => {
     const usersStore = new UsersStore();
     const productsStore = new ProductsStore();
@@ -22,12 +21,12 @@ describe('Testing products routes: ', () => {
         category: 'electronics',
     };
 
-    let token = ''
+    let token = '';
 
     beforeAll(async () => {
         await usersStore.createRandomUsers();
         await productsStore.createRandomProducts();
-        token = await getToken()
+        token = await getToken();
     });
 
     it(`GET: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_PRODUCTS} should return status code 200 and product length must be greater than 0.`, async () => {

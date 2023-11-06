@@ -1,6 +1,5 @@
 import { IOrders, IProduct, IProductsInOrders, IUser } from './interface';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const randomUsers: IUser[] = [
     { id: 1, first_name: 'Milena', last_name: 'Petrovic', password: 'milena' },
     { id: 2, first_name: 'Nikola', last_name: 'Jovanovic', password: 'nikola' },
