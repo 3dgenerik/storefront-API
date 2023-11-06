@@ -4,44 +4,42 @@ export class Store {
     protected getItemByIdSqlQuery: string = '';
 
     protected async getAllItems<T>(sql: string): Promise<T[]> {
-        try{
+        try {
             const conn = await client.connect();
             const result = await conn.query(sql);
             conn.release();
             return result.rows;
-        }catch(err){
-            throw new Error(`Cannot get all items: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get all items: ${err}`);
         }
     }
 
     protected async itemExistById(id: number): Promise<boolean> {
-        try{
-
+        try {
             const conn = await client.connect();
             const sql = this.getItemByIdSqlQuery;
             const result = await conn.query(sql, [id]);
             conn.release();
             const existingItem = result.rows[0];
-    
+
             if (existingItem) return true;
             return false;
-        }catch(err){
-            throw new Error(`Cannot get item: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get item: ${err}`);
         }
     }
 
     protected async itemById(id: number, sqlQuery: string) {
-        try{
-
+        try {
             if (!(await this.itemExistById(id))) return null;
-    
+
             const conn = await client.connect();
             const sql = sqlQuery;
             const result = await conn.query(sql, [id]);
             conn.release();
             return result.rows[0];
-        }catch(err){
-            throw new Error(`Cannot get item: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get item: ${err}`);
         }
     }
 
@@ -49,23 +47,31 @@ export class Store {
         id: number,
         sqlQuery: string,
     ): Promise<T | null> {
-        return this.itemById(id, sqlQuery);
+        try {
+            return this.itemById(id, sqlQuery);
+        } catch (err) {
+            throw new Error(`Cannot get item: ${err}`);
+        }
     }
 
     protected async deleteItemById<T>(
         id: number,
         sqlQuery: string,
     ): Promise<T | null> {
-        return this.itemById(id, sqlQuery);
+        try {
+            return this.itemById(id, sqlQuery);
+        } catch (err) {
+            throw new Error(`Cannot delete item: ${err}`);
+        }
     }
 
     protected async deleteAllItems(sql: string): Promise<void> {
-        try{
+        try {
             const conn = await client.connect();
             await conn.query(sql);
             conn.release();
-        }catch(err){
-            throw new Error(`Cannot delete items ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot delete items ${err}`);
         }
     }
 }

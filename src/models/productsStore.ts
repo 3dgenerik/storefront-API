@@ -23,41 +23,44 @@ export class ProductsStore extends Store {
     }
 
     async getAllProducts(): Promise<IProduct[]> {
-        try{
-
+        try {
             return await this.getAllItems<IProduct>(this.SQL_GET_ALL_PRODUCTS);
-        }catch(err){
-            throw new Error(`Cannot get all products: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get all products: ${err}`);
         }
     }
 
     async productExist(product: IProduct): Promise<boolean> {
-        try{
-
+        try {
             const conn = await client.connect();
             const sql = this.SQL_IF_PRODUCT_EXIST;
-            const result = await conn.query(sql, [product.name, product.category]);
+            const result = await conn.query(sql, [
+                product.name,
+                product.category,
+            ]);
             conn.release();
             const existingProduct = result.rows[0];
-    
+
             if (existingProduct) return true;
             return false;
-        }catch(err){
-            throw new Error(`Cannot perform action for product exist: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot perform action for product exist: ${err}`);
         }
     }
 
     async getProductById(id: number): Promise<IProduct | null> {
-        try{
-            return await this.getItemById<IProduct>(id, this.SQL_GET_PRODUCT_BY_ID);
-        }catch(err){
-            throw new Error(`Cannot get product: ${err}`)
+        try {
+            return await this.getItemById<IProduct>(
+                id,
+                this.SQL_GET_PRODUCT_BY_ID,
+            );
+        } catch (err) {
+            throw new Error(`Cannot get product: ${err}`);
         }
     }
 
     async createProduct(product: IProduct): Promise<IProduct | null> {
-        try{
-
+        try {
             if (await this.productExist(product)) {
                 return null;
             }
@@ -70,18 +73,17 @@ export class ProductsStore extends Store {
             ]);
             conn.release();
             return result.rows[0];
-        }catch(err){
-            throw new Error(`Cannot create product: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot create product: ${err}`);
         }
     }
 
     async createRandomProducts(): Promise<boolean> {
-        try{
-
+        try {
             const existingProducts = await this.getAllProducts();
-    
+
             if (existingProducts.length !== 0) return false;
-    
+
             const conn = await client.connect();
             for (const product of radnomProducts) {
                 const sql = this.SQL_CREATE_PRODUCT_FOR_TEST;
@@ -93,41 +95,38 @@ export class ProductsStore extends Store {
                 ]);
             }
             conn.release();
-    
+
             return true;
-        }catch(err){
-            throw new Error(`Cannot create random products: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot create random products: ${err}`);
         }
     }
 
     async deleteAllProducts(): Promise<void> {
-        try{
-
+        try {
             await this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCTS);
-        }catch(err){
-            throw new Error(`Cannot delete all products: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot delete all products: ${err}`);
         }
     }
 
     async deleteProductById(id: number): Promise<IProduct | null> {
-        try{
-
+        try {
             return await this.deleteItemById(id, this.SQL_DELETE_PRODUCT);
-        }catch(err){
-            throw new Error(`Cannot delete product: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot delete product: ${err}`);
         }
     }
 
     async getProductsByCategory(category: string): Promise<IProduct[]> {
-        try{
-
+        try {
             const conn = await client.connect();
             const sql = 'SELECT * FROM products_table WHERE category = ($1)';
             const result = await conn.query(sql, [category]);
             conn.release();
             return result.rows;
-        }catch(err){
-            throw new Error(`Cannot get products by category: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get products by category: ${err}`);
         }
     }
 }

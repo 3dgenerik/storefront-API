@@ -18,21 +18,19 @@ export class ProductsInOrder extends Store {
     }
 
     async getAllProductInOrders(): Promise<IProductsInOrders[]> {
-        try{
-            
+        try {
             return await this.getAllItems<IProductsInOrders>(
                 this.SQL_GET_ALL_PRODUCT_IN_ORDER,
             );
-        }catch(err){
-            throw new Error(`Cannot get all products-in-order: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get all products-in-order: ${err}`);
         }
     }
 
     async createProductsInOrders(
         productsInOrder: IProductsInOrders,
     ): Promise<IProductsInOrders> {
-        try{
-
+        try {
             const conn = await client.connect();
             const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS;
             const result = await conn.query(sql, [
@@ -42,18 +40,17 @@ export class ProductsInOrder extends Store {
             ]);
             conn.release();
             return result.rows[0];
-        }catch(err){
-            throw new Error(`Cannot create products-in-order: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot create products-in-order: ${err}`);
         }
     }
 
     async createRandomProductInOrders(): Promise<boolean> {
-        try{
-
+        try {
             const existingProductInOrders = await this.getAllProductInOrders();
-    
+
             if (existingProductInOrders.length !== 0) return false;
-    
+
             const conn = await client.connect();
             for (const productInOrder of randomProductInOrder) {
                 const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST;
@@ -65,19 +62,18 @@ export class ProductsInOrder extends Store {
                 ]);
             }
             conn.release();
-    
+
             return true;
-        }catch(err){
-            throw new Error(`Cannot create random products-in-order: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot create random products-in-order: ${err}`);
         }
     }
 
     async deleteAllProductInOrders(): Promise<void> {
-        try{
-
+        try {
             await this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS);
-        }catch(err){
-            throw new Error(`Cannot delete all products-in-order: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot delete all products-in-order: ${err}`);
         }
     }
 }

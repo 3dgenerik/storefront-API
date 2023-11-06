@@ -43,7 +43,10 @@ class ProductsStore extends store_1.Store {
             try {
                 const conn = yield database_1.default.connect();
                 const sql = this.SQL_IF_PRODUCT_EXIST;
-                const result = yield conn.query(sql, [product.name, product.category]);
+                const result = yield conn.query(sql, [
+                    product.name,
+                    product.category,
+                ]);
                 conn.release();
                 const existingProduct = result.rows[0];
                 if (existingProduct)

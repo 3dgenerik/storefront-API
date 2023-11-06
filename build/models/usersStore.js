@@ -72,7 +72,10 @@ class UsersStore extends store_1.Store {
             try {
                 const conn = yield database_1.default.connect();
                 const sql = this.SQL_IF_USER_EXIST;
-                const result = yield conn.query(sql, [user.first_name, user.last_name]);
+                const result = yield conn.query(sql, [
+                    user.first_name,
+                    user.last_name,
+                ]);
                 conn.release();
                 const existingUser = result.rows[0];
                 if (existingUser)
@@ -162,7 +165,10 @@ class UsersStore extends store_1.Store {
                     return null;
                 const conn = yield database_1.default.connect();
                 const sql = this.SQL_AUTH_USER;
-                const result = yield conn.query(sql, [user.first_name, user.last_name]);
+                const result = yield conn.query(sql, [
+                    user.first_name,
+                    user.last_name,
+                ]);
                 conn.release();
                 const dbUser = result.rows[0];
                 if (!(yield this.passwordHashCompare(user.password, dbUser.password)))

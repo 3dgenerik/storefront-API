@@ -25,24 +25,22 @@ export class OrdersStore extends Store {
     }
 
     async getAllOrders(): Promise<IOrders[]> {
-        try{
-
+        try {
             return await this.getAllItems<IOrders>(this.SQL_GET_ALL_ORDERS);
-        }catch(err){
-            throw new Error(`Cannot get all orders: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get all orders: ${err}`);
         }
     }
 
     async getAllOrdersByUserId(userId: number): Promise<IOrders[]> {
-        try{
-
+        try {
             const conn = await client.connect();
             const sql = this.SQL_GET_ALL_ORDFERS_BY_USER_ID;
             const result = await conn.query(sql, [userId]);
             conn.release();
             return result.rows;
-        }catch(err){
-            throw new Error(`Cannot get all orders by id: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get all orders by id: ${err}`);
         }
     }
 
@@ -50,30 +48,28 @@ export class OrdersStore extends Store {
         userId: number,
         status: TStatus,
     ): Promise<IOrders[]> {
-        try{
-
+        try {
             const conn = await client.connect();
             const sql = this.SQL_GET_ALL_SPECIFIC_ORDERS_BY_USER_ID;
             const result = await conn.query(sql, [userId, status]);
             conn.release();
             return result.rows;
-        }catch(err){
-            throw new Error(`Cannot get orders: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get orders: ${err}`);
         }
     }
 
     async getCurrentOrder(userId: number): Promise<IOrders | null> {
-        try{
-
+        try {
             const conn = await client.connect();
             const sql = this.SQL_GET_ALL_ORDERS_WITH_ACTIVE_STATUS;
             const result = await conn.query(sql, [userId]);
             conn.release();
-    
+
             const orders = result.rows as IOrders[];
-    
+
             if (orders.length === 0) return null;
-    
+
             const currentOrder = orders.reduce(
                 (latest: IOrders, current: IOrders) =>
                     (current.timestamp !== undefined && current.timestamp) >
@@ -82,16 +78,15 @@ export class OrdersStore extends Store {
                         : latest,
                 orders[0],
             );
-    
+
             return currentOrder;
-        }catch(err){
-            throw new Error(`Cannot get current order: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot get current order: ${err}`);
         }
     }
 
     async createOrder(order: IOrders): Promise<IOrders> {
-        try{
-
+        try {
             const conn = await client.connect();
             const sql = this.SQL_CREATE_ORDER;
             const result = await conn.query(sql, [
@@ -100,18 +95,17 @@ export class OrdersStore extends Store {
             ]);
             conn.release();
             return result.rows[0];
-        }catch(err){
-            throw new Error(`Cannot create order: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot create order: ${err}`);
         }
     }
 
     async createRandomOrders(): Promise<boolean> {
-        try{
-
+        try {
             const existingOrders = await this.getAllOrders();
-    
+
             if (existingOrders.length !== 0) return false;
-    
+
             const conn = await client.connect();
             for (const order of randomOrders) {
                 const sql = this.SQL_CREATE_ORDER_FOR_TEST;
@@ -122,19 +116,18 @@ export class OrdersStore extends Store {
                 ]);
             }
             conn.release();
-    
+
             return true;
-        }catch(err){
-            throw new Error(`Cannot create random orders: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot create random orders: ${err}`);
         }
     }
 
     async deleteAllOrders(): Promise<void> {
-        try{
-
+        try {
             await this.deleteAllItems(this.SQL_DELETE_ALL_ORDERS);
-        }catch(err){
-            throw new Error(`Cannot delete orders: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot delete orders: ${err}`);
         }
     }
 
@@ -143,19 +136,18 @@ export class OrdersStore extends Store {
         orderId: number,
         status: TStatus,
     ): Promise<IOrders | null> {
-        try{
-
+        try {
             const conn = await client.connect();
             const sql = this.SQL_UPDATE_ORDER_STATUS;
             const result = await conn.query(sql, [status, userId, orderId]);
-    
+
             conn.release();
-    
+
             const completedOrder = result.rows[0];
             if (!completedOrder) return null;
             return result.rows[0];
-        }catch(err){
-            throw new Error(`Cannot complete orders: ${err}`)
+        } catch (err) {
+            throw new Error(`Cannot complete orders: ${err}`);
         }
     }
 

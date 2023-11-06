@@ -66,12 +66,22 @@ class Store {
     }
     getItemById(id, sqlQuery) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.itemById(id, sqlQuery);
+            try {
+                return this.itemById(id, sqlQuery);
+            }
+            catch (err) {
+                throw new Error(`Cannot get item: ${err}`);
+            }
         });
     }
     deleteItemById(id, sqlQuery) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.itemById(id, sqlQuery);
+            try {
+                return this.itemById(id, sqlQuery);
+            }
+            catch (err) {
+                throw new Error(`Cannot delete item: ${err}`);
+            }
         });
     }
     deleteAllItems(sql) {
