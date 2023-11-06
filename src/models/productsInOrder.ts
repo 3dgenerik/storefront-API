@@ -18,46 +18,66 @@ export class ProductsInOrder extends Store {
     }
 
     async getAllProductInOrders(): Promise<IProductsInOrders[]> {
-        return await this.getAllItems<IProductsInOrders>(
-            this.SQL_GET_ALL_PRODUCT_IN_ORDER,
-        );
+        try{
+            
+            return await this.getAllItems<IProductsInOrders>(
+                this.SQL_GET_ALL_PRODUCT_IN_ORDER,
+            );
+        }catch(err){
+            throw new Error(`Cannot get all products-in-order: ${err}`)
+        }
     }
 
     async createProductsInOrders(
         productsInOrder: IProductsInOrders,
     ): Promise<IProductsInOrders> {
-        const conn = await client.connect();
-        const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS;
-        const result = await conn.query(sql, [
-            productsInOrder.quantity,
-            productsInOrder.product_id,
-            productsInOrder.order_id,
-        ]);
-        conn.release();
-        return result.rows[0];
+        try{
+
+            const conn = await client.connect();
+            const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS;
+            const result = await conn.query(sql, [
+                productsInOrder.quantity,
+                productsInOrder.product_id,
+                productsInOrder.order_id,
+            ]);
+            conn.release();
+            return result.rows[0];
+        }catch(err){
+            throw new Error(`Cannot create products-in-order: ${err}`)
+        }
     }
 
     async createRandomProductInOrders(): Promise<boolean> {
-        const existingProductInOrders = await this.getAllProductInOrders();
+        try{
 
-        if (existingProductInOrders.length !== 0) return false;
-
-        const conn = await client.connect();
-        for (const productInOrder of randomProductInOrder) {
-            const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST;
-            await conn.query(sql, [
-                productInOrder.id,
-                productInOrder.quantity,
-                productInOrder.product_id,
-                productInOrder.order_id,
-            ]);
+            const existingProductInOrders = await this.getAllProductInOrders();
+    
+            if (existingProductInOrders.length !== 0) return false;
+    
+            const conn = await client.connect();
+            for (const productInOrder of randomProductInOrder) {
+                const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST;
+                await conn.query(sql, [
+                    productInOrder.id,
+                    productInOrder.quantity,
+                    productInOrder.product_id,
+                    productInOrder.order_id,
+                ]);
+            }
+            conn.release();
+    
+            return true;
+        }catch(err){
+            throw new Error(`Cannot create random products-in-order: ${err}`)
         }
-        conn.release();
-
-        return true;
     }
 
     async deleteAllProductInOrders(): Promise<void> {
-        await this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS);
+        try{
+
+            await this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS);
+        }catch(err){
+            throw new Error(`Cannot delete all products-in-order: ${err}`)
+        }
     }
 }

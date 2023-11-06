@@ -20,33 +20,48 @@ class Store {
     }
     getAllItems(sql) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const result = yield conn.query(sql);
-            conn.release();
-            return result.rows;
+            try {
+                const conn = yield database_1.default.connect();
+                const result = yield conn.query(sql);
+                conn.release();
+                return result.rows;
+            }
+            catch (err) {
+                throw new Error(`Cannot get all items: ${err}`);
+            }
         });
     }
     itemExistById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = this.getItemByIdSqlQuery;
-            const result = yield conn.query(sql, [id]);
-            conn.release();
-            const existingItem = result.rows[0];
-            if (existingItem)
-                return true;
-            return false;
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.getItemByIdSqlQuery;
+                const result = yield conn.query(sql, [id]);
+                conn.release();
+                const existingItem = result.rows[0];
+                if (existingItem)
+                    return true;
+                return false;
+            }
+            catch (err) {
+                throw new Error(`Cannot get item: ${err}`);
+            }
         });
     }
     itemById(id, sqlQuery) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!(yield this.itemExistById(id)))
-                return null;
-            const conn = yield database_1.default.connect();
-            const sql = sqlQuery;
-            const result = yield conn.query(sql, [id]);
-            conn.release();
-            return result.rows[0];
+            try {
+                if (!(yield this.itemExistById(id)))
+                    return null;
+                const conn = yield database_1.default.connect();
+                const sql = sqlQuery;
+                const result = yield conn.query(sql, [id]);
+                conn.release();
+                return result.rows[0];
+            }
+            catch (err) {
+                throw new Error(`Cannot get item: ${err}`);
+            }
         });
     }
     getItemById(id, sqlQuery) {
@@ -61,9 +76,14 @@ class Store {
     }
     deleteAllItems(sql) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            yield conn.query(sql);
-            conn.release();
+            try {
+                const conn = yield database_1.default.connect();
+                yield conn.query(sql);
+                conn.release();
+            }
+            catch (err) {
+                throw new Error(`Cannot delete items ${err}`);
+            }
         });
     }
 }

@@ -23,72 +23,111 @@ export class ProductsStore extends Store {
     }
 
     async getAllProducts(): Promise<IProduct[]> {
-        return await this.getAllItems<IProduct>(this.SQL_GET_ALL_PRODUCTS);
+        try{
+
+            return await this.getAllItems<IProduct>(this.SQL_GET_ALL_PRODUCTS);
+        }catch(err){
+            throw new Error(`Cannot get all products: ${err}`)
+        }
     }
 
     async productExist(product: IProduct): Promise<boolean> {
-        const conn = await client.connect();
-        const sql = this.SQL_IF_PRODUCT_EXIST;
-        const result = await conn.query(sql, [product.name, product.category]);
-        conn.release();
-        const existingProduct = result.rows[0];
+        try{
 
-        if (existingProduct) return true;
-        return false;
+            const conn = await client.connect();
+            const sql = this.SQL_IF_PRODUCT_EXIST;
+            const result = await conn.query(sql, [product.name, product.category]);
+            conn.release();
+            const existingProduct = result.rows[0];
+    
+            if (existingProduct) return true;
+            return false;
+        }catch(err){
+            throw new Error(`Cannot perform action for product exist: ${err}`)
+        }
     }
 
     async getProductById(id: number): Promise<IProduct | null> {
-        return await this.getItemById<IProduct>(id, this.SQL_GET_PRODUCT_BY_ID);
+        try{
+            return await this.getItemById<IProduct>(id, this.SQL_GET_PRODUCT_BY_ID);
+        }catch(err){
+            throw new Error(`Cannot get product: ${err}`)
+        }
     }
 
     async createProduct(product: IProduct): Promise<IProduct | null> {
-        if (await this.productExist(product)) {
-            return null;
-        }
-        const conn = await client.connect();
-        const sql = this.SQL_CREATE_PRODUCT;
-        const result = await conn.query(sql, [
-            product.name,
-            product.price,
-            product.category,
-        ]);
-        conn.release();
-        return result.rows[0];
-    }
+        try{
 
-    async createRandomProducts(): Promise<boolean> {
-        const existingProducts = await this.getAllProducts();
-
-        if (existingProducts.length !== 0) return false;
-
-        const conn = await client.connect();
-        for (const product of radnomProducts) {
-            const sql = this.SQL_CREATE_PRODUCT_FOR_TEST;
-            await conn.query(sql, [
-                product.id,
+            if (await this.productExist(product)) {
+                return null;
+            }
+            const conn = await client.connect();
+            const sql = this.SQL_CREATE_PRODUCT;
+            const result = await conn.query(sql, [
                 product.name,
                 product.price,
                 product.category,
             ]);
+            conn.release();
+            return result.rows[0];
+        }catch(err){
+            throw new Error(`Cannot create product: ${err}`)
         }
-        conn.release();
+    }
 
-        return true;
+    async createRandomProducts(): Promise<boolean> {
+        try{
+
+            const existingProducts = await this.getAllProducts();
+    
+            if (existingProducts.length !== 0) return false;
+    
+            const conn = await client.connect();
+            for (const product of radnomProducts) {
+                const sql = this.SQL_CREATE_PRODUCT_FOR_TEST;
+                await conn.query(sql, [
+                    product.id,
+                    product.name,
+                    product.price,
+                    product.category,
+                ]);
+            }
+            conn.release();
+    
+            return true;
+        }catch(err){
+            throw new Error(`Cannot create random products: ${err}`)
+        }
     }
 
     async deleteAllProducts(): Promise<void> {
-        await this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCTS);
+        try{
+
+            await this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCTS);
+        }catch(err){
+            throw new Error(`Cannot delete all products: ${err}`)
+        }
     }
 
     async deleteProductById(id: number): Promise<IProduct | null> {
-        return await this.deleteItemById(id, this.SQL_DELETE_PRODUCT);
+        try{
+
+            return await this.deleteItemById(id, this.SQL_DELETE_PRODUCT);
+        }catch(err){
+            throw new Error(`Cannot delete product: ${err}`)
+        }
     }
 
     async getProductsByCategory(category: string): Promise<IProduct[]> {
-        const conn = await client.connect();
-        const sql = 'SELECT * FROM products_table WHERE category = ($1)';
-        const result = await conn.query(sql, [category]);
-        conn.release();
-        return result.rows;
+        try{
+
+            const conn = await client.connect();
+            const sql = 'SELECT * FROM products_table WHERE category = ($1)';
+            const result = await conn.query(sql, [category]);
+            conn.release();
+            return result.rows;
+        }catch(err){
+            throw new Error(`Cannot get products by category: ${err}`)
+        }
     }
 }

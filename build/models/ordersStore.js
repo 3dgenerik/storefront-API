@@ -31,88 +31,128 @@ class OrdersStore extends store_1.Store {
     }
     getAllOrders() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.getAllItems(this.SQL_GET_ALL_ORDERS);
+            try {
+                return yield this.getAllItems(this.SQL_GET_ALL_ORDERS);
+            }
+            catch (err) {
+                throw new Error(`Cannot get all orders: ${err}`);
+            }
         });
     }
     getAllOrdersByUserId(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_GET_ALL_ORDFERS_BY_USER_ID;
-            const result = yield conn.query(sql, [userId]);
-            conn.release();
-            return result.rows;
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_GET_ALL_ORDFERS_BY_USER_ID;
+                const result = yield conn.query(sql, [userId]);
+                conn.release();
+                return result.rows;
+            }
+            catch (err) {
+                throw new Error(`Cannot get all orders by id: ${err}`);
+            }
         });
     }
     getAllSpecificStatusOrdersByUserId(userId, status) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_GET_ALL_SPECIFIC_ORDERS_BY_USER_ID;
-            const result = yield conn.query(sql, [userId, status]);
-            conn.release();
-            return result.rows;
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_GET_ALL_SPECIFIC_ORDERS_BY_USER_ID;
+                const result = yield conn.query(sql, [userId, status]);
+                conn.release();
+                return result.rows;
+            }
+            catch (err) {
+                throw new Error(`Cannot get orders: ${err}`);
+            }
         });
     }
     getCurrentOrder(userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_GET_ALL_ORDERS_WITH_ACTIVE_STATUS;
-            const result = yield conn.query(sql, [userId]);
-            conn.release();
-            const orders = result.rows;
-            if (orders.length === 0)
-                return null;
-            const currentOrder = orders.reduce((latest, current) => (current.timestamp !== undefined && current.timestamp) >
-                (latest.timestamp !== undefined && latest.timestamp)
-                ? current
-                : latest, orders[0]);
-            return currentOrder;
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_GET_ALL_ORDERS_WITH_ACTIVE_STATUS;
+                const result = yield conn.query(sql, [userId]);
+                conn.release();
+                const orders = result.rows;
+                if (orders.length === 0)
+                    return null;
+                const currentOrder = orders.reduce((latest, current) => (current.timestamp !== undefined && current.timestamp) >
+                    (latest.timestamp !== undefined && latest.timestamp)
+                    ? current
+                    : latest, orders[0]);
+                return currentOrder;
+            }
+            catch (err) {
+                throw new Error(`Cannot get current order: ${err}`);
+            }
         });
     }
     createOrder(order) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_CREATE_ORDER;
-            const result = yield conn.query(sql, [
-                order.user_id,
-                order.status,
-            ]);
-            conn.release();
-            return result.rows[0];
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_CREATE_ORDER;
+                const result = yield conn.query(sql, [
+                    order.user_id,
+                    order.status,
+                ]);
+                conn.release();
+                return result.rows[0];
+            }
+            catch (err) {
+                throw new Error(`Cannot create order: ${err}`);
+            }
         });
     }
     createRandomOrders() {
         return __awaiter(this, void 0, void 0, function* () {
-            const existingOrders = yield this.getAllOrders();
-            if (existingOrders.length !== 0)
-                return false;
-            const conn = yield database_1.default.connect();
-            for (const order of randomItems_1.randomOrders) {
-                const sql = this.SQL_CREATE_ORDER_FOR_TEST;
-                yield conn.query(sql, [
-                    order.id,
-                    order.user_id,
-                    order.status,
-                ]);
+            try {
+                const existingOrders = yield this.getAllOrders();
+                if (existingOrders.length !== 0)
+                    return false;
+                const conn = yield database_1.default.connect();
+                for (const order of randomItems_1.randomOrders) {
+                    const sql = this.SQL_CREATE_ORDER_FOR_TEST;
+                    yield conn.query(sql, [
+                        order.id,
+                        order.user_id,
+                        order.status,
+                    ]);
+                }
+                conn.release();
+                return true;
             }
-            conn.release();
-            return true;
+            catch (err) {
+                throw new Error(`Cannot create random orders: ${err}`);
+            }
         });
     }
     deleteAllOrders() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.deleteAllItems(this.SQL_DELETE_ALL_ORDERS);
+            try {
+                yield this.deleteAllItems(this.SQL_DELETE_ALL_ORDERS);
+            }
+            catch (err) {
+                throw new Error(`Cannot delete orders: ${err}`);
+            }
         });
     }
     completeOrder(userId, orderId, status) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_UPDATE_ORDER_STATUS;
-            const result = yield conn.query(sql, [status, userId, orderId]);
-            conn.release();
-            const completedOrder = result.rows[0];
-            if (!completedOrder)
-                return null;
-            return result.rows[0];
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_UPDATE_ORDER_STATUS;
+                const result = yield conn.query(sql, [status, userId, orderId]);
+                conn.release();
+                const completedOrder = result.rows[0];
+                if (!completedOrder)
+                    return null;
+                return result.rows[0];
+            }
+            catch (err) {
+                throw new Error(`Cannot complete orders: ${err}`);
+            }
         });
     }
 }

@@ -26,44 +26,64 @@ class ProductsInOrder extends store_1.Store {
     }
     getAllProductInOrders() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.getAllItems(this.SQL_GET_ALL_PRODUCT_IN_ORDER);
+            try {
+                return yield this.getAllItems(this.SQL_GET_ALL_PRODUCT_IN_ORDER);
+            }
+            catch (err) {
+                throw new Error(`Cannot get all products-in-order: ${err}`);
+            }
         });
     }
     createProductsInOrders(productsInOrder) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS;
-            const result = yield conn.query(sql, [
-                productsInOrder.quantity,
-                productsInOrder.product_id,
-                productsInOrder.order_id,
-            ]);
-            conn.release();
-            return result.rows[0];
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS;
+                const result = yield conn.query(sql, [
+                    productsInOrder.quantity,
+                    productsInOrder.product_id,
+                    productsInOrder.order_id,
+                ]);
+                conn.release();
+                return result.rows[0];
+            }
+            catch (err) {
+                throw new Error(`Cannot create products-in-order: ${err}`);
+            }
         });
     }
     createRandomProductInOrders() {
         return __awaiter(this, void 0, void 0, function* () {
-            const existingProductInOrders = yield this.getAllProductInOrders();
-            if (existingProductInOrders.length !== 0)
-                return false;
-            const conn = yield database_1.default.connect();
-            for (const productInOrder of randomItems_1.randomProductInOrder) {
-                const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST;
-                yield conn.query(sql, [
-                    productInOrder.id,
-                    productInOrder.quantity,
-                    productInOrder.product_id,
-                    productInOrder.order_id,
-                ]);
+            try {
+                const existingProductInOrders = yield this.getAllProductInOrders();
+                if (existingProductInOrders.length !== 0)
+                    return false;
+                const conn = yield database_1.default.connect();
+                for (const productInOrder of randomItems_1.randomProductInOrder) {
+                    const sql = this.SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST;
+                    yield conn.query(sql, [
+                        productInOrder.id,
+                        productInOrder.quantity,
+                        productInOrder.product_id,
+                        productInOrder.order_id,
+                    ]);
+                }
+                conn.release();
+                return true;
             }
-            conn.release();
-            return true;
+            catch (err) {
+                throw new Error(`Cannot create random products-in-order: ${err}`);
+            }
         });
     }
     deleteAllProductInOrders() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS);
+            try {
+                yield this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS);
+            }
+            catch (err) {
+                throw new Error(`Cannot delete all products-in-order: ${err}`);
+            }
         });
     }
 }

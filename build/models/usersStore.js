@@ -34,99 +34,144 @@ class UsersStore extends store_1.Store {
     //create hash
     passwordHash(password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const hash = yield bcrypt_1.default.hash(password, Number(config_1.SALT_ROUND));
-            return hash;
+            try {
+                const hash = yield bcrypt_1.default.hash(password, Number(config_1.SALT_ROUND));
+                return hash;
+            }
+            catch (err) {
+                throw new Error(`Cannot hash password: ${err}`);
+            }
         });
     }
     //compare password and hash
     passwordHashCompare(password, hash) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isMatch = yield bcrypt_1.default.compare(password, hash);
-            return isMatch;
+            try {
+                const isMatch = yield bcrypt_1.default.compare(password, hash);
+                return isMatch;
+            }
+            catch (err) {
+                throw new Error(`Cannot compare hash and password: ${err}`);
+            }
         });
     }
     //get all users - from parent class
     getAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.getAllItems(this.SQL_GET_ALL_USERS);
+            try {
+                return yield this.getAllItems(this.SQL_GET_ALL_USERS);
+            }
+            catch (err) {
+                throw new Error(`Cannot get all users: ${err}`);
+            }
         });
     }
     //if user exist
     userExist(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_IF_USER_EXIST;
-            const result = yield conn.query(sql, [user.first_name, user.last_name]);
-            conn.release();
-            const existingUser = result.rows[0];
-            if (existingUser)
-                return true;
-            return false;
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_IF_USER_EXIST;
+                const result = yield conn.query(sql, [user.first_name, user.last_name]);
+                conn.release();
+                const existingUser = result.rows[0];
+                if (existingUser)
+                    return true;
+                return false;
+            }
+            catch (err) {
+                throw new Error(`Cannot perform action for user exist: ${err}`);
+            }
         });
     }
     //show user by id - from parent class
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.getItemById(id, this.SQL_GET_USER_BY_ID);
+            try {
+                return yield this.getItemById(id, this.SQL_GET_USER_BY_ID);
+            }
+            catch (err) {
+                throw new Error(`Cannot get user: ${err}`);
+            }
         });
     }
     //create user
     createUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (yield this.userExist(user)) {
-                return null;
+            try {
+                if (yield this.userExist(user)) {
+                    return null;
+                }
+                const conn = yield database_1.default.connect();
+                const hash = yield this.passwordHash(user.password);
+                const sql = this.SQL_CREATE_USER;
+                const result = yield conn.query(sql, [
+                    user.first_name,
+                    user.last_name,
+                    hash,
+                ]);
+                conn.release();
+                return result.rows[0];
             }
-            const conn = yield database_1.default.connect();
-            const hash = yield this.passwordHash(user.password);
-            const sql = this.SQL_CREATE_USER;
-            const result = yield conn.query(sql, [
-                user.first_name,
-                user.last_name,
-                hash,
-            ]);
-            conn.release();
-            return result.rows[0];
+            catch (err) {
+                throw new Error(`Cannot create user: ${err}`);
+            }
         });
     }
     //create users list
     createRandomUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            const existingUsers = yield this.getAllUsers();
-            if (existingUsers.length !== 0)
-                return false;
-            const conn = yield database_1.default.connect();
-            for (const user of randomItems_1.randomUsers) {
-                const hash = yield this.passwordHash(user.password);
-                const sql = this.SQL_CREATE_USER_FOR_TEST;
-                yield conn.query(sql, [
-                    user.id,
-                    user.first_name,
-                    user.last_name,
-                    hash,
-                ]);
+            try {
+                const existingUsers = yield this.getAllUsers();
+                if (existingUsers.length !== 0)
+                    return false;
+                const conn = yield database_1.default.connect();
+                for (const user of randomItems_1.randomUsers) {
+                    const hash = yield this.passwordHash(user.password);
+                    const sql = this.SQL_CREATE_USER_FOR_TEST;
+                    yield conn.query(sql, [
+                        user.id,
+                        user.first_name,
+                        user.last_name,
+                        hash,
+                    ]);
+                }
+                conn.release();
+                return true;
             }
-            conn.release();
-            return true;
+            catch (err) {
+                throw new Error(`Cannot create random users: ${err}`);
+            }
         });
     }
     deleteAllUsers() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.deleteAllItems(this.SQL_DELETE_ALL_USERS);
+            try {
+                yield this.deleteAllItems(this.SQL_DELETE_ALL_USERS);
+            }
+            catch (err) {
+                throw new Error(`Cannot delete all users: ${err}`);
+            }
         });
     }
     //user authorization
     authUser(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!(yield this.userExist(user)))
-                return null;
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_AUTH_USER;
-            const result = yield conn.query(sql, [user.first_name, user.last_name]);
-            conn.release();
-            const dbUser = result.rows[0];
-            if (!(yield this.passwordHashCompare(user.password, dbUser.password)))
-                return null;
-            return dbUser;
+            try {
+                if (!(yield this.userExist(user)))
+                    return null;
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_AUTH_USER;
+                const result = yield conn.query(sql, [user.first_name, user.last_name]);
+                conn.release();
+                const dbUser = result.rows[0];
+                if (!(yield this.passwordHashCompare(user.password, dbUser.password)))
+                    return null;
+                return dbUser;
+            }
+            catch (err) {
+                throw new Error(`Cannot auth user: ${err}`);
+            }
         });
     }
 }

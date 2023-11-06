@@ -30,78 +30,118 @@ class ProductsStore extends store_1.Store {
     }
     getAllProducts() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.getAllItems(this.SQL_GET_ALL_PRODUCTS);
+            try {
+                return yield this.getAllItems(this.SQL_GET_ALL_PRODUCTS);
+            }
+            catch (err) {
+                throw new Error(`Cannot get all products: ${err}`);
+            }
         });
     }
     productExist(product) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_IF_PRODUCT_EXIST;
-            const result = yield conn.query(sql, [product.name, product.category]);
-            conn.release();
-            const existingProduct = result.rows[0];
-            if (existingProduct)
-                return true;
-            return false;
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_IF_PRODUCT_EXIST;
+                const result = yield conn.query(sql, [product.name, product.category]);
+                conn.release();
+                const existingProduct = result.rows[0];
+                if (existingProduct)
+                    return true;
+                return false;
+            }
+            catch (err) {
+                throw new Error(`Cannot perform action for product exist: ${err}`);
+            }
         });
     }
     getProductById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.getItemById(id, this.SQL_GET_PRODUCT_BY_ID);
+            try {
+                return yield this.getItemById(id, this.SQL_GET_PRODUCT_BY_ID);
+            }
+            catch (err) {
+                throw new Error(`Cannot get product: ${err}`);
+            }
         });
     }
     createProduct(product) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (yield this.productExist(product)) {
-                return null;
-            }
-            const conn = yield database_1.default.connect();
-            const sql = this.SQL_CREATE_PRODUCT;
-            const result = yield conn.query(sql, [
-                product.name,
-                product.price,
-                product.category,
-            ]);
-            conn.release();
-            return result.rows[0];
-        });
-    }
-    createRandomProducts() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const existingProducts = yield this.getAllProducts();
-            if (existingProducts.length !== 0)
-                return false;
-            const conn = yield database_1.default.connect();
-            for (const product of randomItems_1.radnomProducts) {
-                const sql = this.SQL_CREATE_PRODUCT_FOR_TEST;
-                yield conn.query(sql, [
-                    product.id,
+            try {
+                if (yield this.productExist(product)) {
+                    return null;
+                }
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_CREATE_PRODUCT;
+                const result = yield conn.query(sql, [
                     product.name,
                     product.price,
                     product.category,
                 ]);
+                conn.release();
+                return result.rows[0];
             }
-            conn.release();
-            return true;
+            catch (err) {
+                throw new Error(`Cannot create product: ${err}`);
+            }
+        });
+    }
+    createRandomProducts() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const existingProducts = yield this.getAllProducts();
+                if (existingProducts.length !== 0)
+                    return false;
+                const conn = yield database_1.default.connect();
+                for (const product of randomItems_1.radnomProducts) {
+                    const sql = this.SQL_CREATE_PRODUCT_FOR_TEST;
+                    yield conn.query(sql, [
+                        product.id,
+                        product.name,
+                        product.price,
+                        product.category,
+                    ]);
+                }
+                conn.release();
+                return true;
+            }
+            catch (err) {
+                throw new Error(`Cannot create random products: ${err}`);
+            }
         });
     }
     deleteAllProducts() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCTS);
+            try {
+                yield this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCTS);
+            }
+            catch (err) {
+                throw new Error(`Cannot delete all products: ${err}`);
+            }
         });
     }
     deleteProductById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.deleteItemById(id, this.SQL_DELETE_PRODUCT);
+            try {
+                return yield this.deleteItemById(id, this.SQL_DELETE_PRODUCT);
+            }
+            catch (err) {
+                throw new Error(`Cannot delete product: ${err}`);
+            }
         });
     }
     getProductsByCategory(category) {
         return __awaiter(this, void 0, void 0, function* () {
-            const conn = yield database_1.default.connect();
-            const sql = 'SELECT * FROM products_table WHERE category = ($1)';
-            const result = yield conn.query(sql, [category]);
-            conn.release();
-            return result.rows;
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = 'SELECT * FROM products_table WHERE category = ($1)';
+                const result = yield conn.query(sql, [category]);
+                conn.release();
+                return result.rows;
+            }
+            catch (err) {
+                throw new Error(`Cannot get products by category: ${err}`);
+            }
         });
     }
 }
