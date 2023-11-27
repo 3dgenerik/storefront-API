@@ -2,15 +2,15 @@
     "dev":{
         "driver":"pg",
         "host":"127.0.0.1",
-        "user":{"ENV":"PG_USER"},
-        "database":{"ENV":"PG_DB"},
-        "password":{"ENV":"PG_PASSWORD"}
+        "user":{"ENV":"POSTGRES_USER"},
+        "database":{"ENV":"POSTGRES_DB"},
+        "password":{"ENV":"POSTGRES_PASSWORD"}
     },
     "test":{
         "driver":"pg",
         "host":"127.0.0.1",
-        "user":{"ENV":"PG_USER"},
-        "database":{"ENV":"PG_DB_TEST"},
-        "password":{"ENV":"PG_PASSWORD"}
+        "user":{"ENV":"POSTGRES_USER"},
+        "database":{"ENV":"POSTGRES_DB_TEST"},
+        "password":{"ENV":"POSTGRES_PASSWORD"}
     }
 }
