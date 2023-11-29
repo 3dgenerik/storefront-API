@@ -4,6 +4,7 @@ export const enum AppRoutePath {
     ENDPOINT_USERS = '/users',
     ENDPOINT_PRODUCTS = '/products',
     ENDPOINT_ORDERS = '/orders',
+    ENDPOINT_PRODUCTS_IN_ORDERS = '/products_in_orders'
 }
 
 export const enum AppMethods {

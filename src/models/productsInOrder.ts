@@ -12,6 +12,8 @@ export class ProductsInOrder extends Store {
         'INSERT INTO products_in_orders_table (id, quantity, product_id, order_id) VALUES($1, $2, $3, $4)';
     private readonly SQL_DELETE_ALL_PRODUCT_IN_ORDERS =
         'DELETE FROM products_in_orders_table';
+    private readonly SQL_DELETE_PRODUCT_IN_ORDER =
+        'DELETE FROM products_in_orders_table WHERE order_id = ($1) AND product_id = ($2) RETURNING*';
 
     constructor() {
         super();
@@ -74,6 +76,19 @@ export class ProductsInOrder extends Store {
             await this.deleteAllItems(this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS);
         } catch (err) {
             throw new Error(`Cannot delete all products-in-order: ${err}`);
+        }
+    }
+
+    async removeProductFromOrder(orderId: number, productId: number):Promise<IProductsInOrders>{
+        try{
+            const conn = await client.connect()
+            const sql = this.SQL_DELETE_PRODUCT_IN_ORDER;
+            const result = await conn.query(sql, [orderId, productId])
+            conn.release()
+            return result.rows[0]
+
+        }catch(err){
+            throw new Error(`Cannot delete product in order: ${err}`);  
         }
     }
 }

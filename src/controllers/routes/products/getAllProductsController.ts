@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { AppRoutePath } from '../../../constants';
-import { controller, get } from '../../decorators';
+import { controller, get, middleware } from '../../decorators';
 import { CustomError } from '../../../errors/customError';
 import { ProductsStore } from '../../../models/productsStore';
+import { tokenVerifyMiddleware } from '../../../middlewares/tokenVerifyMiddleware';
 
 @controller(AppRoutePath.PREFIX_ROUTE)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

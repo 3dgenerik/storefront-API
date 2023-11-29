@@ -29,6 +29,8 @@ import './controllers/routes/orders/createRandomOrders';
 
 import './controllers/routes/productsInOrder/createProductInOrderController';
 import './controllers/routes/productsInOrder/createRandomProductsInOrderController';
+import './controllers/routes/productsInOrder/getAllProductsInOrderController';
+import './controllers/routes/productsInOrder/removeProductFromOrder';
 
 // declare module 'express-serve-static-core' {
 //     interface Request {
