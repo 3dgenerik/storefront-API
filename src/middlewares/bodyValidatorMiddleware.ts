@@ -75,9 +75,7 @@ export const bodyValidatorMiddleware = (...keys: string[]): RequestHandler => {
 
             if (invalidKeys.length > 0)
                 throw new CustomError(
-                    `Bad request. Invalid values: ${[...invalidKeys].join(
-                        ', ',
-                    )}. Please provide correct values.`,
+                    `Can't sign in. Please provide correct values.`,
                     400,
                 );
 

@@ -46,7 +46,7 @@ const bodyValidatorMiddleware = (...keys) => {
                 }
             }
             if (invalidKeys.length > 0)
-                throw new customError_1.CustomError(`Bad request. Invalid values: ${[...invalidKeys].join(', ')}. Please provide correct values.`, 400);
+                throw new customError_1.CustomError(`Can't sign in. Please provide correct values.`, 400);
             for (const key of keys) {
                 switch (key) {
                     case 'first_name':
