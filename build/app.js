@@ -21,6 +21,7 @@ require("./controllers/routes/products/getAllProductsController");
 require("./controllers/routes/products/createProductController");
 require("./controllers/routes/products/createRandomProducts");
 require("./controllers/routes/products/getProductsByCategories");
+require("./controllers/routes/products/getProductByIdController");
 require("./controllers/routes/orders/createOrderController");
 require("./controllers/routes/orders/getAllOrdersByUserIdController");
 require("./controllers/routes/orders/getAllSpecificOrdersByUserIdController");

@@ -19,6 +19,7 @@ import './controllers/routes/products/getAllProductsController';
 import './controllers/routes/products/createProductController';
 import './controllers/routes/products/createRandomProducts';
 import './controllers/routes/products/getProductsByCategories';
+import './controllers/routes/products/getProductByIdController';
 
 import './controllers/routes/orders/createOrderController';
 import './controllers/routes/orders/getAllOrdersByUserIdController';
