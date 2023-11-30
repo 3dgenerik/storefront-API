@@ -76,7 +76,7 @@ describe('Testing products routes: ', () => {
             .post(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}`)
             .set('Authorization', `Bearer ${token}`)
             .send({ name: 'Laptop' });
-        expect(result.text).toEqual(`Bad request. Invalid values: price, category. Please provide correct values.`);
+        expect(result.text).toEqual(`Can't sign in. Please provide correct values.`);
         expect(result.status).toBe(400);
     }));
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {

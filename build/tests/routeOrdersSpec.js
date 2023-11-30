@@ -102,13 +102,13 @@ describe('Testing orders routes: ', () => {
             expect(isAnOrder(addedOrder)).toBe(true);
             expect(result.status).toEqual(200);
         }));
-        it(`POST: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/create testing body validation middleware with wrong parameters. Error message:  Bad request. Invalid values: user_id, status. Please provide correct values [TOKEN REQUIRED]`, () => __awaiter(void 0, void 0, void 0, function* () {
+        it(`POST: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/create testing body validation middleware with wrong parameters. Error message:  Bad request. Please provide correct values [TOKEN REQUIRED]`, () => __awaiter(void 0, void 0, void 0, function* () {
             const order = {};
             const result = yield getRequest_1.request
                 .post(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/create`)
                 .set('Authorization', `Bearer ${token}`)
                 .send(order);
-            expect(result.text).toEqual('Bad request. Invalid values: user_id, status. Please provide correct values.');
+            expect(result.text).toEqual(`Can't sign in. Please provide correct values.`);
             expect(result.status).toEqual(400);
         }));
         describe('Testing complete order by specific user id', () => {

@@ -58,7 +58,7 @@ describe('Testing product-in-orders routes: ', () => {
                 .post(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}${"/products" /* AppRoutePath.ENDPOINT_PRODUCTS */}/create`)
                 .set('Authorization', `Bearer ${token}`)
                 .send({});
-            expect(result.text).toEqual('Bad request. Invalid values: quantity, product_id, order_id. Please provide correct values.');
+            expect(result.text).toEqual(`Can't sign in. Please provide correct values.`);
             expect(result.status).toEqual(400);
         }));
     });

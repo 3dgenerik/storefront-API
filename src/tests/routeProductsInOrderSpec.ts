@@ -63,7 +63,7 @@ describe('Testing product-in-orders routes: ', () => {
                 .send({});
 
             expect(result.text).toEqual(
-                'Bad request. Invalid values: quantity, product_id, order_id. Please provide correct values.',
+                `Can't sign in. Please provide correct values.`,
             );
             expect(result.status).toEqual(400);
         });

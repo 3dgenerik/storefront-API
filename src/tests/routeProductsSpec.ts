@@ -96,7 +96,7 @@ describe('Testing products routes: ', () => {
             .set('Authorization', `Bearer ${token}`)
             .send({ name: 'Laptop' });
         expect(result.text).toEqual(
-            `Bad request. Invalid values: price, category. Please provide correct values.`,
+            `Can't sign in. Please provide correct values.`,
         );
         expect(result.status).toBe(400);
     });

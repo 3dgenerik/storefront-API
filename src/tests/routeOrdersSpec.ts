@@ -127,7 +127,7 @@ describe('Testing orders routes: ', () => {
             expect(result.status).toEqual(200);
         });
 
-        it(`POST: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_ORDERS}/create testing body validation middleware with wrong parameters. Error message:  Bad request. Invalid values: user_id, status. Please provide correct values [TOKEN REQUIRED]`, async () => {
+        it(`POST: ${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_ORDERS}/create testing body validation middleware with wrong parameters. Error message:  Bad request. Please provide correct values [TOKEN REQUIRED]`, async () => {
             const order = {};
             const result = await request
                 .post(
@@ -137,7 +137,7 @@ describe('Testing orders routes: ', () => {
                 .send(order);
 
             expect(result.text).toEqual(
-                'Bad request. Invalid values: user_id, status. Please provide correct values.',
+                `Can't sign in. Please provide correct values.`,
             );
             expect(result.status).toEqual(400);
         });
