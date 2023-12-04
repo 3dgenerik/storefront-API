@@ -25,7 +25,7 @@ class CreateRandomProducts {
                 );
             }
 
-            res.status(201).send(`Radnom products created.`);
+            res.send(`Random products created.`);
         } catch (err) {
             if (err instanceof CustomError) next(err);
             next(new CustomError(`${err}`, 500));

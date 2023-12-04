@@ -44,7 +44,9 @@ export class OrdersStore extends Store {
         }
     }
 
-    async getAllSpecificStatusOrdersByUserId(
+
+
+    async getOrderWithActiveStatusById(
         userId: number,
         status: TStatus,
     ): Promise<IOrders[]> {

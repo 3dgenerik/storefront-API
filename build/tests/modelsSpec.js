@@ -194,11 +194,11 @@ describe('Testing all models:', () => __awaiter(void 0, void 0, void 0, function
                 expect(allOrdersByUserId.length).toEqual(0);
             }));
             it('getAllSpecificStatusOrdersByUserId() should return list with length of 2. Status = active', () => __awaiter(void 0, void 0, void 0, function* () {
-                const allProductsBySpecificStatus = yield ordersStore.getAllSpecificStatusOrdersByUserId(1, 'active');
+                const allProductsBySpecificStatus = yield ordersStore.getOrderWithActiveStatusById(1, 'active');
                 expect(allProductsBySpecificStatus.length).toEqual(2);
             }));
             it('getAllSpecificStatusOrdersByUserId() should return list with length of 1. Status = complete', () => __awaiter(void 0, void 0, void 0, function* () {
-                const allProductsBySpecificStatus = yield ordersStore.getAllSpecificStatusOrdersByUserId(1, 'complete');
+                const allProductsBySpecificStatus = yield ordersStore.getOrderWithActiveStatusById(1, 'complete');
                 expect(allProductsBySpecificStatus.length).toEqual(1);
             }));
             it('getCurrentOrder() should return null.', () => __awaiter(void 0, void 0, void 0, function* () {

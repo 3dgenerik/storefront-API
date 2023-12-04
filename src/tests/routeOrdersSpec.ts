@@ -72,7 +72,7 @@ describe('Testing orders routes: ', () => {
                 `${AppRoutePath.PREFIX_ROUTE}${AppRoutePath.ENDPOINT_USERS}/100${AppRoutePath.ENDPOINT_ORDERS}/status?status=active`,
             );
             expect(result.text).toEqual(
-                'Orders list with status active is empty.',
+                '[]',
             );
             expect(result.status).toBe(200);
         });

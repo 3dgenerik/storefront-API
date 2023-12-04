@@ -240,7 +240,7 @@ describe('Testing all models:', async () => {
 
             it('getAllSpecificStatusOrdersByUserId() should return list with length of 2. Status = active', async () => {
                 const allProductsBySpecificStatus =
-                    await ordersStore.getAllSpecificStatusOrdersByUserId(
+                    await ordersStore.getOrderWithActiveStatusById(
                         1,
                         'active',
                     );
@@ -249,7 +249,7 @@ describe('Testing all models:', async () => {
 
             it('getAllSpecificStatusOrdersByUserId() should return list with length of 1. Status = complete', async () => {
                 const allProductsBySpecificStatus =
-                    await ordersStore.getAllSpecificStatusOrdersByUserId(
+                    await ordersStore.getOrderWithActiveStatusById(
                         1,
                         'complete',
                     );

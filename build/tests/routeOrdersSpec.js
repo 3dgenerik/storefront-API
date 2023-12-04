@@ -59,7 +59,7 @@ describe('Testing orders routes: ', () => {
         }));
         it(`GET: ${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/1${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/status?status=active should return status code 200. Error message: Orders list with status active is empty.`, () => __awaiter(void 0, void 0, void 0, function* () {
             const result = yield getRequest_1.request.get(`${"/api" /* AppRoutePath.PREFIX_ROUTE */}${"/users" /* AppRoutePath.ENDPOINT_USERS */}/100${"/orders" /* AppRoutePath.ENDPOINT_ORDERS */}/status?status=active`);
-            expect(result.text).toEqual('Orders list with status active is empty.');
+            expect(result.text).toEqual('[]');
             expect(result.status).toBe(200);
         }));
     });

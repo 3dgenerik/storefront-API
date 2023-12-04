@@ -53,7 +53,7 @@ class OrdersStore extends store_1.Store {
             }
         });
     }
-    getAllSpecificStatusOrdersByUserId(userId, status) {
+    getOrderWithActiveStatusById(userId, status) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const conn = yield database_1.default.connect();

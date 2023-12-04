@@ -32,9 +32,12 @@ class GetAllSpecificOrdersByUserIdController {
                 const userId = req.params.id;
                 const status = req.query.status;
                 const store = new ordersStore_1.OrdersStore();
-                const allOrders = yield store.getAllSpecificStatusOrdersByUserId(Number(userId), status);
-                if (allOrders.length === 0)
-                    throw new customError_1.CustomError(`Orders list with status ${status} is empty.`, 200);
+                const allOrders = yield store.getOrderWithActiveStatusById(Number(userId), status);
+                // if (allOrders.length === 0)
+                //     throw new CustomError(
+                //         `Orders list with status ${status} is empty.`,
+                //         200,
+                //     );
                 res.status(200).send(allOrders);
             }
             catch (err) {

@@ -7,6 +7,7 @@ import { idParamValidatorMiddleware } from '../../../middlewares/idParamValidato
 import { queryValidatorMiddleware } from '../../../middlewares/queryValidatorMiddleware';
 import { TStatus } from '../../../interface';
 
+
 @controller(AppRoutePath.PREFIX_ROUTE)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 class GetAllSpecificOrdersByUserIdController {
@@ -24,16 +25,16 @@ class GetAllSpecificOrdersByUserIdController {
             const userId = req.params.id;
             const status = req.query.status as TStatus;
             const store = new OrdersStore();
-            const allOrders = await store.getAllSpecificStatusOrdersByUserId(
+            const allOrders = await store.getOrderWithActiveStatusById(
                 Number(userId),
                 status,
             );
 
-            if (allOrders.length === 0)
-                throw new CustomError(
-                    `Orders list with status ${status} is empty.`,
-                    200,
-                );
+            // if (allOrders.length === 0)
+            //     throw new CustomError(
+            //         `Orders list with status ${status} is empty.`,
+            //         200,
+            //     );
 
             res.status(200).send(allOrders);
         } catch (err) {

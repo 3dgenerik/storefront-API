@@ -32,7 +32,7 @@ class CreateRandomProducts {
                 if (!allProducts) {
                     throw new customError_1.CustomError(`Products already exist in database.`, 409);
                 }
-                res.status(201).send(`Radnom products created.`);
+                res.send(`Random products created.`);
             }
             catch (err) {
                 if (err instanceof customError_1.CustomError)
