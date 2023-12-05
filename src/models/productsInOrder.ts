@@ -6,6 +6,8 @@ import { Store } from './utils/store';
 export class ProductsInOrder extends Store {
     private readonly SQL_GET_ALL_PRODUCT_IN_ORDER =
         'SELECT * FROM products_in_orders_table';
+    private readonly SQL_GET_ALL_PRODUCT_IN_ORDER_BY_ORDER_ID =
+        'SELECT * FROM products_in_orders_table WHERE order_id = ($1)';
     private readonly SQL_INSERT_PRODUCT_IN_ORDERS =
         'INSERT INTO products_in_orders_table (id, quantity, product_id, order_id) VALUES(COALESCE((SELECT MAX(id) FROM products_in_orders_table), 0) + 1, $1, $2, $3) RETURNING *';
     private readonly SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST =
@@ -26,6 +28,19 @@ export class ProductsInOrder extends Store {
             );
         } catch (err) {
             throw new Error(`Cannot get all products-in-order: ${err}`);
+        }
+    }
+
+    async getAllProductsInOrderByOrderId(id: number):Promise<IProductsInOrders[]>{
+        try{
+            const conn = await client.connect();
+            const sql = this.SQL_GET_ALL_PRODUCT_IN_ORDER_BY_ORDER_ID;
+            const result = await conn.query(sql, [id])
+            conn.release()
+            return result.rows;
+
+        }catch(err){
+            throw new Error(`Cannot get all products-in-order by order ID: ${err}`)
         }
     }
 

@@ -32,6 +32,7 @@ require("./controllers/routes/productsInOrder/createProductInOrderController");
 require("./controllers/routes/productsInOrder/createRandomProductsInOrderController");
 require("./controllers/routes/productsInOrder/getAllProductsInOrderController");
 require("./controllers/routes/productsInOrder/removeProductFromOrder");
+require("./controllers/routes/productsInOrder/getAllProductsInOrderByOrderIdController");
 // declare module 'express-serve-static-core' {
 //     interface Request {
 //         token?: IUser | null;

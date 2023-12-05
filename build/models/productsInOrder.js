@@ -20,6 +20,7 @@ class ProductsInOrder extends store_1.Store {
     constructor() {
         super();
         this.SQL_GET_ALL_PRODUCT_IN_ORDER = 'SELECT * FROM products_in_orders_table';
+        this.SQL_GET_ALL_PRODUCT_IN_ORDER_BY_ORDER_ID = 'SELECT * FROM products_in_orders_table WHERE order_id = ($1)';
         this.SQL_INSERT_PRODUCT_IN_ORDERS = 'INSERT INTO products_in_orders_table (id, quantity, product_id, order_id) VALUES(COALESCE((SELECT MAX(id) FROM products_in_orders_table), 0) + 1, $1, $2, $3) RETURNING *';
         this.SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST = 'INSERT INTO products_in_orders_table (id, quantity, product_id, order_id) VALUES($1, $2, $3, $4)';
         this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS = 'DELETE FROM products_in_orders_table';
@@ -32,6 +33,20 @@ class ProductsInOrder extends store_1.Store {
             }
             catch (err) {
                 throw new Error(`Cannot get all products-in-order: ${err}`);
+            }
+        });
+    }
+    getAllProductsInOrderByOrderId(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_GET_ALL_PRODUCT_IN_ORDER_BY_ORDER_ID;
+                const result = yield conn.query(sql, [id]);
+                conn.release();
+                return result.rows;
+            }
+            catch (err) {
+                throw new Error(`Cannot get all products-in-order by order ID: ${err}`);
             }
         });
     }
