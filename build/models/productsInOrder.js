@@ -25,6 +25,7 @@ class ProductsInOrder extends store_1.Store {
         this.SQL_INSERT_PRODUCT_IN_ORDERS_FOR_TEST = 'INSERT INTO products_in_orders_table (id, quantity, product_id, order_id) VALUES($1, $2, $3, $4)';
         this.SQL_DELETE_ALL_PRODUCT_IN_ORDERS = 'DELETE FROM products_in_orders_table';
         this.SQL_DELETE_PRODUCT_IN_ORDER = 'DELETE FROM products_in_orders_table WHERE order_id = ($1) AND product_id = ($2) RETURNING*';
+        this.SQL_DELETE_ALL_PRODUCT_IN_ORDER_BY_ORDER_ID = 'DELETE FROM products_in_orders_table WHERE order_id = ($1) RETURNING*';
     }
     getAllProductInOrders() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -99,6 +100,20 @@ class ProductsInOrder extends store_1.Store {
             }
             catch (err) {
                 throw new Error(`Cannot delete all products-in-order: ${err}`);
+            }
+        });
+    }
+    deleteAllProductsInOrderByOrderId(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const conn = yield database_1.default.connect();
+                const sql = this.SQL_DELETE_ALL_PRODUCT_IN_ORDER_BY_ORDER_ID;
+                const result = yield conn.query(sql, [id]);
+                conn.release();
+                return result.rows;
+            }
+            catch (err) {
+                throw new Error(`Cannot delete all products in order by order Id: ${err}`);
             }
         });
     }

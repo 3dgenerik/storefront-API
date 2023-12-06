@@ -33,6 +33,7 @@ import './controllers/routes/productsInOrder/createRandomProductsInOrderControll
 import './controllers/routes/productsInOrder/getAllProductsInOrderController';
 import './controllers/routes/productsInOrder/removeProductFromOrder';
 import './controllers/routes/productsInOrder/getAllProductsInOrderByOrderIdController';
+import './controllers/routes/productsInOrder/deleteAllPreoductsInOrderByOrderIdController';
 
 // declare module 'express-serve-static-core' {
 //     interface Request {
